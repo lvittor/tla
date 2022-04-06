@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 /**
- * Implementación de "flex-rules.h".
+ * Implementación de "flex-actions.h".
  */
 
 TokenID IntegerPatternAction(const char * lexeme) {
