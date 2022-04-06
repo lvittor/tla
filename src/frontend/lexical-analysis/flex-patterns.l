@@ -16,6 +16,7 @@
 /* Patrones reutilizables. */
 crlf			\r\n
 digit			[0-9]
+float           [0-9]+(\.[0-9]+)?
 endline			\n
 whitespace		[ \f\n\r\t\v]
 
@@ -25,6 +26,7 @@ whitespace		[ \f\n\r\t\v]
 "-"											{ return SUB; }
 "*"											{ return MUL; }
 "/"											{ return DIV; }
+"**"                                        { return POW; } 
 
 "("											{ return OPEN_PARENTHESIS; }
 ")"											{ return CLOSE_PARENTHESIS; }
