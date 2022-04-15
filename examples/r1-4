@@ -1,1 +1,5 @@
 # Realizar un computo que involucre la entrada de algun valor por parte del usuario.
+
+integer entry = input()
+
+print("El factorial de " + entry + "es " + entry!)

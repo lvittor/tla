@@ -1,1 +1,13 @@
 # Imprimir el resultado de utilizar y combinar varias distribuciones de probabilidad.
+
+normal(0, 1) n1
+normal(2, 3) n2
+
+normal(n1 sum with n2) n3
+
+normal(n1 sum with n3) n4
+
+print("Normal n1: " + n1)
+print("Nromal n2: " + n2)
+print("Normal n3: " + n3)
+print("Normal n4: " + n4)
