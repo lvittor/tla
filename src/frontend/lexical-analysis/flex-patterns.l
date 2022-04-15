@@ -16,7 +16,6 @@
 /* Patrones reutilizables. */
 crlf			\r\n
 digit			[0-9]
-float           [0-9]+(\.[0-9]+)?
 endline			\n
 whitespace		[ \f\n\r\t\v]
 
@@ -25,8 +24,8 @@ whitespace		[ \f\n\r\t\v]
 "+"											{ return ADD; }
 "-"											{ return SUB; }
 "*"											{ return MUL; }
-"/"											{ return DIV; }
-"**"                                        { return POW; } 
+"/"											{ return DIV; }                                        
+"**"                                        { return POW; }
 
 "("											{ return OPEN_PARENTHESIS; }
 ")"											{ return CLOSE_PARENTHESIS; }
@@ -34,6 +33,8 @@ whitespace		[ \f\n\r\t\v]
 {digit}+									{ return IntegerPatternAction(yytext); }
 
 {whitespace}								{ IgnoredPatternAction(yytext); }
+
+#.*                                         { IgnoredPatternAction(yytext); }
 
 .											{ return UnknownPatternAction(yytext); }
 

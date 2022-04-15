@@ -9,6 +9,7 @@
 %token SUB
 %token MUL
 %token DIV
+%token POW
 
 %token OPEN_PARENTHESIS
 %token CLOSE_PARENTHESIS
@@ -28,6 +29,7 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 	| expression SUB expression									{ $$ = SubtractionExpressionGrammarAction($1, $3); }
 	| expression MUL expression									{ $$ = MultiplicationExpressionGrammarAction($1, $3); }
 	| expression DIV expression									{ $$ = DivisionExpressionGrammarAction($1, $3); }
+	| expression POW expression									{ PowerExpressionGrammarAction($1, $3); }
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
 	;
 
