@@ -51,6 +51,15 @@ int FactorExpressionGrammarAction(const int value) {
 	return value;
 }
 
+// ---------------------------------- zeke --------------------------------
+
+size_t FactorialExpressionGrammarAction(const size_t value) {
+	LogDebug("FactorialExpressionGrammarAction(%d)", value);
+	return value;
+}
+
+// ------------------------------------------------------------------------
+
 int ExpressionFactorGrammarAction(const int value) {
 	LogDebug("ExpressionFactorGrammarAction(%d)", value);
 	return value;

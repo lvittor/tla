@@ -9,6 +9,7 @@
 %token SUB
 %token MUL
 %token DIV
+%token FACT
 
 %token OPEN_PARENTHESIS
 %token CLOSE_PARENTHESIS
@@ -18,6 +19,7 @@
 // Reglas de asociatividad y precedencia (de menor a mayor):
 %left ADD SUB
 %left MUL DIV
+%left FACT
 
 %%
 
@@ -28,6 +30,7 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 	| expression SUB expression									{ $$ = SubtractionExpressionGrammarAction($1, $3); }
 	| expression MUL expression									{ $$ = MultiplicationExpressionGrammarAction($1, $3); }
 	| expression DIV expression									{ $$ = DivisionExpressionGrammarAction($1, $3); }
+	| expression FACT											{ $$ = FactorialExpressionGrammarAction($1); }
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
 	;
 

@@ -20,6 +20,8 @@ int MultiplicationExpressionGrammarAction(const int leftValue, const int rightVa
 int DivisionExpressionGrammarAction(const int leftValue, const int rightValue);
 int FactorExpressionGrammarAction(const int value);
 
+size_t FactorialExpressionGrammarAction(const size_t value);
+
 // Factores.
 int ExpressionFactorGrammarAction(const int value);
 int ConstantFactorGrammarAction(const int value);
