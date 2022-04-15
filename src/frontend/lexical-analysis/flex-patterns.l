@@ -25,11 +25,12 @@ whitespace		[ \f\n\r\t\v]
 "-"											{ return SUB; }
 "*"											{ return MUL; }
 "/"											{ return DIV; }
+"!"                                         { return FACT; }
 
 "("											{ return OPEN_PARENTHESIS; }
 ")"											{ return CLOSE_PARENTHESIS; }
 
-{digit}+									{ return IntegerPatternAction(yytext); }
+-?{digit}+									{ return IntegerPatternAction(yytext); }
 
 {whitespace}								{ IgnoredPatternAction(yytext); }
 

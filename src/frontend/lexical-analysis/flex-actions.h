@@ -23,6 +23,7 @@ typedef enum TokenID {
 	SUB,
 	MUL,
 	DIV,
+	FACT,
 
 	// Paréntesis.
 	OPEN_PARENTHESIS,
