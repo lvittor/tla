@@ -32,6 +32,8 @@ whitespace		[ \f\n\r\t\v]
 
 "="                                         { return AssignPatternAction(yytext); }
 
+"sum with"                                  { return SumWithPatternAction(yytext); } 
+
 #.*                                         { IgnoredPatternAction(yytext); }
 
 ","                                         { return CommaPatternAction(yytext); }
@@ -44,6 +46,8 @@ whitespace		[ \f\n\r\t\v]
 "binomial"                                  { return BinomialTypePatternAction(yytext); }
 "normal"                                    { return NormalTypePatternAction(yytext); }
 "poisson"                                   { return PoissonTypePatternAction(yytext); }
+
+"print"                                     { return PrintPatternAction(yytext); }
 
 -?(0|[1-9]{digit}*) 						{ return IntegerPatternAction(yytext); }
 
