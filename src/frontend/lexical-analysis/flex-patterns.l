@@ -16,7 +16,7 @@
 /* Patrones reutilizables. */
 crlf			\r\n
 digit			[0-9]
-endline			\n
+endline			[\n]
 whitespace		[ \f\n\r\t\v]
 
 %%
@@ -30,7 +30,28 @@ whitespace		[ \f\n\r\t\v]
 "("											{ return OPEN_PARENTHESIS; }
 ")"											{ return CLOSE_PARENTHESIS; }
 
--?{digit}+									{ return IntegerPatternAction(yytext); }
+"="                                         { return AssignPatternAction(yytext); }
+
+#.*                                         { IgnoredPatternAction(yytext); }
+
+"integer"                                   { return IntegerTypePatternAction(yytext); }
+"float"                                     { return FloatTypePatternAction(yytext); }
+"string"                                    { return StringTypePatternAction(yytext); }
+"list"                                      { return ListTypePatternAction(yytext); }
+
+-?(0|[1-9]{digit}*) 						{ return IntegerPatternAction(yytext); }
+
+-?(0|[1-9]{digit}*)\.{digit}*               { return FloatPatternAction(yytext); }
+
+\"[^\"]+\"                                  { return StringPatternAction(yytext); }
+
+[a-zA-Z_][a-zA-Z0-9_]*                      { return VariableNamePatternAction(yytext); }
+
+\[{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*({whitespace}*,{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*)*{whitespace}*\] { return ListPatternAction(yytext); }
+
+{endline}                                   { EndLinePatternAction(yytext); }
+
+<<EOF>>                                     { static int findEOFF = 0; return findEOFF++ ? 0 : EOFF; }
 
 {whitespace}								{ IgnoredPatternAction(yytext); }
 
