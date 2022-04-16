@@ -13,7 +13,17 @@
 %token OPEN_PARENTHESIS
 %token CLOSE_PARENTHESIS
 
+%token ASSIGN
+
+%token INTEGER_TYPE 
+%token FLOAT_TYPE
+%token STRING_TYPE
+%token LIST_TYPE
+
 %token INTEGER
+%token FLOAT
+
+%token VARIABLE_NAME
 
 // Reglas de asociatividad y precedencia (de menor a mayor):
 %left ADD SUB
@@ -36,6 +46,16 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorG
 	;
 
 constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }
+	| FLOAT														{ $$ = FloatConstantGrammarAction($1); }
 	;
+
+declare: type VARIABLE_NAME ASSIGN value						{ $$ = DeclareVariableGrammarAction($1, $2, $4); }
+	;
+
+type: INTEGER_TYPE | FLOAT_TYPE | STRING_TYPE | LIST_TYPE													
+	;
+
+value: expression												{ $$ = $1; }
+	| VARIABLE_NAME												{ $$ = AddVariableReferenceGrammarAction($1); }
 
 %%

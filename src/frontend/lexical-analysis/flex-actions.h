@@ -28,8 +28,19 @@ typedef enum TokenID {
 	OPEN_PARENTHESIS,
 	CLOSE_PARENTHESIS,
 
+	ASSIGN,
+
+	INTEGER_TYPE, 
+	FLOAT_TYPE,
+	STRING_TYPE,
+	LIST_TYPE,
+
 	// Tipos de dato.
-	INTEGER
+	INTEGER, 
+	FLOAT,
+
+	VARIABLE_NAME,
+
 } TokenID;
 
 /**
@@ -40,6 +51,8 @@ typedef enum TokenID {
  */
 
 TokenID IntegerPatternAction(const char * lexeme);
+
+TokenID FloatPatternAction(const char * lexeme);
 
 void IgnoredPatternAction(const char * lexeme);
 

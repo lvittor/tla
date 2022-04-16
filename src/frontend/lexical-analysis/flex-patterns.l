@@ -29,7 +29,18 @@ whitespace		[ \f\n\r\t\v]
 "("											{ return OPEN_PARENTHESIS; }
 ")"											{ return CLOSE_PARENTHESIS; }
 
-{digit}+									{ return IntegerPatternAction(yytext); }
+"="                                         { return ASSIGN; }
+
+"integer"                                   { return INTEGER_TYPE; }
+"float"                                     { return FLOAT_TYPE; }
+"string"                                    { return STRING_TYPE; }
+"list"                                      { return LIST_TYPE; }
+
+-?{digit}+ 									{ return IntegerPatternAction(yytext); }
+
+-?{digit}+(.{digit}+)?                      { return FloatPatternAction(yytext); }
+
+[a-zA-Z_][a-zA-Z0-9_]*                      { return VARIABLE_NAME; }
 
 {whitespace}								{ IgnoredPatternAction(yytext); }
 

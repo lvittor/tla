@@ -12,6 +12,12 @@ TokenID IntegerPatternAction(const char * lexeme) {
 	return INTEGER;
 }
 
+TokenID FloatPatternAction(const char * lexeme){
+	LogDebug("FloatPatternAction: '%s'.", lexeme);
+	// yylval = atof(lexeme);
+	return FLOAT;
+}
+
 void IgnoredPatternAction(const char * lexeme) {
 	LogDebug("IgnoredPatternAction: '%s'.", lexeme);
 }
