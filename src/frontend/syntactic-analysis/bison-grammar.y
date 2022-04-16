@@ -16,7 +16,11 @@
 
 %token ASSIGN
 
+%token COMMA
+
 %token INTEGER_TYPE FLOAT_TYPE STRING_TYPE LIST_TYPE
+
+%token BINOMIAL_DIST_TYPE NORMAL_DIST_TYPE POISSON_DIST_TYPE
 
 %token INTEGER FLOAT STRING LIST
 
@@ -46,6 +50,7 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 	;
 
 declare: type VARIABLE_NAME ASSIGN value	   					{ $$ = DeclareVariableGrammarAction($1, $2, $4); }
+	| dist_declare												{ printf("Result: %d", $1); } 
 	;
 
 type: INTEGER_TYPE 												
@@ -53,6 +58,20 @@ type: INTEGER_TYPE
 	| STRING_TYPE 												
 	| LIST_TYPE													
 	;
+
+dist_declare: dist_type VARIABLE_NAME
+	;
+
+dist_type: binomial_type
+	| normal_type
+	| poisson_type
+	;
+
+binomial_type:  BINOMIAL_DIST_TYPE OPEN_PARENTHESIS INTEGER COMMA FLOAT CLOSE_PARENTHESIS
+
+normal_type: NORMAL_DIST_TYPE OPEN_PARENTHESIS FLOAT COMMA FLOAT CLOSE_PARENTHESIS
+
+poisson_type: POISSON_DIST_TYPE OPEN_PARENTHESIS INTEGER CLOSE_PARENTHESIS
 
 value: expression												{ $$ = $1; }
 	| VARIABLE_NAME												{ $$ = AddVariableReferenceGrammarAction($1); }

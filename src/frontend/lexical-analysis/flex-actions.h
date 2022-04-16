@@ -31,10 +31,16 @@ typedef enum TokenID {
 
 	ASSIGN,
 
+	COMMA, 
+
 	INTEGER_TYPE, 
 	FLOAT_TYPE,
 	STRING_TYPE,
 	LIST_TYPE,
+
+	BINOMIAL_DIST_TYPE,
+	NORMAL_DIST_TYPE,
+	POISSON_DIST_TYPE,
 
 	// Tipos de dato.
 	INTEGER, 
@@ -68,6 +74,8 @@ TokenID ListPatternAction(const char * lexeme);
 
 TokenID AssignPatternAction(const char * lexeme);
 
+TokenID CommaPatternAction(const char * lexeme);
+
 TokenID IntegerTypePatternAction(const char * lexeme);
 
 TokenID FloatTypePatternAction(const char * lexeme);
@@ -75,6 +83,12 @@ TokenID FloatTypePatternAction(const char * lexeme);
 TokenID StringTypePatternAction(const char * lexeme);
 
 TokenID ListTypePatternAction(const char * lexeme);
+
+TokenID BinomialTypePatternAction(const char * lexeme);
+
+TokenID NormalTypePatternAction(const char * lexeme);
+
+TokenID PoissonTypePatternAction(const char * lexeme);
 
 void IgnoredPatternAction(const char * lexeme);
 

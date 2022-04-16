@@ -35,6 +35,12 @@ TokenID AssignPatternAction(const char * lexeme){
 	return ASSIGN;
 }
 
+TokenID CommaPatternAction(const char * lexeme){
+	LogDebug("CommaPatternAction: '%s'.", lexeme);
+	return COMMA;
+}
+
+
 TokenID IntegerTypePatternAction(const char * lexeme){
 	LogDebug("IntegerTypePatternAction: '%s'.", lexeme);
 	return INTEGER_TYPE;
@@ -53,6 +59,22 @@ TokenID StringTypePatternAction(const char * lexeme){
 TokenID ListTypePatternAction(const char * lexeme){
 	LogDebug("ListTypePatternAction: '%s'.", lexeme);
 	return LIST_TYPE;
+}
+
+
+TokenID BinomialTypePatternAction(const char * lexeme){
+	LogDebug("BinomialTypePatternAction: '%s'.", lexeme);
+	return BINOMIAL_DIST_TYPE; 
+}
+
+TokenID NormalTypePatternAction(const char * lexeme){
+	LogDebug("NormalTypePatternAction: '%s'.", lexeme);
+	return NORMAL_DIST_TYPE;
+}
+
+TokenID PoissonTypePatternAction(const char * lexeme){
+	LogDebug("PoissonTypePatternAction: '%s'.", lexeme);
+	return POISSON_DIST_TYPE;
 }
 
 TokenID ListPatternAction(const char * lexeme){

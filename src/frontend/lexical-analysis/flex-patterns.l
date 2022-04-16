@@ -34,10 +34,16 @@ whitespace		[ \f\n\r\t\v]
 
 #.*                                         { IgnoredPatternAction(yytext); }
 
+","                                         { return CommaPatternAction(yytext); }
+
 "integer"                                   { return IntegerTypePatternAction(yytext); }
 "float"                                     { return FloatTypePatternAction(yytext); }
 "string"                                    { return StringTypePatternAction(yytext); }
 "list"                                      { return ListTypePatternAction(yytext); }
+
+"binomial"                                  { return BinomialTypePatternAction(yytext); }
+"normal"                                    { return NormalTypePatternAction(yytext); }
+"poisson"                                   { return PoissonTypePatternAction(yytext); }
 
 -?(0|[1-9]{digit}*) 						{ return IntegerPatternAction(yytext); }
 
