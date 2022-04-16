@@ -65,20 +65,12 @@ void IgnoredPatternAction(const char * lexeme) {
 }
 
 TokenID EndLinePatternAction(const char * lexeme){
-	const int length = strlen(lexeme);
-	for (int i = 0; i < length; ++i) {
-		LogDebug("EndLinePatternAction: [%d]", lexeme[i]);
-	}
-	//LogDebug("EndLinePatternAction: '[%d]'.", lexeme);
+	LogDebug("EndLinePatternAction: '%s'.", lexeme);
 	return EOL;
 }
 
 TokenID EndFilePatternAction(const char * lexeme){
-	const int length = strlen(lexeme);
-	for (int i = 0; i < length; ++i) {
-		LogDebug("EndFilePatternAction: [%d]", lexeme[i]);
-	}
-	//LogDebug("EndFilePatternAction: '[%d]'.", lexeme);
+	LogDebug("EndFilePatternAction: '[%d]'.", lexeme);
 	return EOFF;
 }
 
