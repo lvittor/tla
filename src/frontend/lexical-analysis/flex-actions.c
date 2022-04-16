@@ -73,6 +73,15 @@ TokenID EndLinePatternAction(const char * lexeme){
 	return EOL;
 }
 
+TokenID EndFilePatternAction(const char * lexeme){
+	const int length = strlen(lexeme);
+	for (int i = 0; i < length; ++i) {
+		LogDebug("EndFilePatternAction: [%d]", lexeme[i]);
+	}
+	//LogDebug("EndFilePatternAction: '[%d]'.", lexeme);
+	return EOFF;
+}
+
 TokenID UnknownPatternAction(const char * lexeme) {
 	LogDebug("UnknownPatternAction: '%s'.", lexeme);
 	return YYUNDEF;

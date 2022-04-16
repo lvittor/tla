@@ -21,7 +21,7 @@
 
 %token VARIABLE_NAME
 
-%token EOL
+%token EOL EOFF
 
 // Reglas de asociatividad y precedencia (de menor a mayor):
 %left ADD SUB
@@ -31,7 +31,7 @@
 
 program: expression program 									{ $$ = ProgramGrammarAction($1); } 
 	|    EOL program											{ $$ = $2; }
-	| 	 expression												{ printf("Result: %d", $1); }
+	|	 EOFF													{ printf("Result: %d", $1); }
 	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }

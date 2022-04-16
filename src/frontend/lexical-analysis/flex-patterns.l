@@ -50,6 +50,8 @@ whitespace		[ \f\n\r\t\v]
 
 {endline}                                   { EndLinePatternAction(yytext); }
 
+<<EOF>>                                     { EndFilePatternAction(yytext); }
+
 {whitespace}								{ IgnoredPatternAction(yytext); }
 
 .											{ return UnknownPatternAction(yytext); }

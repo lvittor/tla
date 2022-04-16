@@ -44,6 +44,7 @@ typedef enum TokenID {
 	VARIABLE_NAME,
 
 	EOL,
+	EOFF,
 
 } TokenID;
 
@@ -77,6 +78,8 @@ TokenID ListTypePatternAction(const char * lexeme);
 void IgnoredPatternAction(const char * lexeme);
 
 TokenID EndLinePatternAction(const char * lexeme);
+
+TokenID EndFilePatternAction(const char * lexeme);
 
 TokenID UnknownPatternAction(const char * lexeme);
 
