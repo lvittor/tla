@@ -29,8 +29,9 @@
 
 %%
 
-program: expression												{ $$ = ProgramGrammarAction($1); }
-	| EOL program											    { $$ = $2; }
+program: expression program 									{ $$ = ProgramGrammarAction($1); } 
+	|    EOL program											{ $$ = $2; }
+	| 	 expression												{ printf("Result: %d", $1); }
 	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
