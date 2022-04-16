@@ -45,7 +45,18 @@ typedef enum TokenID {
 	POISSON_DIST_TYPE,
 
 	PRINT,
-	INPUT, 
+	INPUT,
+
+	MEAN,
+	MODE,
+	VARIANCE,
+	KURTOSIS,
+	Q1,
+	Q3,
+	MAX,
+	MIN,
+	SD,
+	SKEWNESS, 
 
 	// Tipos de dato.
 	INTEGER, 

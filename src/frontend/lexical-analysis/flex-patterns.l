@@ -50,6 +50,17 @@ whitespace		[ \f\n\r\t\v]
 "print"                                     { return PrintPatternAction(yytext); }
 "input"                                     { return InputPatternAction(yytext); }
 
+"mean"                                      { return MEAN; }
+"mode"                                      { return MODE; }
+"variance"                                  { return VARIANCE; }
+"kurtosis"                                  { return KURTOSIS; }
+"q1"                                        { return Q1; }
+"q3"                                        { return Q3; }
+"max"                                       { return MAX; }
+"min"                                       { return MIN; }
+"sd"                                        { return SD; }
+"skewness"                                  { return SKEWNESS; }
+
 -?(0|[1-9]{digit}*) 						{ return IntegerPatternAction(yytext); }
 
 -?(0|[1-9]{digit}*)\.{digit}*               { return FloatPatternAction(yytext); }

@@ -1,18 +1,18 @@
 # Realizar algunas operaciones utilizando los operadores aritmeticos definidos (todos ellos).
 
-list data = [21.3, 38.4, 12.7, 41.6]
+integer n1 = 10
+integer n2 = 1
 
-main {
+print("Operation 1: " + (n1+n2-n1!))
+print("Operation 2: " + (n1-n2))
+print("Operation 3: " + (n1*n2))
+print("Operation 4: " + (n1/n2))
+print("Operation 5: " + n1!)
 
-print(“The mean of ” + data + “is ” + mean data)
-print(“The mode of ” + data + “is ” + mode data)
-print(“The variance of ” + data + “is ” + variance data)
-print(“The kurtosis of ” + data + “is ” + kurtosis data)
-print(“The q1 of ” + data + “is ” + q1 data)
-print(“The q3 of ” + data + “is ” + q3 data)
-print(“The max of ” + data + “is ” + max data)
-print(“The min of ” + data + “is ” + min data)
-print(“The standard deviation of ” + data + “is ” + sd data)
-print(“The skewness of ” + data + “is ” + skewness data)
+float n1 = 10.0
+float n2 = 1.0
 
-}
+print("Operation 6: " + (n1+n2))
+print("Operation 7: " + (n1-n2))
+print("Operation 8: " + (n1*n2))
+print("Operation 9: " + (n1/n2))

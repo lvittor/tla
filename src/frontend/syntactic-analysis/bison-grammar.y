@@ -26,6 +26,8 @@
 
 %token PRINT INPUT
 
+%token MEAN MODE VARIANCE KURTOSIS Q1 Q3 MAX MIN SD SKEWNESS
+
 %token INTEGER FLOAT STRING LIST
 
 %token VARIABLE_NAME
@@ -54,6 +56,7 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 	| expression DIV expression									{ $$ = DivisionExpressionGrammarAction($1, $3); }
 	| factor FACT												{ $$ = FactorialExpressionGrammarAction($1); }
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
+	| stat_function												{ $$ = $1; }
 	;
 
 declare: type VARIABLE_NAME ASSIGN value	   					{ $$ = DeclareVariableGrammarAction($1, $2, $4); }
@@ -72,6 +75,26 @@ print_args: STRING ADD print_args
 	| STRING
 	| VARIABLE_NAME
 	| expression
+	;
+
+stat_function: stat_function_type OPEN_PARENTHESIS stat_function_arg CLOSE_PARENTHESIS
+	;	
+
+stat_function_arg: VARIABLE_NAME
+	| LIST
+	;
+
+
+stat_function_type: MEAN 
+	| MODE 
+	| VARIANCE
+	| KURTOSIS
+	| Q1
+	| Q3
+	| MAX
+	| MIN
+	| SD
+	| SKEWNESS
 	;
 
 type: INTEGER_TYPE 												
