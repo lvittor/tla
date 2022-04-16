@@ -3,70 +3,70 @@
 
 #include "../../backend/support/shared.h"
 
-typedef ast_node *_ast_node;
+// typedef ast_node *_ast_node;
 
-struct _integer_node {
-    char * integer;
-};
+// struct _integer_node {
+//     char * integer;
+// };
 
-struct _float_node {
-    char * ffloat;
-};
+// struct _float_node {
+//     char * ffloat;
+// };
 
-struct _string_node {
-    char * string;
-};
+// struct _string_node {
+//     char * string;
+// };
 
-struct _list_node {
-    char * list;
-};
+// struct _list_node {
+//     char * list;
+// };
 
-struct _variable_node {
-    int declared;   // TODO: Revisar si sirve este parametro
-    int type;       // Tipo de la variable
-    char * name;    // Nombre de la variable
-    ast_node value;
-};
+// struct _variable_node {
+//     int declared;   // TODO: Revisar si sirve este parametro
+//     int type;       // Tipo de la variable
+//     char * name;    // Nombre de la variable
+//     ast_node value;
+// };
 
-struct _expression_node {
-    ast_node first;
-    ast_node second;
-    ast_node third;
-};
+// struct _expression_node {
+//     ast_node first;
+//     ast_node second;
+//     ast_node third;
+// };
 
-struct _ast_node_list {
-    ast_node node;
-    struct _ast_node_list * next;
-};
+// struct _ast_node_list {
+//     ast_node node;
+//     struct _ast_node_list * next;
+// };
 
-typedef struct _ast_node { 
-    enum {
-        // Tipos de datos
-        INTEGER_NODE, 
-        FLOAT_NODE, 
-        STRING_NODE, 
-        LIST_NODE,
+// typedef struct _ast_node { 
+//     enum {
+//         // Tipos de datos
+//         INTEGER_NODE, 
+//         FLOAT_NODE, 
+//         STRING_NODE, 
+//         LIST_NODE,
 
-        VARIABLE_NODE, 
+//         VARIABLE_NODE, 
 
-        EXPRESSION_NODE,
+//         EXPRESSION_NODE,
 
-        AST_LIST_NODE,
-    } _node_t;
+//         AST_LIST_NODE,
+//     } _node_t;
 
-    union {
-        struct _integer_node integer_node;
-        struct _float_node float_node;
-        struct _string_node string_node;
-        struct _list_node list_node;
+//     union {
+//         struct _integer_node integer_node;
+//         struct _float_node float_node;
+//         struct _string_node string_node;
+//         struct _list_node list_node;
 
-        struct _variable_node variable_node;
+//         struct _variable_node variable_node;
         
-        struct _expression_node expression_node; 
+//         struct _expression_node expression_node; 
         
-        struct _ast_node_list ast_node_list;
-    };
-} _ast_node;
+//         struct _ast_node_list ast_node_list;
+//     };
+// } _ast_node;
 
 /**
  * Se definen las acciones a ejecutar sobre cada regla de producción de la
@@ -91,6 +91,10 @@ int ConstantFactorGrammarAction(const int value);
 
 // Constantes.
 int IntegerConstantGrammarAction(const int value);
-float FloatConstantGrammarAction(const float value);
+int FloatConstantGrammarAction(const float value);
+int ListConstantGrammarAction(const int list);
+
+// Variables.
+int DeclareVariableGrammarAction(const char *type, const char *variableName, const char *value);
 
 #endif

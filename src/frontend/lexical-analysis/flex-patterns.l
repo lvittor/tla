@@ -31,16 +31,20 @@ whitespace		[ \f\n\r\t\v]
 
 "="                                         { return ASSIGN; }
 
+#.*                                         { IgnoredPatternAction(yytext); }
+
 "integer"                                   { return INTEGER_TYPE; }
 "float"                                     { return FLOAT_TYPE; }
 "string"                                    { return STRING_TYPE; }
 "list"                                      { return LIST_TYPE; }
 
--?{digit}+ 									{ return IntegerPatternAction(yytext); }
+-?(0|[1-9]{digit}*) 						{ return IntegerPatternAction(yytext); }
 
--?{digit}+(.{digit}+)?                      { return FloatPatternAction(yytext); }
+-?(0|[1-9]{digit}*)\.{digit}*               { return FloatPatternAction(yytext); }
 
-[a-zA-Z_][a-zA-Z0-9_]*                      { return VARIABLE_NAME; }
+[a-zA-Z_][a-zA-Z0-9_]*                      { return VariableNamePatternAction(yytext); }
+
+\[{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*({whitespace}*,{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*)*{whitespace}*\] { return ListPatternAction(yytext); }
 
 {whitespace}								{ IgnoredPatternAction(yytext); }
 

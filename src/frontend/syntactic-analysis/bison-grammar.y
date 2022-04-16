@@ -22,6 +22,7 @@
 
 %token INTEGER
 %token FLOAT
+%token LIST
 
 %token VARIABLE_NAME
 
@@ -47,12 +48,16 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorG
 
 constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }
 	| FLOAT														{ $$ = FloatConstantGrammarAction($1); }
+	| LIST														{ $$ = ListConstantGrammarAction($1); }
+	;
+
+type: INTEGER_TYPE 												{ ; }
+	| FLOAT_TYPE 												{ ; }
+	| STRING_TYPE 												{ ; }
+	| LIST_TYPE													{ ; }
 	;
 
 declare: type VARIABLE_NAME ASSIGN value						{ $$ = DeclareVariableGrammarAction($1, $2, $4); }
-	;
-
-type: INTEGER_TYPE | FLOAT_TYPE | STRING_TYPE | LIST_TYPE													
 	;
 
 value: expression												{ $$ = $1; }

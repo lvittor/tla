@@ -66,7 +66,17 @@ int IntegerConstantGrammarAction(const int value) {
 	return value;
 }
 
-float FloatConstantGrammarAction(const float value){
+int FloatConstantGrammarAction(const float value){
 	LogDebug("	FloatConstantGrammarAction(%f)", value);
-	return value;
+	return 1;
+}
+
+int ListConstantGrammarAction(const int list){
+	LogDebug("	ListConstantGrammarAction(%d)", list);
+	return 1;
+}
+
+int DeclareVariableGrammarAction(const char *type, const char *variableName, const char *value){
+	LogDebug("	DeclareVariableGrammarAction(%s, %s, %s)", type, variableName, value);
+	return 1;
 }

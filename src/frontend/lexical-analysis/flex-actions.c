@@ -18,6 +18,16 @@ TokenID FloatPatternAction(const char * lexeme){
 	return FLOAT;
 }
 
+TokenID VariableNamePatternAction(const char * lexeme){
+	LogDebug("VariableNamePatternAction: '%s'.", lexeme);
+	return VARIABLE_NAME;
+}
+
+TokenID ListPatternAction(const char * lexeme){
+	LogDebug("ListPatternAction: '%s'.", lexeme);
+	return LIST;
+}
+
 void IgnoredPatternAction(const char * lexeme) {
 	LogDebug("IgnoredPatternAction: '%s'.", lexeme);
 }
