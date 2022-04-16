@@ -25,6 +25,7 @@ whitespace		[ \f\n\r\t\v]
 "-"											{ return SUB; }
 "*"											{ return MUL; }
 "/"											{ return DIV; }
+"!"                                         { return FACT; }
 
 "("											{ return OPEN_PARENTHESIS; }
 ")"											{ return CLOSE_PARENTHESIS; }
