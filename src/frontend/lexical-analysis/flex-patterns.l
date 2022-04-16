@@ -16,7 +16,7 @@
 /* Patrones reutilizables. */
 crlf			\r\n
 digit			[0-9]
-endline			\n
+endline			[\n]
 whitespace		[ \f\n\r\t\v]
 
 %%

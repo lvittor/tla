@@ -15,15 +15,9 @@
 
 %token ASSIGN
 
-%token INTEGER_TYPE 
-%token FLOAT_TYPE
-%token STRING_TYPE
-%token LIST_TYPE
+%token INTEGER_TYPE FLOAT_TYPE STRING_TYPE LIST_TYPE
 
-%token INTEGER
-%token FLOAT
-%token STRING
-%token LIST
+%token INTEGER FLOAT STRING LIST
 
 %token VARIABLE_NAME
 
@@ -36,7 +30,7 @@
 %%
 
 program: expression												{ $$ = ProgramGrammarAction($1); }
-	| EOL program EOL											{ $$ = $2; }
+	| EOL program											    { $$ = $2; }
 	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
@@ -47,7 +41,7 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 	| declare													{ $$ = $1; }
 	;
 
-declare: type VARIABLE_NAME ASSIGN value    					{ $$ = DeclareVariableGrammarAction($1, $2, $4); }
+declare: type VARIABLE_NAME ASSIGN value	   					{ $$ = DeclareVariableGrammarAction($1, $2, $4); }
 	;
 
 type: INTEGER_TYPE 												

@@ -1,1 +1,6 @@
-10.9 + 123
+# Crear una o varias variables de cada tipo de dato, y realizar la asignacion de algun valor.
+
+#float f = 0.123 
+
+#string s = "esto es una cadena" 
+#list l = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0] 

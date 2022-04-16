@@ -1,6 +1,8 @@
 #include "../../backend/support/logger.h"
 #include "flex-actions.h"
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 /**
  * Implementación de "flex-rules.h".
@@ -63,7 +65,11 @@ void IgnoredPatternAction(const char * lexeme) {
 }
 
 TokenID EndLinePatternAction(const char * lexeme){
-	LogDebug("EndLinePatternAction: '%s'.", lexeme);
+	const int length = strlen(lexeme);
+	for (int i = 0; i < length; ++i) {
+		LogDebug("EndLinePatternAction: [%d]", lexeme[i]);
+	}
+	//LogDebug("EndLinePatternAction: '[%d]'.", lexeme);
 	return EOL;
 }
 
