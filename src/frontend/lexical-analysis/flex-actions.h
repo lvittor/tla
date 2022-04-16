@@ -24,6 +24,12 @@ typedef enum TokenID {
 	MUL,
 	DIV,
 	FACT,
+	EQ,
+	NEQ,
+	LEQ,
+	GEQ,
+	LOW,
+	GTR,
 
 	// Paréntesis.
 	OPEN_PARENTHESIS,

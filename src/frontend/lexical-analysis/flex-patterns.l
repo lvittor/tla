@@ -27,6 +27,13 @@ whitespace		[ \f\n\r\t\v]
 "/"											{ return DIV; }
 "!"                                         { return FACT; }
 
+"=="                                        { return EQ; }
+"!="                                        { return NEQ; }
+"<="                                        { return LEQ; }
+">="                                        { return GEQ; }
+"<"                                         { return LOW; }
+">"                                         { return GTR; }
+
 "("											{ return OPEN_PARENTHESIS; }
 ")"											{ return CLOSE_PARENTHESIS; }
 
