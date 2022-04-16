@@ -92,9 +92,12 @@ int ConstantFactorGrammarAction(const int value);
 // Constantes.
 int IntegerConstantGrammarAction(const int value);
 int FloatConstantGrammarAction(const float value);
+int StringConstantGrammarAction(const int value);
 int ListConstantGrammarAction(const int list);
 
 // Variables.
-int DeclareVariableGrammarAction(const char *type, const char *variableName, const char *value);
+int DeclareVariableGrammarAction(const int type, const int variableName, const int value);
+
+int AddVariableReferenceGrammarAction(const int name);
 
 #endif

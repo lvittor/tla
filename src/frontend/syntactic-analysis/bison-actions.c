@@ -71,12 +71,22 @@ int FloatConstantGrammarAction(const float value){
 	return 1;
 }
 
+int StringConstantGrammarAction(const int value){
+	LogDebug("	StringConstantGrammarAction(%d)", value);
+	return 1;
+}
+
 int ListConstantGrammarAction(const int list){
 	LogDebug("	ListConstantGrammarAction(%d)", list);
 	return 1;
 }
 
-int DeclareVariableGrammarAction(const char *type, const char *variableName, const char *value){
-	LogDebug("	DeclareVariableGrammarAction(%s, %s, %s)", type, variableName, value);
+int DeclareVariableGrammarAction(const int type, const int variableName, const int value){
+	LogDebug("	DeclareVariableGrammarAction(%d, %d, %d)", type, variableName, value);
+	return 1;
+}
+
+int AddVariableReferenceGrammarAction(const int name){
+	LogDebug("	AddVariableReferenceGrammarAction(%d)", name);
 	return 1;
 }

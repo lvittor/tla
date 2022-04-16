@@ -12,6 +12,11 @@ TokenID IntegerPatternAction(const char * lexeme) {
 	return INTEGER;
 }
 
+TokenID StringPatternAction(const char * lexeme){
+	LogDebug("StringPatternAction: '%s'.", lexeme);
+	return STRING;
+}
+
 TokenID FloatPatternAction(const char * lexeme){
 	LogDebug("FloatPatternAction: '%s'.", lexeme);
 	// yylval = atof(lexeme);
@@ -23,6 +28,31 @@ TokenID VariableNamePatternAction(const char * lexeme){
 	return VARIABLE_NAME;
 }
 
+TokenID AssignPatternAction(const char * lexeme){
+	LogDebug("AssignPatternAction: '%s'.", lexeme);
+	return ASSIGN;
+}
+
+TokenID IntegerTypePatternAction(const char * lexeme){
+	LogDebug("IntegerTypePatternAction: '%s'.", lexeme);
+	return INTEGER_TYPE;
+}
+
+TokenID FloatTypePatternAction(const char * lexeme){
+	LogDebug("FloatTypePatternAction: '%s'.", lexeme);
+	return FLOAT_TYPE;
+}
+
+TokenID StringTypePatternAction(const char * lexeme){
+	LogDebug("StringTypePatternAction: '%s'.", lexeme);
+	return STRING_TYPE;
+}
+
+TokenID ListTypePatternAction(const char * lexeme){
+	LogDebug("ListTypePatternAction: '%s'.", lexeme);
+	return LIST_TYPE;
+}
+
 TokenID ListPatternAction(const char * lexeme){
 	LogDebug("ListPatternAction: '%s'.", lexeme);
 	return LIST;
@@ -30,6 +60,11 @@ TokenID ListPatternAction(const char * lexeme){
 
 void IgnoredPatternAction(const char * lexeme) {
 	LogDebug("IgnoredPatternAction: '%s'.", lexeme);
+}
+
+TokenID EndLinePatternAction(const char * lexeme){
+	LogDebug("EndLinePatternAction: '%s'.", lexeme);
+	return EOL;
 }
 
 TokenID UnknownPatternAction(const char * lexeme) {

@@ -38,9 +38,12 @@ typedef enum TokenID {
 	// Tipos de dato.
 	INTEGER, 
 	FLOAT,
+	STRING,
 	LIST,
 
 	VARIABLE_NAME,
+
+	EOL,
 
 } TokenID;
 
@@ -55,11 +58,25 @@ TokenID IntegerPatternAction(const char * lexeme);
 
 TokenID FloatPatternAction(const char * lexeme);
 
+TokenID StringPatternAction(const char * lexeme);
+
 TokenID VariableNamePatternAction(const char * lexeme);
 
 TokenID ListPatternAction(const char * lexeme);
 
+TokenID AssignPatternAction(const char * lexeme);
+
+TokenID IntegerTypePatternAction(const char * lexeme);
+
+TokenID FloatTypePatternAction(const char * lexeme);
+
+TokenID StringTypePatternAction(const char * lexeme);
+
+TokenID ListTypePatternAction(const char * lexeme);
+
 void IgnoredPatternAction(const char * lexeme);
+
+TokenID EndLinePatternAction(const char * lexeme);
 
 TokenID UnknownPatternAction(const char * lexeme);
 

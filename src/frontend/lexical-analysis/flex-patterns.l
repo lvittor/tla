@@ -29,22 +29,26 @@ whitespace		[ \f\n\r\t\v]
 "("											{ return OPEN_PARENTHESIS; }
 ")"											{ return CLOSE_PARENTHESIS; }
 
-"="                                         { return ASSIGN; }
+"="                                         { return AssignPatternAction(yytext); }
 
 #.*                                         { IgnoredPatternAction(yytext); }
 
-"integer"                                   { return INTEGER_TYPE; }
-"float"                                     { return FLOAT_TYPE; }
-"string"                                    { return STRING_TYPE; }
-"list"                                      { return LIST_TYPE; }
+"integer"                                   { return IntegerTypePatternAction(yytext); }
+"float"                                     { return FloatTypePatternAction(yytext); }
+"string"                                    { return StringTypePatternAction(yytext); }
+"list"                                      { return ListTypePatternAction(yytext); }
 
 -?(0|[1-9]{digit}*) 						{ return IntegerPatternAction(yytext); }
 
 -?(0|[1-9]{digit}*)\.{digit}*               { return FloatPatternAction(yytext); }
 
+\"[^\"]+\"                                  { return StringPatternAction(yytext); }
+
 [a-zA-Z_][a-zA-Z0-9_]*                      { return VariableNamePatternAction(yytext); }
 
 \[{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*({whitespace}*,{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*)*{whitespace}*\] { return ListPatternAction(yytext); }
+
+{endline}                                   { EndLinePatternAction(yytext); }
 
 {whitespace}								{ IgnoredPatternAction(yytext); }
 
