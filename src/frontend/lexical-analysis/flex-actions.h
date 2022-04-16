@@ -79,7 +79,7 @@ void IgnoredPatternAction(const char * lexeme);
 
 TokenID EndLinePatternAction(const char * lexeme);
 
-TokenID EndFilePatternAction(const char * lexeme);
+// TokenID EndFilePatternAction(const char * lexeme, int findEOF);
 
 TokenID UnknownPatternAction(const char * lexeme);
 

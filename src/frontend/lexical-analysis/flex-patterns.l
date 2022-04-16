@@ -50,7 +50,7 @@ whitespace		[ \f\n\r\t\v]
 
 {endline}                                   { EndLinePatternAction(yytext); }
 
-<<EOF>>                                     { EndFilePatternAction(yytext); }
+<<EOF>>                                     { static int findEOFF = 0; return findEOFF++ ? 0 : EOFF; }
 
 {whitespace}								{ IgnoredPatternAction(yytext); }
 

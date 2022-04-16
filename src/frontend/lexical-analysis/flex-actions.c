@@ -69,10 +69,11 @@ TokenID EndLinePatternAction(const char * lexeme){
 	return EOL;
 }
 
-TokenID EndFilePatternAction(const char * lexeme){
-	LogDebug("EndFilePatternAction: '[%d]'.", lexeme);
-	return EOFF;
-}
+// TokenID EndFilePatternAction(const char * lexeme, int findEOF){
+// 	LogDebug("EndFilePatternAction: '%s'.", lexeme);
+// 	int a = findEOF++ ? UNKNOWN : EOFF;
+// 	return a;
+// }
 
 TokenID UnknownPatternAction(const char * lexeme) {
 	LogDebug("UnknownPatternAction: '%s'.", lexeme);
