@@ -85,6 +85,11 @@ TokenID PrintPatternAction(const char * lexeme){
 	return PRINT;
 }
 
+TokenID InputPatternAction(const char * lexeme){
+	LogDebug("InputPatternAction: '%s'.", lexeme);
+	return INPUT;
+}
+
 TokenID ListPatternAction(const char * lexeme){
 	LogDebug("ListPatternAction: '%s'.", lexeme);
 	return LIST;

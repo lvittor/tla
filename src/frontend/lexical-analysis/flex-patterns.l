@@ -48,6 +48,7 @@ whitespace		[ \f\n\r\t\v]
 "poisson"                                   { return PoissonTypePatternAction(yytext); }
 
 "print"                                     { return PrintPatternAction(yytext); }
+"input"                                     { return InputPatternAction(yytext); }
 
 -?(0|[1-9]{digit}*) 						{ return IntegerPatternAction(yytext); }
 

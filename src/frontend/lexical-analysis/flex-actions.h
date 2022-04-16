@@ -45,6 +45,7 @@ typedef enum TokenID {
 	POISSON_DIST_TYPE,
 
 	PRINT,
+	INPUT, 
 
 	// Tipos de dato.
 	INTEGER, 
@@ -97,6 +98,8 @@ TokenID NormalTypePatternAction(const char * lexeme);
 TokenID PoissonTypePatternAction(const char * lexeme);
 
 TokenID PrintPatternAction(const char * lexeme);
+
+TokenID InputPatternAction(const char * lexeme);
 
 void IgnoredPatternAction(const char * lexeme);
 
