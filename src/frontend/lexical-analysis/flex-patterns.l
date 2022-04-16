@@ -30,9 +30,22 @@ whitespace		[ \f\n\r\t\v]
 "("											{ return OPEN_PARENTHESIS; }
 ")"											{ return CLOSE_PARENTHESIS; }
 
+"{"											{ return OPEN_BRACE; }
+"}"											{ return CLOSE_BRACE; }
+
 "="                                         { return AssignPatternAction(yytext); }
 
+"=="                                        { return EQ; }
+"!="                                        { return NE; }
+"<="                                        { return LE; }
+">="                                        { return GE; }
+"<"                                         { return LT; }
+">"                                         { return GT; }
+
 "sum with"                                  { return SumWithPatternAction(yytext); } 
+
+"if"                                        { printf("if"); return IF; }
+"else"                                      { return ELSE; }
 
 #.*                                         { IgnoredPatternAction(yytext); }
 

@@ -29,9 +29,22 @@ typedef enum TokenID {
 	OPEN_PARENTHESIS,
 	CLOSE_PARENTHESIS,
 
+	OPEN_BRACE, 
+	CLOSE_BRACE,
+
 	ASSIGN,
 
+	EQ,
+	NE,
+	LE,
+	GE,
+	LT,
+	GT,
+
 	SUM_WITH,
+
+	IF, 
+	ELSE,
 
 	COMMA, 
 

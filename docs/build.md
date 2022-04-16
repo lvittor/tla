@@ -5,7 +5,7 @@ alias compile="
 rm -rf bin/
 cmake -S . -B bin                       # build the compiler
 cd bin && make clean && make && cd ..   # run make all
-cat examples/r1-5 | bin/Compiler        # run the compiler
+cat examples/r1-6 | bin/Compiler        # run the compiler
 "
 ```
 

@@ -11,10 +11,15 @@
 %token DIV
 %token FACT
 
-%token OPEN_PARENTHESIS
-%token CLOSE_PARENTHESIS
+%token OPEN_PARENTHESIS CLOSE_PARENTHESIS
+
+%token OPEN_BRACE CLOSE_BRACE
+
+%token IF ELSE
 
 %token ASSIGN
+
+%token EQ NE LE GE LT GT
 
 %token SUM_WITH
 
@@ -48,6 +53,7 @@ program: instruction program 									{ $$ = ProgramGrammarAction($1); }
 
 instruction: declare											{ printf("Result: %d", $1); }
 	| print														{ printf("Result: %d", $1); }
+	| if														{ printf("Result: %d", $1); }
 	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
@@ -57,6 +63,28 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 	| factor FACT												{ $$ = FactorialExpressionGrammarAction($1); }
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
 	| stat_function												{ $$ = $1; }
+	;
+
+if: IF OPEN_PARENTHESIS condition CLOSE_PARENTHESIS OPEN_BRACE block end_if	 { printf("Result: %d, %d, %d", $3, $6, $7); }
+	;
+
+end_if: CLOSE_BRACE
+	| ELSE OPEN_BRACE block CLOSE_BRACE
+
+condition: factor compare_opt factor
+	;
+
+block: instruction block										{ $$ = $1; }
+	| EOL block													{ $$ = $2; }
+	| EOL														{ $$ = $1; }
+	;
+
+compare_opt: EQ
+	| NE
+	| LE
+	| GE
+	| LT
+	| GT
 	;
 
 declare: type VARIABLE_NAME ASSIGN value	   					{ $$ = DeclareVariableGrammarAction($1, $2, $4); }
