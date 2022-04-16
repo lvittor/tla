@@ -19,8 +19,16 @@ int SubtractionExpressionGrammarAction(const int leftValue, const int rightValue
 int MultiplicationExpressionGrammarAction(const int leftValue, const int rightValue);
 int DivisionExpressionGrammarAction(const int leftValue, const int rightValue);
 int FactorExpressionGrammarAction(const int value);
-
 size_t FactorialExpressionGrammarAction(const size_t value);
+
+//Comparaciones
+int ComparisonGrammarAction(const int value);
+int EqualComparisonGrammarAction(const int leftValue, const int rightValue);
+int NotEqualComparisonGrammarAction(const int leftValue, const int rightValue);
+int LowerOrEqualComparisonGrammarAction(const int leftValue, const int rightValue);
+int GreaterOrEqualComparisonGrammarAction(const int leftValue, const int rightValue);
+int LowerComparisonGrammarAction(const int leftValue, const int rightValue);
+int GreaterComparisonGrammarAction(const int leftValue, const int rightValue);
 
 // Factores.
 int ExpressionFactorGrammarAction(const int value);

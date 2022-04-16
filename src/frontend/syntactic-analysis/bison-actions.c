@@ -58,6 +58,41 @@ size_t FactorialExpressionGrammarAction(const size_t value) {
 	return value;
 }
 
+int ComparisonGrammarAction(const int value){
+	LogDebug("ComparisonGrammarAction(%d)", value);
+	return value;
+}
+
+int EqualComparisonGrammarAction(const int leftValue, const int rightValue){
+	LogDebug("EqualComparisonGrammarAction(%d, %d)", leftValue, rightValue);
+	return 1;
+}
+
+int NotEqualComparisonGrammarAction(const int leftValue, const int rightValue){
+	LogDebug("NotEqualComparisonGrammarAction(%d, %d)", leftValue, rightValue);
+	return 1;
+}
+
+int LowerOrEqualComparisonGrammarAction(const int leftValue, const int rightValue){
+	LogDebug("LowerOrEqualComparisonGrammarAction(%d, %d)", leftValue, rightValue);
+	return 1;
+}
+
+int GreaterOrEqualComparisonGrammarAction(const int leftValue, const int rightValue){
+	LogDebug("GreaterOrEqualComparisonGrammarAction(%d, %d)", leftValue, rightValue);
+	return 1;
+}
+
+int LowerComparisonGrammarAction(const int leftValue, const int rightValue){
+	LogDebug("LowerComparisonGrammarAction(%d, %d)", leftValue, rightValue);
+	return 1;
+}
+
+int GreaterComparisonGrammarAction(const int leftValue, const int rightValue){
+	LogDebug("GreaterComparisonGrammarAction(%d, %d)", leftValue, rightValue);
+	return 1;
+}
+
 // ------------------------------------------------------------------------
 
 int ExpressionFactorGrammarAction(const int value) {
