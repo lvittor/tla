@@ -60,6 +60,11 @@ TokenID ElsePatternAction(const char * lexeme){
 	return ELSE;
 }
 
+TokenID ForeachPatternAction(const char * lexeme){
+	LogDebug("ForeachPatternAction: '%s'.", lexeme);
+	return FOREACH;
+}
+
 TokenID CommaPatternAction(const char * lexeme){
 	LogDebug("CommaPatternAction: '%s'.", lexeme);
 	return COMMA;

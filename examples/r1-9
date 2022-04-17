@@ -1,6 +1,5 @@
 # Realizar una operacion que involucre el uso de variables y distribuciones en un mismo calculo.
 
-
 int mu1 = 0
 int sigma1 = 1
 

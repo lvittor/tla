@@ -49,6 +49,8 @@ whitespace		[ \f\n\r\t\v]
 "if"                                        { return IfPatternAction(yytext); }
 "else"                                      { return ElsePatternAction(yytext); }
 
+"foreach"                                   { return ForeachPatternAction(yytext);}
+
 #.*                                         { IgnoredPatternAction(yytext); }
 
 ","                                         { return CommaPatternAction(yytext); }

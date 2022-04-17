@@ -48,6 +48,8 @@ typedef enum TokenID {
 	IF, 
 	ELSE,
 
+	FOREACH,
+
 	COMMA, 
 
 	INTEGER_TYPE, 
@@ -114,6 +116,8 @@ TokenID SumWithPatternAction(const char * lexeme);
 TokenID IfPatternAction(const char * lexeme);
 
 TokenID ElsePatternAction(const char * lexeme);
+
+TokenID ForeachPatternAction(const char * lexeme);
 
 TokenID CommaPatternAction(const char * lexeme);
 

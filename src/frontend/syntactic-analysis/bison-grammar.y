@@ -25,6 +25,8 @@
 
 %token IF ELSE
 
+%token FOREACH
+
 %token COMMA
 
 %token INTEGER_TYPE FLOAT_TYPE STRING_TYPE LIST_TYPE
@@ -56,6 +58,7 @@ program: instruction program 									{ $$ = ProgramGrammarAction($1); }
 instruction: declare											{ GenericLogger("DeclareInstructionGrammarAction"); }
 	| print														{ GenericLogger("PrintInstructionGrammarAction"); }
 	| if														{ GenericLogger("IfInstructionGrammarAction"); }
+	| foreach													{ GenericLogger("ForeachGrammarAction"); }
 	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
@@ -66,7 +69,6 @@ expression: expression ADD expression							{ $$ = AdditionExpressionGrammarActi
 	| SQRT OPEN_PARENTHESIS expression CLOSE_PARENTHESIS		{ GenericLogger("SqrtExpressionGrammarAction"); }
 	| factor FACT												{ $$ = FactorialExpressionGrammarAction($1); }
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
-	| stat_function												{ $$ = $1; }
 	;
 
 if: IF OPEN_PARENTHESIS condition CLOSE_PARENTHESIS OPEN_BRACE block end_if
@@ -95,6 +97,16 @@ compare_opt: EQ
 declare: type VARIABLE_NAME ASSIGN value	   					{ $$ = DeclareVariableGrammarAction($1, $2, $4); }
 	| dist_declare												{ printf("Result: %d", $1); } 
 	| type VARIABLE_NAME ASSIGN input							{ printf("Result: %d", $1); }
+	;
+
+foreach: FOREACH OPEN_PARENTHESIS stat_function_arg COMMA foreach_func_arg COMMA INTEGER COMMA INTEGER CLOSE_PARENTHESIS
+	;
+
+foreach_func_arg: PRINT
+	| SQRT
+	| FACT
+	| ADD
+	| MUL
 	;
 
 input: INPUT OPEN_PARENTHESIS CLOSE_PARENTHESIS
@@ -160,6 +172,7 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorG
 
 value: constant													{ $$ = ConstantFactorGrammarAction($1); }
 	| VARIABLE_NAME												{ $$ = AddVariableReferenceGrammarAction($1); }
+	| stat_function												{ GenericLogger("StatFuntionGrammarAction"); }
 	;
 
 constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }
