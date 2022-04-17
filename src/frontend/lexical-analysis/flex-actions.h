@@ -24,6 +24,8 @@ typedef enum TokenID {
 	MUL,
 	DIV,
 	FACT,
+	POW, 
+	SQRT, 
 
 	// Paréntesis.
 	OPEN_PARENTHESIS,
@@ -91,6 +93,10 @@ typedef enum TokenID {
  * (a.k.a. DFA), como mecanismo de escaneo y reconocimiento.
  */
 
+TokenID OpenBracePatternAction(const char * lexeme);
+
+TokenID CloseBracePatternAction(const char * lexeme);
+
 TokenID IntegerPatternAction(const char * lexeme);
 
 TokenID FloatPatternAction(const char * lexeme);
@@ -104,6 +110,10 @@ TokenID ListPatternAction(const char * lexeme);
 TokenID AssignPatternAction(const char * lexeme);
 
 TokenID SumWithPatternAction(const char * lexeme);
+
+TokenID IfPatternAction(const char * lexeme);
+
+TokenID ElsePatternAction(const char * lexeme);
 
 TokenID CommaPatternAction(const char * lexeme);
 
@@ -128,8 +138,6 @@ TokenID InputPatternAction(const char * lexeme);
 void IgnoredPatternAction(const char * lexeme);
 
 TokenID EndLinePatternAction(const char * lexeme);
-
-// TokenID EndFilePatternAction(const char * lexeme, int findEOF);
 
 TokenID UnknownPatternAction(const char * lexeme);
 

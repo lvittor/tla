@@ -10,18 +10,20 @@
 %token MUL
 %token DIV
 %token FACT
+%token POW
+%token SQRT
 
 %token OPEN_PARENTHESIS CLOSE_PARENTHESIS
 
 %token OPEN_BRACE CLOSE_BRACE
-
-%token IF ELSE
 
 %token ASSIGN
 
 %token EQ NE LE GE LT GT
 
 %token SUM_WITH
+
+%token IF ELSE
 
 %token COMMA
 
@@ -48,35 +50,38 @@
 
 program: instruction program 									{ $$ = ProgramGrammarAction($1); } 
 	|    EOL program											{ $$ = $2; }
-	|	 EOFF													{ printf("Result: %d", $1); }
+	|	 EOFF													{ GenericLogger("EOFFProgramGrammarAction"); }
 	;
 
-instruction: declare											{ printf("Result: %d", $1); }
-	| print														{ printf("Result: %d", $1); }
-	| if														{ printf("Result: %d", $1); }
+instruction: declare											{ GenericLogger("DeclareInstructionGrammarAction"); }
+	| print														{ GenericLogger("PrintInstructionGrammarAction"); }
+	| if														{ GenericLogger("IfInstructionGrammarAction"); }
 	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
 	| expression SUB expression									{ $$ = SubtractionExpressionGrammarAction($1, $3); }
 	| expression MUL expression									{ $$ = MultiplicationExpressionGrammarAction($1, $3); }
 	| expression DIV expression									{ $$ = DivisionExpressionGrammarAction($1, $3); }
+	| expression POW expression									{ GenericLogger("PowExpressionGrammarAction"); }
+	| SQRT OPEN_PARENTHESIS expression CLOSE_PARENTHESIS		{ GenericLogger("SqrtExpressionGrammarAction"); }
 	| factor FACT												{ $$ = FactorialExpressionGrammarAction($1); }
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
 	| stat_function												{ $$ = $1; }
 	;
 
-if: IF OPEN_PARENTHESIS condition CLOSE_PARENTHESIS OPEN_BRACE block end_if	 { printf("Result: %d, %d, %d", $3, $6, $7); }
+if: IF OPEN_PARENTHESIS condition CLOSE_PARENTHESIS OPEN_BRACE block end_if
 	;
 
-end_if: CLOSE_BRACE
-	| ELSE OPEN_BRACE block CLOSE_BRACE
+end_if: CLOSE_BRACE												{ GenericLogger("CloseBraceGrammarAction"); }
+	| CLOSE_BRACE ELSE OPEN_BRACE block CLOSE_BRACE				{ GenericLogger("ElseGrammarAction"); }
 
-condition: factor compare_opt factor
+condition: factor compare_opt factor							{ GenericLogger("ConditionGrammarAction"); }
 	;
 
-block: instruction block										{ $$ = $1; }
-	| EOL block													{ $$ = $2; }
-	| EOL														{ $$ = $1; }
+block: instruction block										{ GenericLogger("InstructionBlockGrammarAction"); }
+	| EOL block													{ GenericLogger("EOLBlockGrammarAction"); }
+	| instruction												{ GenericLogger("InstructionGrammarAction"); }
+	| EOL														{ GenericLogger("EOLGrammarAction"); }
 	;
 
 compare_opt: EQ

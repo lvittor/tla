@@ -8,6 +8,16 @@
  * Implementación de "flex-rules.h".
  */
 
+TokenID OpenBracePatternAction(const char * lexeme){
+	LogDebug("OpenBracePatternAction: '%s'.", lexeme);
+	return OPEN_BRACE;
+}
+
+TokenID CloseBracePatternAction(const char * lexeme){
+	LogDebug("CloseBracePatternAction: '%s'.", lexeme);
+	return CLOSE_BRACE;
+}
+
 TokenID IntegerPatternAction(const char * lexeme) {
 	LogDebug("IntegerPatternAction: '%s'.", lexeme);
 	yylval = atoi(lexeme);
@@ -38,6 +48,16 @@ TokenID AssignPatternAction(const char * lexeme){
 TokenID SumWithPatternAction(const char * lexeme){
 	LogDebug("SumWithPatternAction: '%s'.", lexeme);
 	return SUM_WITH;
+}
+
+TokenID IfPatternAction(const char * lexeme){
+	LogDebug("IfPatternAction: '%s'.", lexeme);
+	return IF;
+}
+
+TokenID ElsePatternAction(const char * lexeme){
+	LogDebug("ElsePatternAction: '%s'.", lexeme);
+	return ELSE;
 }
 
 TokenID CommaPatternAction(const char * lexeme){

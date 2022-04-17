@@ -75,6 +75,8 @@
  * abstracta (i.e., el AST).
  */
 
+void GenericLogger(const char * string);
+
 // Programa.
 int ProgramGrammarAction(const int value);
 

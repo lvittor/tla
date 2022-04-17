@@ -1,2 +1,11 @@
 # Realizar alguna operacion que involucre un salto o decision condicional.
 
+list data = [1.0, 2.0, 3.0, 10.1, 1.0, 2.1]
+
+float max_data = max(data)
+
+if(max_data == 1.0){
+    print("1.0 es el mayor valor")
+} else {
+    print("En realidad el mayor valor es: ", max_data)
+}

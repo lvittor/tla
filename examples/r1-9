@@ -1,1 +1,19 @@
 # Realizar una operacion que involucre el uso de variables y distribuciones en un mismo calculo.
+
+
+int mu1 = 0
+int sigma1 = 1
+
+int mu2 = 2
+int sigma2 = 3
+
+normal(mu1, sigma1) n1
+normal(mu2, sigma2) n2
+
+normal(mu1 + mu2, sqrt(sigma1**2 + sigma2**2)) n3
+
+normal(n1 sum with n2) n4 
+
+if (n4 == n3){
+   print("The sum of normal distributions is defined")
+}

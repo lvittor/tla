@@ -1,11 +1,23 @@
 # Building the compiler
 
 ```bash
-alias compile="
+compile(){
 rm -rf bin/
 cmake -S . -B bin                       # build the compiler
 cd bin && make clean && make && cd ..   # run make all
-cat examples/r1-6 | bin/Compiler        # run the compiler
+fs=`ls examples/`
+for f in $fs
+do
+    cat examples/$f | bin/Compiler  > out_compiler/$f 2>&1      # run the compiler
+done
+}
+```
+```bash
+alias c="
+rm -rf bin/
+cmake -S . -B bin                       # build the compiler
+cd bin && make clean && make && cd ..   # run make all
+cat examples/program | bin/Compiler        # run the compiler
 "
 ```
 

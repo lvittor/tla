@@ -17,3 +17,4 @@ bison-parser.h
 flex-scanner.c
 
 out/
+out_compiler/

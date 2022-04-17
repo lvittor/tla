@@ -26,12 +26,14 @@ whitespace		[ \f\n\r\t\v]
 "*"											{ return MUL; }
 "/"											{ return DIV; }
 "!"                                         { return FACT; }
+"**"                                        { return POW; }
+"sqrt"                                      { return SQRT; }
 
 "("											{ return OPEN_PARENTHESIS; }
 ")"											{ return CLOSE_PARENTHESIS; }
 
-"{"											{ return OPEN_BRACE; }
-"}"											{ return CLOSE_BRACE; }
+"{"											{ return OpenBracePatternAction(yytext); }
+"}"											{ return CloseBracePatternAction(yytext); }
 
 "="                                         { return AssignPatternAction(yytext); }
 
@@ -44,8 +46,8 @@ whitespace		[ \f\n\r\t\v]
 
 "sum with"                                  { return SumWithPatternAction(yytext); } 
 
-"if"                                        { printf("if"); return IF; }
-"else"                                      { return ELSE; }
+"if"                                        { return IfPatternAction(yytext); }
+"else"                                      { return ElsePatternAction(yytext); }
 
 #.*                                         { IgnoredPatternAction(yytext); }
 

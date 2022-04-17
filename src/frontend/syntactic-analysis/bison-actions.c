@@ -19,6 +19,10 @@ void yyerror(const char * string) {
 	LogErrorRaw("\n\n");
 }
 
+void GenericLogger(const char * string){
+    LogDebug("	%s", string);
+}
+
 int ProgramGrammarAction(const int value) {
 	LogDebug("	ProgramGrammarAction(%d)", value);
 	state.succeed = true;
