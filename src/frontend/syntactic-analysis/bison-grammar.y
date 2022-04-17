@@ -114,10 +114,10 @@ input: INPUT OPEN_PARENTHESIS CLOSE_PARENTHESIS
 print: PRINT OPEN_PARENTHESIS print_args CLOSE_PARENTHESIS
 	;
 
-print_args: STRING ADD print_args
+print_args: text_value ADD print_args
 	| VARIABLE_NAME ADD print_args
 	| expression ADD print_args
-	| STRING
+	| text_value
 	| VARIABLE_NAME
 	| expression
 	;
@@ -125,10 +125,9 @@ print_args: STRING ADD print_args
 stat_function: stat_function_type OPEN_PARENTHESIS stat_function_arg CLOSE_PARENTHESIS
 	;	
 
-stat_function_arg: VARIABLE_NAME
-	| LIST
+stat_function_arg: list_value
+	| VARIABLE_NAME
 	;
-
 
 stat_function_type: MEAN 
 	| MODE 
@@ -156,7 +155,10 @@ dist_type: binomial_type
 	| poisson_type
 	;
 
+// maybe put numeric_value + VARIABLE_NAME as dist_args and manage in backend
+
 binomial_type:  BINOMIAL_DIST_TYPE OPEN_PARENTHESIS INTEGER COMMA FLOAT CLOSE_PARENTHESIS
+	| BINOMIAL_DIST_TYPE OPEN_PARENTHESIS VARIABLE_NAME COMMA VARIABLE_NAME CLOSE_PARENTHESIS
 	;
 
 normal_type: NORMAL_DIST_TYPE OPEN_PARENTHESIS FLOAT COMMA FLOAT CLOSE_PARENTHESIS
@@ -165,21 +167,30 @@ normal_type: NORMAL_DIST_TYPE OPEN_PARENTHESIS FLOAT COMMA FLOAT CLOSE_PARENTHES
 	;
 
 poisson_type: POISSON_DIST_TYPE OPEN_PARENTHESIS INTEGER CLOSE_PARENTHESIS
+	| POISSON_DIST_TYPE OPEN_PARENTHESIS VARIABLE_NAME CLOSE_PARENTHESIS
 	;
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorGrammarAction($2); }
-	| value														{ $$ = $1; }
+	| numeric_value												{ $$ = $1; }
+	| VARIABLE_NAME												{ $$ = $1; }
 	;
 
-value: constant													{ $$ = ConstantFactorGrammarAction($1); }
+value: numeric_value											{ $$ = $1; }
+	| text_value												{ $$ = $1; }
+	| list_value												{ $$ = $1; }
+	| expression
 	| VARIABLE_NAME												{ $$ = AddVariableReferenceGrammarAction($1); }
+	;
+
+list_value: LIST												{ $$ = ListConstantGrammarAction($1); }
+	;
+
+numeric_value: INTEGER											{ $$ = IntegerConstantGrammarAction($1); }
+	| FLOAT														{ $$ = FloatConstantGrammarAction($1); }
 	| stat_function												{ GenericLogger("StatFuntionGrammarAction"); }
 	;
 
-constant: INTEGER												{ $$ = IntegerConstantGrammarAction($1); }
-	| FLOAT														{ $$ = FloatConstantGrammarAction($1); }
-	| STRING													{ $$ = StringConstantGrammarAction($1); }
-	| LIST														{ $$ = ListConstantGrammarAction($1); }
+text_value: STRING												{ $$ = StringConstantGrammarAction($1); }
 	;
 
 %%
