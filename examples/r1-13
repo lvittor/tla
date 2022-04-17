@@ -1,1 +1,3 @@
 # Intentar un calculo cualquiera utilizando variables no declaradas previamente.
+
+print("The sum is: " + (n1 + n2))
