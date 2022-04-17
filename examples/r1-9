@@ -1,15 +1,18 @@
 # Realizar una operacion que involucre el uso de variables y distribuciones en un mismo calculo.
 
-int mu1 = 0
-int sigma1 = 1
+float mu1 = 0.0
+float sigma1 = 1.0
 
-int mu2 = 2
-int sigma2 = 3
+float mu2 = 2.0
+float sigma2 = 3.0
 
 normal(mu1, sigma1) n1
 normal(mu2, sigma2) n2
 
-normal(mu1 + mu2, sqrt(sigma1**2 + sigma2**2)) n3
+float mu1_2 = mu1 + mu2 
+float sigma3 = sqrt(sigma1**2 + sigma2**2)
+
+normal(mu1_2, sigma3) n3
 
 normal(n1 sum with n2) n4 
 

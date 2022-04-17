@@ -17,7 +17,7 @@ alias c="
 rm -rf bin/
 cmake -S . -B bin                       # build the compiler
 cd bin && make clean && make && cd ..   # run make all
-cat examples/r1-8 | bin/Compiler        # run the compiler
+cat examples/r1-9 | bin/Compiler        # run the compiler
 "
 ```
 
