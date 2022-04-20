@@ -1,8 +1,8 @@
 [![✗](https://img.shields.io/badge/Release-v0.1.0-ffb600.svg?style=for-the-badge)](https://github.com/agustin-golmar/Flex-Bison-Compiler/releases)
 
-# Flex/Bison Compiler
+# Probably - The best compiler
 
-An empty compiler built with Flex and Bison.
+A first approach to a compiler built with Flex and Bison.
 
 ## Requirements
 
