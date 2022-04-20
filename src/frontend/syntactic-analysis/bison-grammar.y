@@ -76,6 +76,7 @@ if: IF OPEN_PARENTHESIS condition CLOSE_PARENTHESIS OPEN_BRACE block end_if
 
 end_if: CLOSE_BRACE												{ GenericLogger("CloseBraceGrammarAction"); }
 	| CLOSE_BRACE ELSE OPEN_BRACE block CLOSE_BRACE				{ GenericLogger("ElseGrammarAction"); }
+	;
 
 condition: factor compare_opt factor							{ GenericLogger("ConditionGrammarAction"); }
 	;

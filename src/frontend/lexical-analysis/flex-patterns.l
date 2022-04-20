@@ -80,7 +80,7 @@ whitespace		[ \f\n\r\t\v]
 
 -?(0|[1-9]{digit}*) 						{ return IntegerPatternAction(yytext); }
 
--?(0|[1-9]{digit}*)\.{digit}*               { return FloatPatternAction(yytext); }
+-?(0|[1-9]{digit}*)\.{digit}+               { return FloatPatternAction(yytext); }
 
 \"[^\"]+\"                                  { return StringPatternAction(yytext); }
 

@@ -1,6 +1,5 @@
 # Realizar un calculo entre variables de tipos incompatibles.
 
 integer n = 10
-string s = "hola"
 
-print("Sum: " + (s+n))
+print("Sum: " + ("hola"+n))
