@@ -4,49 +4,101 @@
 
 %}
 
-// IDs de los tokens generados desde Flex:
-%token ADD
-%token SUB
-%token MUL
-%token DIV
-%token FACT
-%token POW
-%token SQRT
+%union {
+	// Terminales
+	char * string;
+	int integer;
+	int token;
+	double float;
 
-%token OPEN_PARENTHESIS CLOSE_PARENTHESIS
+	// No terminales
+	Program * program;
+	Instructions * instructions;
+	Instruction * instruction;
+	Expression * expression;
+	If * _if;
+	EndIf * _endif;
+	Condition * condition;
+	Block * block;
+	CompareOpt * compare_opt;
+	Declare * declare;
+	Foreach * foreach;
+	ForeachFunctionArg * foreach_func_arg;
+	Input * input;
+	Print * print;
+	PrintArgs * print_args;
+	StatFunction * stat_function;
+	StatFunctionArg * stat_function_arg;
+	StatFunctionType * stat_function_type;
+	Token * token_node;
+	DistDeclare * dist_declare;
+	DistType * dist_type;
+	Binomial * binomial;
+	Normal * normal;
+	Poisson * poisson;
+	Factor * factor;
+	Value * value;
+	List * list;
+	Numeric * numeric;
+	Text * text;
+}
 
-%token OPEN_BRACE CLOSE_BRACE
+// Terminales
+%token <token> ADD SUB MUL DIV FACT POW SQRT
+%token <token> OPEN_PARENTHESIS CLOSE_PARENTHESIS
+%token <token> OPEN_BRACE CLOSE_BRACE
+%token <token> ASSIGN
+%token <token> EQ NE LE GE LT GT
+%token <token> SUM_WITH
+%token <token> IF ELSE
+%token <token> FOREACH
+%token <token> COMMA
+%token <token> INTEGER_TYPE FLOAT_TYPE STRING_TYPE LIST_TYPE
+%token <token> BINOMIAL_DIST_TYPE NORMAL_DIST_TYPE POISSON_DIST_TYPE
+%token <token> PRINT INPUT
+%token <token> MEAN MODE VARIANCE KURTOSIS Q1 Q3 MAX MIN SD SKEWNESS
+%token <integer> INTEGER 
+%token <float> FLOAT 
+%token <string> STRING LIST VARIABLE_NAME
+%token <token> EOL EOFF
 
-%token ASSIGN
-
-%token EQ NE LE GE LT GT
-
-%token SUM_WITH
-
-%token IF ELSE
-
-%token FOREACH
-
-%token COMMA
-
-%token INTEGER_TYPE FLOAT_TYPE STRING_TYPE LIST_TYPE
-
-%token BINOMIAL_DIST_TYPE NORMAL_DIST_TYPE POISSON_DIST_TYPE
-
-%token PRINT INPUT
-
-%token MEAN MODE VARIANCE KURTOSIS Q1 Q3 MAX MIN SD SKEWNESS
-
-%token INTEGER FLOAT STRING LIST
-
-%token VARIABLE_NAME
-
-%token EOL EOFF
+// No terminales
+%type <program> program
+%type <instructions> instructions
+%type <instruction> instruction
+%type <expression> expression
+%type <_if> if
+%type <_endif> end_if
+%type <condition> condition
+%type <block> block
+%type <compare_opt> compare_opt
+%type <declare> declare
+%type <foreach> foreach
+%type <foreach_func_arg> foreach_func_arg
+%type <input> input
+%type <print> print
+%type <print_args> print_args
+%type <stat_function> stat_function
+%type <stat_function_arg> stat_function_arg
+%type <stat_function_type> stat_function_type
+%type <token_node> type
+%type <dist_declare> dist_declare
+%type <dist_type> dist_type
+%type <binomial> binomial_type
+%type <normal> normal_type
+%type <poisson> poisson_type
+%type <factor> factor
+%type <value> value
+%type <list> list_value
+%type <numeric> numeric_value
+%type <text> text_value
 
 // Reglas de asociatividad y precedencia (de menor a mayor):
 %left ADD SUB
 %left MUL DIV
 %left FACT
+
+%start program
 
 %%
 
