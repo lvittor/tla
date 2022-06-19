@@ -21,62 +21,62 @@ whitespace		[ \f\n\r\t\v]
 
 %%
 
-"+"											{ return ADD; }
-"-"											{ return SUB; }
-"*"											{ return MUL; }
-"/"											{ return DIV; }
-"!"                                         { return FACT; }
-"**"                                        { return POW; }
-"sqrt"                                      { return SQRT; }
+"+"											{ return TokenIDPatternAction(yytext, ADD); }
+"-"											{ return TokenIDPatternAction(yytext, SUB); }
+"*"											{ return TokenIDPatternAction(yytext, MUL); }
+"/"											{ return TokenIDPatternAction(yytext, DIV); }
+"!"                                         { return TokenIDPatternAction(yytext, FACT); }
+"**"                                        { return TokenIDPatternAction(yytext, POW); }
+"sqrt"                                      { return TokenIDPatternAction(yytext, SQRT); }
 
-"("											{ return OPEN_PARENTHESIS; }
-")"											{ return CLOSE_PARENTHESIS; }
+"("											{ return TokenIDPatternAction(yytext, OPEN_PARENTHESIS); }
+")"											{ return TokenIDPatternAction(yytext, CLOSE_PARENTHESIS); }
 
-"{"											{ return OpenBracePatternAction(yytext); }
-"}"											{ return CloseBracePatternAction(yytext); }
+"{"											{ return TokenIDPatternAction(yytext, OPEN_BRACE); }
+"}"											{ return TokenIDPatternAction(yytext, CLOSE_BRACE); }
 
-"="                                         { return AssignPatternAction(yytext); }
+"="                                         { return TokenIDPatternAction(yytext, ASSIGN); }
 
-"=="                                        { return EQ; }
-"!="                                        { return NE; }
-"<="                                        { return LE; }
-">="                                        { return GE; }
-"<"                                         { return LT; }
-">"                                         { return GT; }
+"=="                                        { return TokenIDPatternAction(yytext, EQ); }
+"!="                                        { return TokenIDPatternAction(yytext, NE); }
+"<="                                        { return TokenIDPatternAction(yytext, LE); }
+">="                                        { return TokenIDPatternAction(yytext, GE); }
+"<"                                         { return TokenIDPatternAction(yytext, LT); }
+">"                                         { return TokenIDPatternAction(yytext, GT); }
 
-"sumwith"                                   { return SumWithPatternAction(yytext); } 
+"sumwith"                                   { return TokenIDPatternAction(yytext, SUM_WITH); } 
 
-"if"                                        { return IfPatternAction(yytext); }
-"else"                                      { return ElsePatternAction(yytext); }
+"if"                                        { return TokenIDPatternAction(yytext, IF); }
+"else"                                      { return TokenIDPatternAction(yytext, ELSE); }
 
-"foreach"                                   { return ForeachPatternAction(yytext);}
+"foreach"                                   { return TokenIDPatternAction(yytext, FOREACH); }
 
 #.*                                         { IgnoredPatternAction(yytext); }
 
-","                                         { return CommaPatternAction(yytext); }
+","                                         { return TokenIDPatternAction(yytext, COMMA); }
 
-"integer"                                   { return IntegerTypePatternAction(yytext); }
-"float"                                     { return FloatTypePatternAction(yytext); }
-"string"                                    { return StringTypePatternAction(yytext); }
-"list"                                      { return ListTypePatternAction(yytext); }
+"integer"                                   { return TokenIDPatternAction(yytext, INTEGER_TYPE); }
+"float"                                     { return TokenIDPatternAction(yytext, FLOAT_TYPE); }
+"string"                                    { return TokenIDPatternAction(yytext, STRING_TYPE); }
+"list"                                      { return TokenIDPatternAction(yytext, LIST_TYPE); }
 
-"binomial"                                  { return BinomialTypePatternAction(yytext); }
-"normal"                                    { return NormalTypePatternAction(yytext); }
-"poisson"                                   { return PoissonTypePatternAction(yytext); }
+"binomial"                                  { return TokenIDPatternAction(yytext, BINOMIAL_DIST_TYPE); }
+"normal"                                    { return TokenIDPatternAction(yytext, NORMAL_DIST_TYPE); }
+"poisson"                                   { return TokenIDPatternAction(yytext, POISSON_DIST_TYPE); }
 
-"print"                                     { return PrintPatternAction(yytext); }
-"input"                                     { return InputPatternAction(yytext); }
+"print"                                     { return TokenIDPatternAction(yytext, PRINT); }
+"input"                                     { return TokenIDPatternAction(yytext, INPUT); }
 
-"mean"                                      { return MEAN; }
-"mode"                                      { return MODE; }
-"variance"                                  { return VARIANCE; }
-"kurtosis"                                  { return KURTOSIS; }
-"q1"                                        { return Q1; }
-"q3"                                        { return Q3; }
-"max"                                       { return MAX; }
-"min"                                       { return MIN; }
-"sd"                                        { return SD; }
-"skewness"                                  { return SKEWNESS; }
+"mean"                                      { return TokenIDPatternAction(yytext, MEAN); }
+"mode"                                      { return TokenIDPatternAction(yytext, MODE); }
+"variance"                                  { return TokenIDPatternAction(yytext, VARIANCE); }
+"kurtosis"                                  { return TokenIDPatternAction(yytext, KURTOSIS); }
+"q1"                                        { return TokenIDPatternAction(yytext, Q1); }
+"q3"                                        { return TokenIDPatternAction(yytext, Q3); }
+"max"                                       { return TokenIDPatternAction(yytext, MAX); }
+"min"                                       { return TokenIDPatternAction(yytext, MIN); }
+"sd"                                        { return TokenIDPatternAction(yytext, SD); }
+"skewness"                                  { return TokenIDPatternAction(yytext, SKEWNESS); }
 
 -?(0|[1-9]{digit}*) 						{ return IntegerPatternAction(yytext); }
 
@@ -88,11 +88,11 @@ whitespace		[ \f\n\r\t\v]
 
 \[{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*({whitespace}*,{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*)*{whitespace}*\] { return ListPatternAction(yytext); }
 
-{endline}                                   { EndLinePatternAction(yytext); }
+{endline}                                   { return EndLinePatternAction(yytext); }
 
 <<EOF>>                                     { static int findEOFF = 0; return findEOFF++ ? 0 : EOFF; }
 
-{whitespace}								{ IgnoredPatternAction(yytext); }
+{whitespace}								{ return IgnoredPatternAction(yytext); }
 
 .											{ return UnknownPatternAction(yytext); }
 

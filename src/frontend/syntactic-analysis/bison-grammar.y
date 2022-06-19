@@ -220,27 +220,27 @@ poisson_type: POISSON_DIST_TYPE OPEN_PARENTHESIS INTEGER CLOSE_PARENTHESIS      
 	| POISSON_DIST_TYPE OPEN_PARENTHESIS VARIABLE_NAME CLOSE_PARENTHESIS                         { $$ = PoissonTypeVariableGrammarAction($3); }
 	;
 
-factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = ExpressionFactorGrammarAction($2); }
-	| numeric_value												{ $$ = $1; }
-	| VARIABLE_NAME												{ $$ = $1; }
+factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = FactorExpressionGrammarAction($2); }
+	| numeric_value												{ $$ = FactorValueGrammarAction($1); }
+	| VARIABLE_NAME												{ $$ = FactorVariableGrammarAction($1); }
 	;
 
-value: numeric_value											{ $$ = $1; }
-	| text_value												{ $$ = $1; }
-	| list_value												{ $$ = $1; }
-	| expression
-	| VARIABLE_NAME												{ $$ = AddVariableReferenceGrammarAction($1); }
+value: numeric_value											{ $$ = ValueNumericGrammarAction($1); }
+	| text_value												{ $$ = ValueTextGrammarAction($1); }
+	| list_value												{ $$ = ValueListGrammarAction($1); }
+	| expression												{ $$ = ValueExpressionGrammarAction($1); }
+	| VARIABLE_NAME												{ $$ = ValueVariableGrammarAction($1); }
 	;
 
-list_value: LIST												{ $$ = ListConstantGrammarAction($1); }
+list_value: LIST												{ $$ = ListGrammarAction($1); }
 	;
 
-numeric_value: INTEGER											{ $$ = IntegerConstantGrammarAction($1); }
-	| FLOAT														{ $$ = FloatConstantGrammarAction($1); }
-	| stat_function												{ GenericLogger("StatFuntionGrammarAction"); }
+numeric_value: INTEGER											{ $$ = NumericIntegerGrammarAction($1); }
+	| FLOAT														{ $$ = NumericFloatGrammarAction($1); }
+	| stat_function												{ $$ = NumericStatGrammarAction($1); }
 	;
 
-text_value: STRING												{ $$ = StringConstantGrammarAction($1); }
+text_value: STRING												{ $$ = TextGrammarAction($1); }
 	;
 
 %%
