@@ -27,6 +27,36 @@ extern int yylex(void);
 // Función global del analizador sintáctico Bison.
 extern int yyparse(void);
 
+typedef struct Program;
+typedef struct Instructions;
+typedef struct Instruction;
+typedef struct Expression;
+typedef struct If;
+typedef struct EndIf;
+typedef struct Condition;
+typedef struct Block;
+typedef struct CompareOpt;
+typedef struct Declare;
+typedef struct Foreach;
+typedef struct ForeachFunctionArg;
+typedef struct Input;
+typedef struct Print;
+typedef struct PrintArgs;
+typedef struct StatFunction;
+typedef struct StatFunctionArg;
+typedef struct StatFunctionType;
+typedef struct Token;
+typedef struct DistDeclare;
+typedef struct DistType;
+typedef struct Binomial;
+typedef struct Normal;
+typedef struct Poisson;
+typedef struct Factor;
+typedef struct Value;
+typedef struct List;
+typedef struct Numeric;
+typedef struct Text;
+
 // Emular tipo "boolean".
 typedef enum {
 	false = 0,
