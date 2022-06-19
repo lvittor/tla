@@ -10,7 +10,7 @@ extern FILE * yyin;
 extern FILE * yyout;
 
 // Variable global que contiene el número escaneado.
-extern int yylval;
+// extern int yylval;
 
 // Variable global que contiene el número de la línea analizada.
 extern int yylineno;
@@ -47,9 +47,306 @@ typedef struct {
 	// Agregar una tabla de símbolos.
 	// ...
 
+	Program * program;
+
 } CompilerState;
 
 // El estado se define e inicializa en el archivo "main.c":
 extern CompilerState state;
+
+typedef struct Program {
+	Instructions * instructions;
+} Program;
+
+typedef enum InstructionsType {
+	EOL_INSTRUCTIONS,
+	INSTRUCTION_INSTRUCTIONS
+} InstructionsType;
+
+typedef struct Instructions {
+	InstructionsType type;
+	Instruction * instruction;
+	Instructions * instructions;
+} Instructions;
+
+typedef enum InstructionType {
+	DECLARE_INSTRUCTION,
+	PRINT_INSTRUCTION,
+	IF_INSTRUCTION,
+	FOREACH_INSTRUCTION
+} InstructionType;
+
+typedef struct Instruction {
+	InstructionType type;
+	Declare * declare_instruction;
+	Print * print_instruction;
+	If * if_instruction;
+	Foreach * foreach_instruction;
+} Instruction;
+
+typedef enum ExpressionType {
+	ADD_EXPRESSION,
+	SUB_EXPRESSION,
+	MUL_EXPRESSION,
+	DIV_EXPRESSION,
+	POW_EXPRESSION,
+	SQRT_EXPRESSION,
+	FACT_EXPRESSION,
+	FACTOR_EXPRESSION
+} ExpressionType;
+
+typedef struct Expression {
+	ExpressionType type;
+	Expression * left_expression;
+	Expression * right_expression;
+	Factor * factor_expression;
+} Expression;
+
+typedef struct If {
+	Condition * condition;
+	Block * block;
+	EndIf * end_if;
+} If;
+
+typedef enum EndIfType {
+	CLOSE_NORMAL,
+	CLOSE_BLOCK
+} EndIfType;
+
+typedef struct EndIf {
+	EndIfType type;
+	Block * block;
+} EndIf;
+
+typedef struct Condition {
+	Factor * left_factor;
+	Factor * right_factor;
+	CompareOpt * compare_opt;
+} Condition;
+
+typedef struct Block {
+	Instructions * instructions;
+} Block;
+
+typedef enum CompareOptType {
+	EQ_COMPARE,
+	NE_COMPARE,
+	LE_COMPARE,
+	GE_COMPARE,
+	LT_COMPARE,
+	GT_COMPARE
+} CompareOptType;
+
+typedef struct CompareOpt {
+	CompareOptType type;
+	int comparator;
+} CompareOpt;
+
+typedef enum DeclareType {
+	VALUE_DECLARE,
+	DIST_DECLARE,
+	INPUT_DECLARE
+} DeclareType;
+
+// tengo dudas
+typedef struct Declare { 
+	DeclareType type;
+	Token * type_token;
+	char * variable_name;
+	DistDeclare * dist_declare;
+	Value * value;
+	Input * input;
+} Declare;
+
+typedef struct Foreach {
+	StatFunctionArg * stat_function_arg;
+	ForeachFunctionArg * foreach_function_arg;
+} Foreach;
+
+typedef enum ForeachFuncArgType {
+	PRINT_FOREACH,
+	SQRT_FOREACH,
+	FACT_FOREACH,
+	ADD_FOREACH,
+	MUL_FOREACH
+} ForeachFuncArgType;
+
+typedef struct ForeachFunctionArg {
+	ForeachFuncArgType type;
+	int function;
+} ForeachFunctionArg;
+
+// ?????????/
+typedef struct Input {
+	char * value;
+} Input;
+
+typedef struct Print {
+	PrintArgs * print_args;
+} Print;
+
+typedef enum PrintArgsType {
+	TEXT_ADD_TYPE,
+	VAR_ADD_TYPE,
+	EXPRESSION_ADD_TYPE,
+	TEXT_TYPE,
+	VAR_TYPE,
+	EXPRESSION_TYPE
+} PrintArgsType;
+
+typedef struct PrintArgs {
+	PrintArgsType type;
+	TextValue * text_value;
+	PrintArgs * print_args;
+	Expression * expression;
+	char * variable_name;
+} PrintArgs;
+
+typedef struct StatFunction {
+	StatFunctionType * stat_function_type;
+	StatFunctionArg * stat_function_arg;
+} StatFunction;
+
+typedef struct StatFunctionArg {
+	List * list_value;
+	char * variable_name;
+} StatFunctionArg;
+
+typedef enum StatFunctionTypeType {
+	MEAN_STAT_TYPE,
+	MODE_STAT_TYPE,
+	VARIANCE_STAT_TYPE,
+	KURTOSIS_STAT_TYPE,
+	Q1_STAT_TYPE,
+	Q3_STAT_TYPE,
+	MAX_STAT_TYPE,
+	MIN_STAT_TYPE,
+	SD_STAT_TYPE,
+	SKEWNESS_STAT_TYPE
+} StatFunctionTypeType;
+
+typedef struct StatFunctionType {
+	StatFunctionTypeType type;
+	int stat_function;
+} StatFunctionType;
+
+typedef enum TokenType {
+	INTEGER_TYPE,
+	FLOAT_TYPE,
+	STRING_TYPE,
+	LIST_TYPE	
+} TokenType;
+
+typedef struct Token {
+	TokenType type;
+	int token;
+} Token;
+
+typedef struct DistDeclare {
+	DistType * dist_type;
+	char * variable_name;
+} DistDeclare;
+
+typedef struct DistType {
+	Binomial * binomial;
+	Normal * normal;
+	Poisson * poisson;
+} DistType;
+
+typedef enum BinomialType {
+	INTEGER_FLOAT_BINOMIAL,
+	VARIABLE_VARIABLE_BINOMIAL
+} BinomialType;
+
+typedef struct Binomial {
+	BinomialType type;
+	char * left_variable_name;
+	char * right_variable_name;
+	int int_value;
+	float float_value;
+} Binomial;
+
+typedef enum NormalType {
+	FLOAT_FLOAT_NORMAL,
+	VARIABLE_VARIABLE_NORMAL,
+	VARIABLE_SUM_VARIABLE_NORMAL
+} NormalType;
+
+typedef struct Normal {
+	NormalType type;
+	float left_float;
+	float right_float;
+	char * left_variable_name;
+	char * right_variable_name;
+} Normal;
+
+typedef enum PoissonType {
+	INTEGER_POISSON,
+	VARIABLE_POISSON
+} PoissonType;
+
+typedef struct Poisson {
+	PoissonType type;
+	int value;
+	char * variable_name;
+} Poisson;
+
+typedef enum FactorType {
+	EXPRESSION_FACTOR,
+	NUMERIC_FACTOR,
+	VARIABLE_FACTOR
+} FactorType;
+
+typedef struct Factor {
+	FactorType type;
+	Expression * expression;
+	Numeric * numeric_value;
+	char * variable_name;
+} Factor;
+
+typedef enum ValueType {
+	NUMERIC_VALUE,
+	TEXT_VALUE,
+	LIST_VALUE,
+	EXPRESSION_VALUE,
+	VARIABLE_VALUE
+} ValueType;
+
+typedef struct Value {
+	Numeric * numeric_value;
+	Text * text_value;
+	List * list_value;
+	Expression * expression;
+	char * variable_name;
+} Value;
+
+typedef struct List {
+	char * list;
+} List;
+
+typedef enum NumericType {
+	INTEGER_NUMERIC,
+	FLOAT_NUMERIC,
+	STAT_NUMERIC
+} NumericType;
+
+typedef struct Numeric {
+	NumericType type;
+	int int_value;
+	float float_value;
+	StatFunction * stat_function;
+} Numeric;
+
+typedef struct Text {
+	char * value;
+} Text;
+
+
+
+
+
+
+
+
 
 #endif

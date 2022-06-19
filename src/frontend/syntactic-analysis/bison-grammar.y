@@ -50,9 +50,11 @@
 
 %%
 
-program: instruction program 									{ $$ = ProgramGrammarAction($1); } 
-	|    EOL program											{ $$ = $2; }
-	|	 EOFF													{ GenericLogger("EOFFProgramGrammarAction"); }
+program: instructions											{ $$ = ProgramGrammarAction($1); } 
+	;
+
+instructions: instruction EOL instructions
+	|	instruction
 	;
 
 instruction: declare											{ GenericLogger("DeclareInstructionGrammarAction"); }
@@ -81,10 +83,7 @@ end_if: CLOSE_BRACE												{ GenericLogger("CloseBraceGrammarAction"); }
 condition: factor compare_opt factor							{ GenericLogger("ConditionGrammarAction"); }
 	;
 
-block: instruction block										{ GenericLogger("InstructionBlockGrammarAction"); }
-	| EOL block													{ GenericLogger("EOLBlockGrammarAction"); }
-	| instruction												{ GenericLogger("InstructionGrammarAction"); }
-	| EOL														{ GenericLogger("EOLGrammarAction"); }
+block: instructions												{ GenericLogger("InstructionBlockGrammarAction"); }
 	;
 
 compare_opt: EQ

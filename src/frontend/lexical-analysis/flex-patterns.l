@@ -44,7 +44,7 @@ whitespace		[ \f\n\r\t\v]
 "<"                                         { return LT; }
 ">"                                         { return GT; }
 
-"sum with"                                  { return SumWithPatternAction(yytext); } 
+"sumwith"                                  { return SumWithPatternAction(yytext); } 
 
 "if"                                        { return IfPatternAction(yytext); }
 "else"                                      { return ElsePatternAction(yytext); }
