@@ -301,7 +301,7 @@ typedef struct Binomial {
 	char * left_variable_name;
 	char * right_variable_name;
 	int int_value;
-	float float_value;
+	double float_value;
 } Binomial;
 
 typedef enum NormalType {
@@ -312,8 +312,8 @@ typedef enum NormalType {
 
 typedef struct Normal {
 	NormalType type;
-	float left_float;
-	float right_float;
+	double left_float;
+	double right_float;
 	char * left_variable_name;
 	char * right_variable_name;
 } Normal;
@@ -325,7 +325,7 @@ typedef enum PoissonType {
 
 typedef struct Poisson {
 	PoissonType type;
-	int value;
+	int int_value;
 	char * variable_name;
 } Poisson;
 
@@ -351,6 +351,7 @@ typedef enum ValueType {
 } ValueType;
 
 typedef struct Value {
+	ValueType type;
 	Numeric * numeric_value;
 	Text * text_value;
 	List * list_value;
@@ -371,12 +372,12 @@ typedef enum NumericType {
 typedef struct Numeric {
 	NumericType type;
 	int int_value;
-	float float_value;
+	double float_value;
 	StatFunction * stat_function;
 } Numeric;
 
 typedef struct Text {
-	char * value;
+	char * text_value;
 } Text;
 
 
