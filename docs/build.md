@@ -15,9 +15,10 @@ done
 ```bash
 alias c="
 rm -rf bin/
+rm src/frontend/lexical-analysis/flex-scanner.c src/frontend/syntactic-analysis/bison-parser.*
 cmake -S . -B bin                       # build the compiler
 cd bin && make clean && make && cd ..   # run make all
-cat examples/r1-9 | bin/Compiler        # run the compiler
+cat examples/r1-1 | bin/Compiler        # run the compiler
 "
 ```
 

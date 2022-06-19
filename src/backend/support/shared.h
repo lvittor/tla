@@ -27,35 +27,35 @@ extern int yylex(void);
 // Función global del analizador sintáctico Bison.
 extern int yyparse(void);
 
-typedef struct Program;
-typedef struct Instructions;
-typedef struct Instruction;
-typedef struct Expression;
-typedef struct If;
-typedef struct EndIf;
-typedef struct Condition;
-typedef struct Block;
-typedef struct CompareOpt;
-typedef struct Declare;
-typedef struct Foreach;
-typedef struct ForeachFunctionArg;
-typedef struct Input;
-typedef struct Print;
-typedef struct PrintArgs;
-typedef struct StatFunction;
-typedef struct StatFunctionArg;
-typedef struct StatFunctionType;
-typedef struct Token;
-typedef struct DistDeclare;
-typedef struct DistType;
-typedef struct Binomial;
-typedef struct Normal;
-typedef struct Poisson;
-typedef struct Factor;
-typedef struct Value;
-typedef struct List;
-typedef struct Numeric;
-typedef struct Text;
+typedef struct Program Program;
+typedef struct Instructions Instructions;
+typedef struct Instruction Instruction;
+typedef struct Expression Expression;
+typedef struct If If;
+typedef struct EndIf EndIf;
+typedef struct Condition Condition;
+typedef struct Block Block;
+typedef struct CompareOpt CompareOpt;
+typedef struct Declare Declare;
+typedef struct Foreach Foreach;
+typedef struct ForeachFunctionArg ForeachFunctionArg;
+typedef struct Input Input;
+typedef struct Print Print;
+typedef struct PrintArgs PrintArgs;
+typedef struct StatFunction StatFunction;
+typedef struct StatFunctionArg StatFunctionArg;
+typedef struct StatFunctionType StatFunctionType;
+typedef struct Token Token;
+typedef struct DistDeclare DistDeclare;
+typedef struct DistType DistType;
+typedef struct Binomial Binomial;
+typedef struct Normal Normal;
+typedef struct Poisson Poisson;
+typedef struct Factor Factor;
+typedef struct Value Value;
+typedef struct List List;
+typedef struct Numeric Numeric;
+typedef struct Text Text;
 
 // Emular tipo "boolean".
 typedef enum {
@@ -178,7 +178,6 @@ typedef enum DeclareType {
 	INPUT_DECLARE
 } DeclareType;
 
-// tengo dudas
 typedef struct Declare { 
 	DeclareType type;
 	Token * type_token;
@@ -208,7 +207,6 @@ typedef struct ForeachFunctionArg {
 	int function;
 } ForeachFunctionArg;
 
-// ?????????/
 typedef struct Input {
 	char * value;
 } Input;
@@ -269,10 +267,10 @@ typedef struct StatFunctionType {
 } StatFunctionType;
 
 typedef enum TokenType {
-	INTEGER_TYPE,
-	FLOAT_TYPE,
-	STRING_TYPE,
-	LIST_TYPE	
+	INTEGER_TOKEN_TYPE,
+	FLOAT_TOKEN_TYPE,
+	STRING_TOKEN_TYPE,
+	LIST_TOKEN_TYPE	
 } TokenType;
 
 typedef struct Token {

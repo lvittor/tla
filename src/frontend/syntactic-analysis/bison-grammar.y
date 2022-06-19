@@ -9,7 +9,7 @@
 	char * string;
 	int integer;
 	int token;
-	double float;
+	double decimal;
 
 	// No terminales
 	Program * program;
@@ -58,7 +58,7 @@
 %token <token> PRINT INPUT
 %token <token> MEAN MODE VARIANCE KURTOSIS Q1 Q3 MAX MIN SD SKEWNESS
 %token <integer> INTEGER 
-%token <float> FLOAT 
+%token <decimal> FLOAT 
 %token <string> STRING LIST VARIABLE_NAME
 %token <token> EOL EOFF
 

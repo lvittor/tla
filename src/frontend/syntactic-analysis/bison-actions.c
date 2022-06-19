@@ -533,28 +533,28 @@ StatFunctionType * StatFunctionTypeSkewnessGrammarAction(int stat_function) {
 Token * TypeIntegerGrammarAction(int token) {
 	GenericLogger("TypeIntegerGrammarAction");
 	Token * newToken = malloc(sizeof(Token));
-	newToken->type = INTEGER_TYPE;
+	newToken->type = INTEGER_TOKEN_TYPE;
 	newToken->token = token;
 }
 
 Token * TypeFloatGrammarAction(int token) {
 	GenericLogger("TypeFloatGrammarAction");
 	Token * newToken = malloc(sizeof(Token));
-	newToken->type = FLOAT_TYPE;
+	newToken->type = FLOAT_TOKEN_TYPE;
 	newToken->token = token;
 }
 
 Token * TypeStringGrammarAction(int token) {
 	GenericLogger("TypeStringGrammarAction");
 	Token * newToken = malloc(sizeof(Token));
-	newToken->type = STRING_TYPE;
+	newToken->type = STRING_TOKEN_TYPE;
 	newToken->token = token;
 }
 
 Token * TypeListGrammarAction(int token) {
 	GenericLogger("TypeListGrammarAction");
 	Token * newToken = malloc(sizeof(Token));
-	newToken->type = LIST_TYPE;
+	newToken->type = LIST_TOKEN_TYPE;
 	newToken->token = token;
 }
 
@@ -637,7 +637,7 @@ Normal * NormalTypeVariableGrammarAction(char * left_variable_name, char * left_
 	return newNormal;
 }
 
-Normal * NormalTypeSumGrammarAction($3, $5)  {
+Normal * NormalTypeSumGrammarAction(char * left_variable_name, char * left_variable_name)  {
 	GenericLogger("NormalTypeSumGrammarAction");
 	Normal * newNormal = malloc(sizeof(Normal));
 	newNormal->type = VARIABLE_SUM_VARIABLE_NORMAL;
@@ -665,7 +665,6 @@ Poisson * PoissonTypeVariableGrammarAction(char * variable_name) {
 	newPoisson->variable_name = variable_name;
 	return newPoisson;
 }
-
 
 Factor * FactorExpressionGrammarAction(Expression * expression) {
 	GenericLogger("FactorExpressionGrammarAction");

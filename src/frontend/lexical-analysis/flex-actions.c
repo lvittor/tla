@@ -11,37 +11,37 @@
 
 TokenID TokenIDPatternAction(const char * lexeme, TokenID token) {
 	LogDebug("TokenIDPatternAction: '%s' with %d.\n", lexeme, token);
-	yyval.token = token;
+	yylval.token = token;
 	return token;
 }
 
 TokenID IntegerPatternAction(const char * lexeme) {
 	LogDebug("IntegerPatternAction: '%s'.\n", lexeme);
-	yyval.integer = atoi(lexeme);
+	yylval.integer = atoi(lexeme);
 	return INTEGER;
 }
 
 TokenID FloatPatternAction(const char * lexeme) {
 	LogDebug("FloatPatternAction: '%s'.\n", lexeme);
-	yyval.float = atof(lexeme);
+	yylval.decimal = atof(lexeme);
 	return FLOAT;
 }
 
 TokenID StringPatternAction(const char * lexeme) {
 	LogDebug("StringPatternAction: '%s'.\n", lexeme);
-	yyval.string = lexeme;
+	yylval.string = lexeme;
 	return STRING;
 }
 
 TokenID ListPatternAction(const char * lexeme){
 	LogDebug("ListPatternAction: '%s'.\n", lexeme);
-	yyval.string = lexeme;
+	yylval.string = lexeme;
 	return LIST;
 }
 
 TokenID VariableNamePatternAction(const char * lexeme){
 	LogDebug("VariableNamePatternAction: '%s'.\n", lexeme);
-	yyval.string = lexeme;
+	yylval.string = lexeme;
 	return VARIABLE_NAME;
 }
 

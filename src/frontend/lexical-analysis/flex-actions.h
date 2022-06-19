@@ -2,91 +2,94 @@
 #define FLEX_ACTIONS_HEADER
 
 #include "../../backend/support/shared.h"
+#include "../syntactic-analysis/bison-parser.h"
 
 /**
  * Se definen los diferentes IDs de cada token disponible para el scanner Flex.
  */
-typedef enum TokenID {
 
-	// Por defecto, el valor "0" hace fallar el analizador sintáctico.
-	UNKNOWN = 0,
+typedef yytoken_kind_t TokenID;
+// typedef enum TokenID {
 
-	// Código de error de Bison, que permite abortar el escaneo de lexemas cuando
-	// se presente un patrón desconocido. El número "257" coincide con el valor
-	// que Bison le otorga por defecto, pero además permite que el resto de
-	// tokens continúen desde el valor "258" lo que permite proteger los IDs
-	// internos que Bison reserva para crear "tokens literales":
-	YYUNDEF = 257,
+// 	// Por defecto, el valor "0" hace fallar el analizador sintáctico.
+// 	UNKNOWN = 0,
 
-	// Operadores aritméticos.
-	ADD,
-	SUB,
-	MUL,
-	DIV,
-	FACT,
-	POW, 
-	SQRT, 
+// 	// Código de error de Bison, que permite abortar el escaneo de lexemas cuando
+// 	// se presente un patrón desconocido. El número "257" coincide con el valor
+// 	// que Bison le otorga por defecto, pero además permite que el resto de
+// 	// tokens continúen desde el valor "258" lo que permite proteger los IDs
+// 	// internos que Bison reserva para crear "tokens literales":
+// 	YYUNDEF = 257,
 
-	// Paréntesis.
-	OPEN_PARENTHESIS,
-	CLOSE_PARENTHESIS,
+// 	// Operadores aritméticos.
+// 	ADD,
+// 	SUB,
+// 	MUL,
+// 	DIV,
+// 	FACT,
+// 	POW, 
+// 	SQRT, 
 
-	OPEN_BRACE, 
-	CLOSE_BRACE,
+// 	// Paréntesis.
+// 	OPEN_PARENTHESIS,
+// 	CLOSE_PARENTHESIS,
 
-	ASSIGN,
+// 	OPEN_BRACE, 
+// 	CLOSE_BRACE,
 
-	EQ,
-	NE,
-	LE,
-	GE,
-	LT,
-	GT,
+// 	ASSIGN,
 
-	SUM_WITH,
+// 	EQ,
+// 	NE,
+// 	LE,
+// 	GE,
+// 	LT,
+// 	GT,
 
-	IF, 
-	ELSE,
+// 	SUM_WITH,
 
-	FOREACH,
+// 	IF, 
+// 	ELSE,
 
-	COMMA, 
+// 	FOREACH,
 
-	INTEGER_TYPE, 
-	FLOAT_TYPE,
-	STRING_TYPE,
-	LIST_TYPE,
+// 	COMMA, 
 
-	BINOMIAL_DIST_TYPE,
-	NORMAL_DIST_TYPE,
-	POISSON_DIST_TYPE,
+// 	INTEGER_TYPE, 
+// 	FLOAT_TYPE,
+// 	STRING_TYPE,
+// 	LIST_TYPE,
 
-	PRINT,
-	INPUT,
+// 	BINOMIAL_DIST_TYPE,
+// 	NORMAL_DIST_TYPE,
+// 	POISSON_DIST_TYPE,
 
-	MEAN,
-	MODE,
-	VARIANCE,
-	KURTOSIS,
-	Q1,
-	Q3,
-	MAX,
-	MIN,
-	SD,
-	SKEWNESS, 
+// 	PRINT,
+// 	INPUT,
 
-	// Tipos de dato.
-	INTEGER, 
-	FLOAT,
-	STRING,
-	LIST,
+// 	MEAN,
+// 	MODE,
+// 	VARIANCE,
+// 	KURTOSIS,
+// 	Q1,
+// 	Q3,
+// 	MAX,
+// 	MIN,
+// 	SD,
+// 	SKEWNESS, 
 
-	VARIABLE_NAME,
+// 	// Tipos de dato.
+// 	INTEGER, 
+// 	FLOAT,
+// 	STRING,
+// 	LIST,
 
-	EOL,
-	EOFF,
+// 	VARIABLE_NAME,
 
-} TokenID;
+// 	EOL,
+// 	EOFF,
+
+// } TokenID;
 
 /**
  * Se definen las acciones a ejecutar sobre cada patrón hallado mediante el
@@ -95,54 +98,14 @@ typedef enum TokenID {
  * (a.k.a. DFA), como mecanismo de escaneo y reconocimiento.
  */
 
-TokenID OpenBracePatternAction(const char * lexeme);
-
-TokenID CloseBracePatternAction(const char * lexeme);
-
+TokenID TokenIDPatternAction(const char * lexeme, TokenID token);
 TokenID IntegerPatternAction(const char * lexeme);
-
 TokenID FloatPatternAction(const char * lexeme);
-
 TokenID StringPatternAction(const char * lexeme);
-
-TokenID VariableNamePatternAction(const char * lexeme);
-
 TokenID ListPatternAction(const char * lexeme);
-
-TokenID AssignPatternAction(const char * lexeme);
-
-TokenID SumWithPatternAction(const char * lexeme);
-
-TokenID IfPatternAction(const char * lexeme);
-
-TokenID ElsePatternAction(const char * lexeme);
-
-TokenID ForeachPatternAction(const char * lexeme);
-
-TokenID CommaPatternAction(const char * lexeme);
-
-TokenID IntegerTypePatternAction(const char * lexeme);
-
-TokenID FloatTypePatternAction(const char * lexeme);
-
-TokenID StringTypePatternAction(const char * lexeme);
-
-TokenID ListTypePatternAction(const char * lexeme);
-
-TokenID BinomialTypePatternAction(const char * lexeme);
-
-TokenID NormalTypePatternAction(const char * lexeme);
-
-TokenID PoissonTypePatternAction(const char * lexeme);
-
-TokenID PrintPatternAction(const char * lexeme);
-
-TokenID InputPatternAction(const char * lexeme);
-
+TokenID VariableNamePatternAction(const char * lexeme);
 void IgnoredPatternAction(const char * lexeme);
-
 TokenID EndLinePatternAction(const char * lexeme);
-
 TokenID UnknownPatternAction(const char * lexeme);
 
 #endif
