@@ -105,112 +105,110 @@
 program: instructions											{ $$ = ProgramGrammarAction($1); } 
 	;
 
-instructions: instruction EOL instructions
-	|	instruction
+instructions: instruction EOL instructions						{ $$ = InstructionsEOLGrammarAction($1, $3); }
+	|	instruction												{ $$ = InstructionsGrammarAction($1); }
 	;
 
-instruction: declare											{ GenericLogger("DeclareInstructionGrammarAction"); }
-	| print														{ GenericLogger("PrintInstructionGrammarAction"); }
-	| if														{ GenericLogger("IfInstructionGrammarAction"); }
-	| foreach													{ GenericLogger("ForeachGrammarAction"); }
+instruction: declare											{ $$ = InstructionDeclareGrammarAction($1); }
+	| print														{ $$ = InstructionPrintGrammarAction($1); }
+	| if														{ $$ = InstructionIfGrammarAction($1); }
+	| foreach													{ $$ = InstructionForeachGrammarAction($1); }
 	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
 	| expression SUB expression									{ $$ = SubtractionExpressionGrammarAction($1, $3); }
 	| expression MUL expression									{ $$ = MultiplicationExpressionGrammarAction($1, $3); }
 	| expression DIV expression									{ $$ = DivisionExpressionGrammarAction($1, $3); }
-	| expression POW expression									{ GenericLogger("PowExpressionGrammarAction"); }
-	| SQRT OPEN_PARENTHESIS expression CLOSE_PARENTHESIS		{ GenericLogger("SqrtExpressionGrammarAction"); }
+	| expression POW expression									{ $$ = PowerExpressionGrammarAction($1, $3); }
+	| SQRT OPEN_PARENTHESIS expression CLOSE_PARENTHESIS		{ $$ = SqrtExpressionGrammarAction($3); }
 	| factor FACT												{ $$ = FactorialExpressionGrammarAction($1); }
 	| factor													{ $$ = FactorExpressionGrammarAction($1); }
 	;
 
-if: IF OPEN_PARENTHESIS condition CLOSE_PARENTHESIS OPEN_BRACE block end_if
+if: IF OPEN_PARENTHESIS condition CLOSE_PARENTHESIS OPEN_BRACE block end_if		{ $$ = IfGrammarAction($3, $6, $7); }
 	;
 
-end_if: CLOSE_BRACE												{ GenericLogger("CloseBraceGrammarAction"); }
-	| CLOSE_BRACE ELSE OPEN_BRACE block CLOSE_BRACE				{ GenericLogger("ElseGrammarAction"); }
+end_if: CLOSE_BRACE												{ $$ = EndIfCloseBraceGrammarAction(); }
+	| CLOSE_BRACE ELSE OPEN_BRACE block CLOSE_BRACE				{ $$ = EndIfElseGrammarAction($4); }
 	;
 
-condition: factor compare_opt factor							{ GenericLogger("ConditionGrammarAction"); }
+condition: factor compare_opt factor							{ $$ = ConditionGrammarAction($1, $2, $3); }
 	;
 
-block: instructions												{ GenericLogger("InstructionBlockGrammarAction"); }
+block: instructions												{ $$ = BlockGrammarAction($1); }
 	;
 
-compare_opt: EQ
-	| NE
-	| LE
-	| GE
-	| LT
-	| GT
+compare_opt: EQ													{ $$ = CompareEQGrammarAction($1); }
+	| NE														{ $$ = CompareNEGrammarAction($1); }
+	| LE														{ $$ = CompareLEGrammarAction($1); }
+	| GE														{ $$ = CompareGEGrammarAction($1); }
+	| LT														{ $$ = CompareLTGrammarAction($1); }
+	| GT														{ $$ = CompareGTGrammarAction($1); }
 	;
 
 declare: type VARIABLE_NAME ASSIGN value	   					{ $$ = DeclareVariableGrammarAction($1, $2, $4); }
-	| dist_declare												{ printf("Result: %d", $1); } 
-	| type VARIABLE_NAME ASSIGN input							{ printf("Result: %d", $1); }
+	| dist_declare												{ $$ = DeclareDistributionGrammarAction($1); } 
+	| type VARIABLE_NAME ASSIGN input							{ $$ = DeclareInputGrammarAction($1, $2, $4); }
 	;
 
-foreach: FOREACH OPEN_PARENTHESIS stat_function_arg COMMA foreach_func_arg COMMA INTEGER COMMA INTEGER CLOSE_PARENTHESIS
+foreach: FOREACH OPEN_PARENTHESIS stat_function_arg COMMA foreach_func_arg COMMA INTEGER COMMA INTEGER CLOSE_PARENTHESIS	{ $$ = ForeachGrammarAction($3, $5, $7, $9); }
 	;
 
-foreach_func_arg: PRINT
-	| SQRT
-	| FACT
-	| ADD
-	| MUL
+foreach_func_arg: PRINT											{ $$ = ForeachFuncArgPrintGrammarAction($1); }
+	| SQRT														{ $$ = ForeachFuncArgSqrtGrammarAction($1); }
+	| FACT														{ $$ = ForeachFuncArgFactGrammarAction($1); }
+	| ADD														{ $$ = ForeachFuncArgAddGrammarAction($1); }
+	| MUL														{ $$ = ForeachFuncArgMulGrammarAction($1); }
 	;
 
-input: INPUT OPEN_PARENTHESIS CLOSE_PARENTHESIS
+input: INPUT OPEN_PARENTHESIS CLOSE_PARENTHESIS					{ $$ = InputGrammarAction(); }
 
-print: PRINT OPEN_PARENTHESIS print_args CLOSE_PARENTHESIS
+print: PRINT OPEN_PARENTHESIS print_args CLOSE_PARENTHESIS		{ $$ = PrintGrammarAction($3); }
 	;
 
-print_args: text_value ADD print_args
-	| VARIABLE_NAME ADD print_args
-	| expression ADD print_args
-	| text_value
-	| VARIABLE_NAME
-	| expression
+print_args: text_value ADD print_args							{ $$ = PrintArgsTextAddGrammarAction($1, $2); }
+	| VARIABLE_NAME ADD print_args								{ $$ = PrintArgsVariableAddGrammarAction($1, $2); }
+	| expression ADD print_args									{ $$ = PrintArgsExpressionAddGrammarAction($1, $2); }
+	| text_value												{ $$ = PrintArgsTextGrammarAction($1); }
+	| VARIABLE_NAME												{ $$ = PrintArgsVariableGrammarAction($1); }
+	| expression												{ $$ = PrintArgsExpressionGrammarAction($1); }
 	;
 
-stat_function: stat_function_type OPEN_PARENTHESIS stat_function_arg CLOSE_PARENTHESIS
+stat_function: stat_function_type OPEN_PARENTHESIS stat_function_arg CLOSE_PARENTHESIS { $$ = StatFunctionGrammarAction($1, $3); }
 	;	
 
-stat_function_arg: list_value
-	| VARIABLE_NAME
+stat_function_arg: list_value									{ $$ = StatFunctionArgListGrammarAction($1); }
+	| VARIABLE_NAME												{ $$ = StatFunctionArgVariableGrammarAction($1); }
 	;
 
-stat_function_type: MEAN 
-	| MODE 
-	| VARIANCE
-	| KURTOSIS
-	| Q1
-	| Q3
-	| MAX
-	| MIN
-	| SD
-	| SKEWNESS
+stat_function_type: MEAN										{ $$ = StatFunctionTypeMeanGrammarAction($1); } 
+	| MODE 														{ $$ = StatFunctionTypeModeGrammarAction($1); } 
+	| VARIANCE													{ $$ = StatFunctionTypeVarianceGrammarAction($1); } 
+	| KURTOSIS													{ $$ = StatFunctionTypeKurtosisGrammarAction($1); } 
+	| Q1														{ $$ = StatFunctionTypeQ1GrammarAction($1); } 
+	| Q3														{ $$ = StatFunctionTypeQ3GrammarAction($1); } 
+	| MAX														{ $$ = StatFunctionTypeMaxGrammarAction($1); } 
+	| MIN														{ $$ = StatFunctionTypeMinGrammarAction($1); } 
+	| SD														{ $$ = StatFunctionTypeSdGrammarAction($1); } 
+	| SKEWNESS													{ $$ = StatFunctionTypeSkewnessGrammarAction($1); } 
 	;
 
-type: INTEGER_TYPE 												
-	| FLOAT_TYPE 												
-	| STRING_TYPE 												
-	| LIST_TYPE													
+type: INTEGER_TYPE												{ $$ = TypeIntegerGrammarAction($1); }												
+	| FLOAT_TYPE 												{ $$ = TypeFloatGrammarAction($1); }												
+	| STRING_TYPE 												{ $$ = TypeStringGrammarAction($1); }												
+	| LIST_TYPE													{ $$ = TypeListGrammarAction($1); }												
 	;
 
-dist_declare: dist_type VARIABLE_NAME
+dist_declare: dist_type VARIABLE_NAME							{ $$ = DistDeclareGrammarAction($1, $2); }
 	;
 
-dist_type: binomial_type
-	| normal_type
-	| poisson_type
+dist_type: binomial_type										{ $$ = DistTypeBinomialGrammarAction($1); }
+	| normal_type												{ $$ = DistTypeNormalGrammarAction($1); }
+	| poisson_type												{ $$ = DistTypePoissonGrammarAction($1); }
 	;
 
-// maybe put numeric_value + VARIABLE_NAME as dist_args and manage in backend
-
-binomial_type:  BINOMIAL_DIST_TYPE OPEN_PARENTHESIS INTEGER COMMA FLOAT CLOSE_PARENTHESIS
-	| BINOMIAL_DIST_TYPE OPEN_PARENTHESIS VARIABLE_NAME COMMA VARIABLE_NAME CLOSE_PARENTHESIS
+binomial_type:  BINOMIAL_DIST_TYPE OPEN_PARENTHESIS INTEGER COMMA FLOAT CLOSE_PARENTHESIS	 	{ $$ = BinomialTypeValuesGrammarAction($3, $5); }			
+	| BINOMIAL_DIST_TYPE OPEN_PARENTHESIS VARIABLE_NAME COMMA VARIABLE_NAME CLOSE_PARENTHESIS	{ $$ = BinomialTypeVariablesGrammarAction($3, $5); }		
 	;
 
 normal_type: NORMAL_DIST_TYPE OPEN_PARENTHESIS FLOAT COMMA FLOAT CLOSE_PARENTHESIS

@@ -191,6 +191,8 @@ typedef struct Declare {
 typedef struct Foreach {
 	StatFunctionArg * stat_function_arg;
 	ForeachFunctionArg * foreach_function_arg;
+	int left_value;
+	int right_value;
 } Foreach;
 
 typedef enum ForeachFuncArgType {
@@ -226,7 +228,7 @@ typedef enum PrintArgsType {
 
 typedef struct PrintArgs {
 	PrintArgsType type;
-	TextValue * text_value;
+	Text * text_value;
 	PrintArgs * print_args;
 	Expression * expression;
 	char * variable_name;
@@ -237,7 +239,13 @@ typedef struct StatFunction {
 	StatFunctionArg * stat_function_arg;
 } StatFunction;
 
+typedef enum StatFunctionArgType {
+	LIST_STAT_ARG,
+	VARIABLE_STAT_ARG
+} StatFunctionArgType;
+
 typedef struct StatFunctionArg {
+	StatFunctionArgType type;
 	List * list_value;
 	char * variable_name;
 } StatFunctionArg;
