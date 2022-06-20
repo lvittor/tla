@@ -279,6 +279,9 @@ Declare * DeclareVariableGrammarAction(Token * type_token, char * variable_name,
 	Declare * newDeclare = malloc(sizeof(Declare));
 	newDeclare->type = EXPRESSION_DECLARE;
 	newDeclare->type_token = type_token;
+	LogDebug("TOKEN RECEIVED: %d", type_token->token);
+	LogDebug("TOKEN TYPE: %d", newDeclare->type_token->type);
+	LogDebug("TOKEN: %d", newDeclare->type_token->token);
 	LogDebug("RECEIVED VARIABLE NAME: %s", variable_name);
 	newDeclare->variable_name = variable_name;
 	LogDebug("GOT VARIABLE NAME : %s", newDeclare->variable_name);
