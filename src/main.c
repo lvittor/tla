@@ -12,7 +12,7 @@ const int main(const int argumentCount, const char ** arguments) {
 	// Inicializar estado de la aplicación.
 	state.result = 0;
 	state.succeed = false;
-	state.program = NULL;
+	state.main = NULL;
 
 	// Mostrar parámetros recibidos por consola.
 	for (int i = 0; i < argumentCount; ++i) {

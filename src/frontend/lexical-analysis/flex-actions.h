@@ -107,5 +107,7 @@ TokenID VariableNamePatternAction(const char * lexeme);
 void IgnoredPatternAction(const char * lexeme);
 TokenID EndLinePatternAction(const char * lexeme);
 TokenID UnknownPatternAction(const char * lexeme);
+TokenID MainPatternAction(const char * lexeme);
+TokenID SemiColonPatternAction(const char * lexeme);
 
 #endif

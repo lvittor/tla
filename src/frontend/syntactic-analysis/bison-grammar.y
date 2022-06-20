@@ -12,9 +12,11 @@
 	double decimal;
 
 	// No terminales
+	Main * main;
 	Program * program;
 	Instructions * instructions;
 	Instruction * instruction;
+	Statement * statement;
 	Expression * expression;
 	If * _if;
 	EndIf * _endif;
@@ -26,9 +28,7 @@
 	ForeachFunctionArg * foreach_func_arg;
 	Input * input;
 	Print * print;
-	PrintArgs * print_args;
 	StatFunction * stat_function;
-	StatFunctionArg * stat_function_arg;
 	StatFunctionType * stat_function_type;
 	Token * token_node;
 	DistDeclare * dist_declare;
@@ -44,6 +44,8 @@
 }
 
 // Terminales
+%token <token> MAIN
+%token <token> SEMICOLON
 %token <token> ADD SUB MUL DIV FACT POW SQRT
 %token <token> OPEN_PARENTHESIS CLOSE_PARENTHESIS
 %token <token> OPEN_BRACE CLOSE_BRACE
@@ -63,9 +65,11 @@
 %token <token> EOL EOFF
 
 // No terminales
+%type <main> main
 %type <program> program
 %type <instructions> instructions
 %type <instruction> instruction
+%type <statement> statement
 %type <expression> expression
 %type <_if> if
 %type <_endif> end_if
@@ -77,9 +81,7 @@
 %type <foreach_func_arg> foreach_func_arg
 %type <input> input
 %type <print> print
-%type <print_args> print_args
 %type <stat_function> stat_function
-%type <stat_function_arg> stat_function_arg
 %type <stat_function_type> stat_function_type
 %type <token_node> type
 %type <dist_declare> dist_declare
@@ -96,33 +98,41 @@
 // Reglas de asociatividad y precedencia (de menor a mayor):
 %left ADD SUB
 %left MUL DIV
+%left EQ NE LT LE GT GE
 %left FACT
+%left POW
 
-%start program
+%start main
 
 %%
+
+main: MAIN OPEN_BRACE program CLOSE_BRACE						{ $$ = MainGrammarAction($3); }
+	;
 
 program: instructions											{ $$ = ProgramGrammarAction($1); } 
 	;
 
-instructions: instruction EOL instructions						{ $$ = InstructionsEOLGrammarAction($1, $3); }
-	|	instruction												{ $$ = InstructionsGrammarAction($1); }
+instructions: instruction instructions							{ $$ = InstructionsGrammarAction($1, $2); }
+	|	instruction												{ $$ = InstructionOneGrammarAction($1); }
 	;
 
-instruction: declare											{ $$ = InstructionDeclareGrammarAction($1); }
-	| print														{ $$ = InstructionPrintGrammarAction($1); }
+instruction: statement SEMICOLON								{ $$ = InstructionStatementGrammarAction($1); }
 	| if														{ $$ = InstructionIfGrammarAction($1); }
-	| foreach													{ $$ = InstructionForeachGrammarAction($1); }
 	;
 
-expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
-	| expression SUB expression									{ $$ = SubtractionExpressionGrammarAction($1, $3); }
-	| expression MUL expression									{ $$ = MultiplicationExpressionGrammarAction($1, $3); }
-	| expression DIV expression									{ $$ = DivisionExpressionGrammarAction($1, $3); }
-	| expression POW expression									{ $$ = PowerExpressionGrammarAction($1, $3); }
-	| SQRT OPEN_PARENTHESIS expression CLOSE_PARENTHESIS		{ $$ = SqrtExpressionGrammarAction($3); }
-	| factor FACT												{ $$ = FactorialExpressionGrammarAction($1); }
-	| factor													{ $$ = FactorExpressionGrammarAction($1); }
+statement: declare												{ $$ = StatementDeclareGrammarAction($1); }
+	| print														{ $$ = StatementPrintGrammarAction($1); }
+	| foreach													{ $$ = StatementForeachGrammarAction($1); }
+	;
+
+expression: expression ADD expression							{ $$ = ExpressionAdditionGrammarAction($1, $3); }
+	| expression SUB expression									{ $$ = ExpressionSubtractionGrammarAction($1, $3); }
+	| expression MUL expression									{ $$ = ExpressionMultiplicationGrammarAction($1, $3); }
+	| expression DIV expression									{ $$ = ExpressionDivisionGrammarAction($1, $3); }
+	| expression POW expression									{ $$ = ExpressionPowerGrammarAction($1, $3); }
+	| SQRT OPEN_PARENTHESIS expression CLOSE_PARENTHESIS		{ $$ = ExpressionSqrtGrammarAction($3); }
+	| factor FACT												{ $$ = ExpressionFactorialGrammarAction($1); }
+	| factor													{ $$ = ExpressionFactorGrammarAction($1); }
 	;
 
 if: IF OPEN_PARENTHESIS condition CLOSE_PARENTHESIS OPEN_BRACE block end_if		{ $$ = IfGrammarAction($3, $6, $7); }
@@ -146,12 +156,13 @@ compare_opt: EQ													{ $$ = CompareEQGrammarAction($1); }
 	| GT														{ $$ = CompareGTGrammarAction($1); }
 	;
 
-declare: type VARIABLE_NAME ASSIGN value	   					{ $$ = DeclareVariableGrammarAction($1, $2, $4); }
+declare: type VARIABLE_NAME ASSIGN expression	   				{ $$ = DeclareVariableGrammarAction($1, $2, $4); }
 	| dist_declare												{ $$ = DeclareDistributionGrammarAction($1); } 
 	| type VARIABLE_NAME ASSIGN input							{ $$ = DeclareInputGrammarAction($1, $2, $4); }
 	;
 
-foreach: FOREACH OPEN_PARENTHESIS stat_function_arg COMMA foreach_func_arg COMMA INTEGER COMMA INTEGER CLOSE_PARENTHESIS	{ $$ = ForeachGrammarAction($3, $5, $7, $9); }
+foreach: FOREACH OPEN_PARENTHESIS list_value COMMA foreach_func_arg COMMA INTEGER COMMA INTEGER CLOSE_PARENTHESIS	{ $$ = ForeachGrammarAction($3, $5, $7, $9); }
+	| FOREACH OPEN_PARENTHESIS VARIABLE_NAME COMMA foreach_func_arg COMMA INTEGER COMMA INTEGER CLOSE_PARENTHESIS	{ $$ = ForeachVariableGrammarAction($3, $5, $7, $9); }
 	;
 
 foreach_func_arg: PRINT											{ $$ = ForeachFuncArgPrintGrammarAction($1); }
@@ -161,25 +172,15 @@ foreach_func_arg: PRINT											{ $$ = ForeachFuncArgPrintGrammarAction($1); }
 	| MUL														{ $$ = ForeachFuncArgMulGrammarAction($1); }
 	;
 
-input: INPUT OPEN_PARENTHESIS CLOSE_PARENTHESIS					{ $$ = InputGrammarAction(); }
-
-print: PRINT OPEN_PARENTHESIS print_args CLOSE_PARENTHESIS		{ $$ = PrintGrammarAction($3); }
+input: INPUT OPEN_PARENTHESIS CLOSE_PARENTHESIS					{ InputGrammarAction(); }
 	;
 
-print_args: text_value ADD print_args							{ $$ = PrintArgsTextAddGrammarAction($1, $2); }
-	| VARIABLE_NAME ADD print_args								{ $$ = PrintArgsVariableAddGrammarAction($1, $2); }
-	| expression ADD print_args									{ $$ = PrintArgsExpressionAddGrammarAction($1, $2); }
-	| text_value												{ $$ = PrintArgsTextGrammarAction($1); }
-	| VARIABLE_NAME												{ $$ = PrintArgsVariableGrammarAction($1); }
-	| expression												{ $$ = PrintArgsExpressionGrammarAction($1); }
+print: PRINT OPEN_PARENTHESIS expression CLOSE_PARENTHESIS		{ $$ = PrintGrammarAction($3); }
 	;
 
-stat_function: stat_function_type OPEN_PARENTHESIS stat_function_arg CLOSE_PARENTHESIS { $$ = StatFunctionGrammarAction($1, $3); }
+stat_function: stat_function_type OPEN_PARENTHESIS list_value CLOSE_PARENTHESIS { $$ = StatFunctionGrammarAction($1, $3); }
+	| stat_function_type OPEN_PARENTHESIS VARIABLE_NAME CLOSE_PARENTHESIS { $$ = StatFunctionVariableGrammarAction($1, $3); }
 	;	
-
-stat_function_arg: list_value									{ $$ = StatFunctionArgListGrammarAction($1); }
-	| VARIABLE_NAME												{ $$ = StatFunctionArgVariableGrammarAction($1); }
-	;
 
 stat_function_type: MEAN										{ $$ = StatFunctionTypeMeanGrammarAction($1); } 
 	| MODE 														{ $$ = StatFunctionTypeModeGrammarAction($1); } 
@@ -221,15 +222,13 @@ poisson_type: POISSON_DIST_TYPE OPEN_PARENTHESIS INTEGER CLOSE_PARENTHESIS      
 	;
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = FactorExpressionGrammarAction($2); }
-	| numeric_value												{ $$ = FactorValueGrammarAction($1); }
-	| VARIABLE_NAME												{ $$ = FactorVariableGrammarAction($1); }
+	| value														{ $$ = FactorVariableGrammarAction($1); }
 	;
 
 value: numeric_value											{ $$ = ValueNumericGrammarAction($1); }
 	| text_value												{ $$ = ValueTextGrammarAction($1); }
-	| list_value												{ $$ = ValueListGrammarAction($1); }
-	| expression												{ $$ = ValueExpressionGrammarAction($1); }
 	| VARIABLE_NAME												{ $$ = ValueVariableGrammarAction($1); }
+	| list_value												{ $$ = ValueListGrammarAction($1); }
 	;
 
 list_value: LIST												{ $$ = ListGrammarAction($1); }

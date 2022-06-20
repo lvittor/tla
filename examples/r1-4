@@ -1,5 +1,7 @@
 # Realizar un computo que involucre la entrada de algun valor por parte del usuario.
+main {
 
-integer entry = input()
+integer entry = input();
 
-print("El factorial de " + entry + "es " + entry!)
+print("El factorial de " + entry + "es " + entry!);
+}

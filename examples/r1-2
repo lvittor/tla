@@ -1,7 +1,11 @@
+main {
+
 # Crear una distribucion de probabilidad de cada tipo soportado.
 
-binomial(17, 0.5) dist1
+binomial(17, 0.5) dist1;
 
-normal(0.0, 1.0) dist2
+normal(0.0, 1.0) dist2;
 
-poisson(3) dist3
+poisson(3) dist3;
+
+}

@@ -1,18 +1,21 @@
 # Realizar algunas operaciones utilizando los operadores aritmeticos definidos (todos ellos).
 
-integer n1 = 10
-integer n2 = 1
+main {
 
-print("Operation 1: " + (n1+n2-n1!))
-print("Operation 2: " + (n1-n2))
-print("Operation 3: " + (n1*n2))
-print("Operation 4: " + (n1/n2))
-print("Operation 5: " + n1!)
+integer n1 = 10;
+integer n2 = 1;
 
-float n1 = 10.0
-float n2 = 1.0
+print("Operation 1: " + (n1+n2-n1!));
+print("Operation 2: " + (n1-n2));
+print("Operation 3: " + (n1*n2));
+print("Operation 4: " + (n1/n2));
+print("Operation 5: " + n1!);
 
-print("Operation 6: " + (n1+n2))
-print("Operation 7: " + (n1-n2))
-print("Operation 8: " + (n1*n2))
-print("Operation 9: " + (n1/n2))
+float n1 = 10.0;
+float n2 = 1.0;
+
+print("Operation 6: " + (n1+n2));
+print("Operation 7: " + (n1-n2));
+print("Operation 8: " + (n1*n2));
+print("Operation 9: " + (n1/n2));
+}

@@ -27,9 +27,11 @@ extern int yylex(void);
 // Función global del analizador sintáctico Bison.
 extern int yyparse(void);
 
+typedef struct Main Main;
 typedef struct Program Program;
 typedef struct Instructions Instructions;
 typedef struct Instruction Instruction;
+typedef struct Statement Statement;
 typedef struct Expression Expression;
 typedef struct If If;
 typedef struct EndIf EndIf;
@@ -41,9 +43,7 @@ typedef struct Foreach Foreach;
 typedef struct ForeachFunctionArg ForeachFunctionArg;
 typedef struct Input Input;
 typedef struct Print Print;
-typedef struct PrintArgs PrintArgs;
 typedef struct StatFunction StatFunction;
-typedef struct StatFunctionArg StatFunctionArg;
 typedef struct StatFunctionType StatFunctionType;
 typedef struct Token Token;
 typedef struct DistDeclare DistDeclare;
@@ -77,20 +77,24 @@ typedef struct {
 	// Agregar una tabla de símbolos.
 	// ...
 
-	Program * program;
+	Main * main;
 
 } CompilerState;
 
 // El estado se define e inicializa en el archivo "main.c":
 extern CompilerState state;
 
+typedef struct Main {
+	Program * program;
+} Main;
+
 typedef struct Program {
 	Instructions * instructions;
 } Program;
 
 typedef enum InstructionsType {
-	EOL_INSTRUCTIONS,
-	INSTRUCTION_INSTRUCTIONS
+	INSTRUCTION_INSTRUCTIONS,
+	ONE_INSTRUCTIONS
 } InstructionsType;
 
 typedef struct Instructions {
@@ -100,19 +104,28 @@ typedef struct Instructions {
 } Instructions;
 
 typedef enum InstructionType {
-	DECLARE_INSTRUCTION,
-	PRINT_INSTRUCTION,
+	STATEMENT_INSTRUCTION,
 	IF_INSTRUCTION,
-	FOREACH_INSTRUCTION
 } InstructionType;
 
 typedef struct Instruction {
 	InstructionType type;
-	Declare * declare_instruction;
-	Print * print_instruction;
+	Statement * statement_instruction;
 	If * if_instruction;
-	Foreach * foreach_instruction;
 } Instruction;
+
+typedef enum StatementType {
+	PRINT_STATEMENT,
+	DECLARE_STATEMENT,
+	FOREACH_STATEMENT,
+} StatementType;
+
+typedef struct Statement {
+	StatementType type;
+	Declare * declare_statement;
+	Print * print_statement;
+	Foreach * foreach_statement;
+} Statement;
 
 typedef enum ExpressionType {
 	ADD_EXPRESSION,
@@ -173,7 +186,7 @@ typedef struct CompareOpt {
 } CompareOpt;
 
 typedef enum DeclareType {
-	VALUE_DECLARE,
+	EXPRESSION_DECLARE,
 	DIST_DECLARE,
 	INPUT_DECLARE
 } DeclareType;
@@ -183,15 +196,22 @@ typedef struct Declare {
 	Token * type_token;
 	char * variable_name;
 	DistDeclare * dist_declare;
-	Value * value;
+	Expression * expression;
 	Input * input;
 } Declare;
 
+typedef enum ForeachType {
+	LIST_FOREACH,
+	VARIABLE_FOREACH
+} ForeachType;
+
 typedef struct Foreach {
-	StatFunctionArg * stat_function_arg;
+	ForeachType type;
+	List * list_value;
 	ForeachFunctionArg * foreach_function_arg;
 	int left_value;
 	int right_value;
+	char * variable_name;
 } Foreach;
 
 typedef enum ForeachFuncArgType {
@@ -212,41 +232,20 @@ typedef struct Input {
 } Input;
 
 typedef struct Print {
-	PrintArgs * print_args;
+	Expression * expression;
 } Print;
 
-typedef enum PrintArgsType {
-	TEXT_ADD_TYPE,
-	VAR_ADD_TYPE,
-	EXPRESSION_ADD_TYPE,
-	TEXT_TYPE,
-	VAR_TYPE,
-	EXPRESSION_TYPE
-} PrintArgsType;
-
-typedef struct PrintArgs {
-	PrintArgsType type;
-	Text * text_value;
-	PrintArgs * print_args;
-	Expression * expression;
-	char * variable_name;
-} PrintArgs;
+typedef enum StatFunctionTypeToken {
+	LIST_STAT_FUNCTION,
+	VARIABLE_STAT_FUNCTION
+} StatFunctionTypeToken;
 
 typedef struct StatFunction {
+	StatFunctionTypeToken type;
 	StatFunctionType * stat_function_type;
-	StatFunctionArg * stat_function_arg;
-} StatFunction;
-
-typedef enum StatFunctionArgType {
-	LIST_STAT_ARG,
-	VARIABLE_STAT_ARG
-} StatFunctionArgType;
-
-typedef struct StatFunctionArg {
-	StatFunctionArgType type;
 	List * list_value;
 	char * variable_name;
-} StatFunctionArg;
+} StatFunction;
 
 typedef enum StatFunctionTypeType {
 	MEAN_STAT_TYPE,
@@ -330,21 +329,20 @@ typedef struct Poisson {
 typedef enum FactorType {
 	EXPRESSION_FACTOR,
 	NUMERIC_FACTOR,
-	VARIABLE_FACTOR
+	VALUE_FACTOR
 } FactorType;
 
 typedef struct Factor {
 	FactorType type;
 	Expression * expression;
 	Numeric * numeric_value;
-	char * variable_name;
+	Value * value;
 } Factor;
 
 typedef enum ValueType {
 	NUMERIC_VALUE,
 	TEXT_VALUE,
 	LIST_VALUE,
-	EXPRESSION_VALUE,
 	VARIABLE_VALUE
 } ValueType;
 
@@ -353,12 +351,11 @@ typedef struct Value {
 	Numeric * numeric_value;
 	Text * text_value;
 	List * list_value;
-	Expression * expression;
 	char * variable_name;
 } Value;
 
 typedef struct List {
-	char * list;
+	char * list_value;
 } List;
 
 typedef enum NumericType {

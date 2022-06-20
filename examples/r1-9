@@ -1,21 +1,22 @@
 # Realizar una operacion que involucre el uso de variables y distribuciones en un mismo calculo.
+main {
+float mu1 = 0.0;
+float sigma1 = 1.0;
 
-float mu1 = 0.0
-float sigma1 = 1.0
+float mu2 = 2.0;
+float sigma2 = 3.0;
 
-float mu2 = 2.0
-float sigma2 = 3.0
+normal(mu1, sigma1) n1;
+normal(mu2, sigma2) n2;
 
-normal(mu1, sigma1) n1
-normal(mu2, sigma2) n2
+float mu1_2 = mu1 + mu2; 
+float sigma3 = sqrt(sigma1**2 + sigma2**2);
 
-float mu1_2 = mu1 + mu2 
-float sigma3 = sqrt(sigma1**2 + sigma2**2)
+normal(mu1_2, sigma3) n3;
 
-normal(mu1_2, sigma3) n3
-
-normal(n1 sum with n2) n4 
+normal(n1 sumwith n2) n4;
 
 if (n4 == n3){
-   print("The sum of normal distributions is defined")
+   print("The sum of normal distributions is defined");
+}
 }

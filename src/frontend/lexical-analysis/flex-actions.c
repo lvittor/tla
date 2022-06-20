@@ -46,7 +46,7 @@ TokenID VariableNamePatternAction(const char * lexeme){
 }
 
 void IgnoredPatternAction(const char * lexeme) {
-	LogDebug("IgnoredPatternAction: '%s'.", lexeme);
+	// LogDebug("IgnoredPatternAction:");
 }
 
 TokenID EndLinePatternAction(const char * lexeme){
@@ -57,4 +57,14 @@ TokenID EndLinePatternAction(const char * lexeme){
 TokenID UnknownPatternAction(const char * lexeme) {
 	LogDebug("UnknownPatternAction: '%s'.", lexeme);
 	return YYUNDEF;
+}
+
+TokenID MainPatternAction(const char * lexeme) {
+	LogDebug("MainPatternAction: '%s'", lexeme);
+	return MAIN;
+}
+
+TokenID SemiColonPatternAction(const char * lexeme) {
+	LogDebug("SemiColonPatternAction: '%s'", lexeme);
+	return SEMICOLON;
 }

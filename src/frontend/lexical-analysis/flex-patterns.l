@@ -21,6 +21,10 @@ whitespace		[ \f\n\r\t\v]
 
 %%
 
+"main"                                      { return MainPatternAction(yytext); }
+
+";"                                         { return SemiColonPatternAction(yytext); }
+
 "+"											{ return TokenIDPatternAction(yytext, ADD); }
 "-"											{ return TokenIDPatternAction(yytext, SUB); }
 "*"											{ return TokenIDPatternAction(yytext, MUL); }
@@ -88,11 +92,7 @@ whitespace		[ \f\n\r\t\v]
 
 \[{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*({whitespace}*,{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*)*{whitespace}*\] { return ListPatternAction(yytext); }
 
-{endline}                                   { return EndLinePatternAction(yytext); }
-
-<<EOF>>                                     { static int findEOFF = 0; return findEOFF++ ? 0 : EOFF; }
-
-{whitespace}								{ return IgnoredPatternAction(yytext); }
+{whitespace}								{ IgnoredPatternAction(yytext); }
 
 .											{ return UnknownPatternAction(yytext); }
 

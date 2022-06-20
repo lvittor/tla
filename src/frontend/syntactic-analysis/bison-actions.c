@@ -23,76 +23,90 @@ void GenericLogger(const char * string){
     LogDebug("	%s", string);
 }
 
-Program * ProgramGrammarAction(Instructions * instructions) {
-    GenericLogger("programGrammarAction!");
-    Program * newProgram = malloc(sizeof(Program));
-	p->instructions = instructions;
+Main * MainGrammarAction(Program * program) {
+	GenericLogger("MainGrammarAction!");
+	Main * newMain = malloc(sizeof(Main));
+	newMain->program = program;
 	state.succeed = true;
-	state.program = newProgram;
+	state.main = newMain;
+	return newMain;
+}
+
+Program * ProgramGrammarAction(Instructions * instructions) {
+    GenericLogger("ProgramGrammarAction!");
+    Program * newProgram = malloc(sizeof(Program));
+	newProgram->instructions = instructions;
 	return newProgram;
 }
 
-Instructions * InstructionsEOLGrammarAction(Instruction * instruction, Instructions * instructions) {
-	GenericLogger("instructionsEOLGrammarAction");
+Instructions * InstructionsGrammarAction(Instruction * instruction, Instructions * instructions) {
+	GenericLogger("InstructionsGrammarAction");
 	Instructions * newInstructions = malloc(sizeof(Instructions));
-	newInstructions->type = EOL_INSTRUCTIONS;
+	newInstructions->type = INSTRUCTION_INSTRUCTIONS;
 	newInstructions->instruction = instruction;
 	newInstructions->instructions = instructions;
 	return newInstructions;
 }
 
-Instructions * InstructionsGrammarAction(Instruction * instruction) {
-	GenericLogger("InstructionsGrammarAction");
+Instructions * InstructionOneGrammarAction(Instruction * instruction) {
+	GenericLogger("InstructionOneGrammarAction");
 	Instructions * newInstructions = malloc(sizeof(Instructions));
-	newInstructions->type = INSTRUCTION_INSTRUCTIONS;
+	newInstructions->type = ONE_INSTRUCTIONS;
 	newInstructions->instruction = instruction;
 	newInstructions->instructions = NULL;
 	return newInstructions;
 }
 
-Instruction * InstructionDeclareGrammarAction(Declare * declare_instruction) {
-	GenericLogger("InstructionDeclareGrammarAction");
+Instruction * InstructionStatementGrammarAction(Statement * statement_instruction) {
+	GenericLogger("InstructionStatementGrammarAction");
 	Instruction * newInstruction = malloc(sizeof(Instruction));
-	newInstruction->type = DECLARE_INSTRUCTION;
-	newInstruction->declare_instruction = declare_instruction;
-	newInstruction->print_instruction = NULL;
+	newInstruction->type = STATEMENT_INSTRUCTION;
+	newInstruction->statement_instruction = statement_instruction;
 	newInstruction->if_instruction = NULL;
-	newInstruction->foreach_instruction = NULL;
 	return newInstruction;
-}
-
-Instruction * InstructionPrintGrammarAction(Print * print_instruction) {
-	GenericLogger("InstructionPrintGrammarAction");
-	Instruction * newInstruction = malloc(sizeof(Instruction));
-	newInstruction->type = PRINT_INSTRUCTION;
-	newInstruction->declare_instruction = NULL;
-	newInstruction->print_instruction = print_instruction;
-	newInstruction->if_instruction = NULL;
-	newInstruction->foreach_instruction = NULL;
 }
 
 Instruction * InstructionIfGrammarAction(If * if_instruction) {
 	GenericLogger("InstructionIfGrammarAction");
 	Instruction * newInstruction = malloc(sizeof(Instruction));
 	newInstruction->type = IF_INSTRUCTION;
-	newInstruction->declare_instruction = NULL;
-	newInstruction->print_instruction = NULL;
+	newInstruction->statement_instruction = NULL;
 	newInstruction->if_instruction = if_instruction;
-	newInstruction->foreach_instruction = NULL;
+	return newInstruction;
 }
 
-Instruction * InstructionForeachGrammarAction(Foreach * foreach_instruction) {
-	GenericLogger("InstructionForeachGrammarAction");
-	Instruction * newInstruction = malloc(sizeof(Instruction));
-	newInstruction->type = FOREACH_INSTRUCTION;
-	newInstruction->declare_instruction = NULL;
-	newInstruction->print_instruction = NULL;
-	newInstruction->if_instruction = NULL;
-	newInstruction->foreach_instruction = foreach_instruction;
+Statement * StatementDeclareGrammarAction(Declare * declare_statement) {
+	GenericLogger("StatementDeclareGrammarAction");
+	Statement * newStatement = malloc(sizeof(Statement));
+	newStatement->type = DECLARE_STATEMENT;
+	newStatement->declare_statement = declare_statement;
+	newStatement->print_statement = NULL;
+	newStatement->foreach_statement = NULL;
+	return newStatement;
 }
 
-Expression * AdditionExpressionGrammarAction(Expression * left_expression, Expression * right_expression) {
-	GenericLogger("AdditionExpressionGrammarAction");
+Statement * StatementPrintGrammarAction(Print * print_statement) {
+	GenericLogger("StatementPrintGrammarAction");
+	Statement * newStatement = malloc(sizeof(Statement));
+	newStatement->type = PRINT_STATEMENT;
+	newStatement->declare_statement = NULL;
+	newStatement->print_statement = print_statement;
+	newStatement->foreach_statement = NULL;
+	return newStatement;
+}
+
+Statement * StatementForeachGrammarAction(Foreach * foreach_statement) {
+	GenericLogger("StatementForeachGrammarAction");
+	Statement * newStatement = malloc(sizeof(Statement));
+	newStatement->type = FOREACH_STATEMENT;
+	newStatement->declare_statement = NULL;
+	newStatement->print_statement = NULL;
+	newStatement->foreach_statement = foreach_statement;
+	return newStatement;
+}
+
+Expression * ExpressionAdditionGrammarAction(Expression * left_expression, Expression * right_expression) {
+	GenericLogger("ExpressionAdditionGrammarAction");
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = ADD_EXPRESSION;
 	newExpression->left_expression = left_expression;
@@ -101,8 +115,8 @@ Expression * AdditionExpressionGrammarAction(Expression * left_expression, Expre
 	return newExpression;
 }
 
-Expression * SubtractionExpressionGrammarAction(Expression * left_expression, Expression * right_expression) {
-	GenericLogger("SubtractionExpressionGrammarAction");
+Expression * ExpressionSubtractionGrammarAction(Expression * left_expression, Expression * right_expression) {
+	GenericLogger("ExpressionSubtractionGrammarAction");
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = SUB_EXPRESSION;
 	newExpression->left_expression = left_expression;
@@ -111,8 +125,8 @@ Expression * SubtractionExpressionGrammarAction(Expression * left_expression, Ex
 	return newExpression;
 }
 
-Expression * MultiplicationExpressionGrammarAction(Expression * left_expression, Expression * right_expression) {
-	GenericLogger("MultiplicationExpressionGrammarAction");
+Expression * ExpressionMultiplicationGrammarAction(Expression * left_expression, Expression * right_expression) {
+	GenericLogger("ExpressionMultiplicationGrammarAction");
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = MUL_EXPRESSION;
 	newExpression->left_expression = left_expression;
@@ -121,8 +135,8 @@ Expression * MultiplicationExpressionGrammarAction(Expression * left_expression,
 	return newExpression;
 }
 
-Expression * DivisionExpressionGrammarAction(Expression * left_expression, Expression * right_expression) {
-	GenericLogger("DivisionExpressionGrammarAction");
+Expression * ExpressionDivisionGrammarAction(Expression * left_expression, Expression * right_expression) {
+	GenericLogger("ExpressionDivisionGrammarAction");
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = DIV_EXPRESSION;
 	newExpression->left_expression = left_expression;
@@ -131,8 +145,8 @@ Expression * DivisionExpressionGrammarAction(Expression * left_expression, Expre
 	return newExpression;
 }
 
-Expression * PowerExpressionGrammarAction(Expression * left_expression, Expression * right_expression) {
-	GenericLogger("PowerExpressionGrammarAction");
+Expression * ExpressionPowerGrammarAction(Expression * left_expression, Expression * right_expression) {
+	GenericLogger("ExpressionPowerGrammarAction");
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = POW_EXPRESSION;
 	newExpression->left_expression = left_expression;
@@ -141,8 +155,8 @@ Expression * PowerExpressionGrammarAction(Expression * left_expression, Expressi
 	return newExpression;
 }
 
-Expression * SqrtExpressionGrammarAction(Expression * expression) {
-	GenericLogger("SqrtExpressionGrammarAction");
+Expression * ExpressionSqrtGrammarAction(Expression * expression) {
+	GenericLogger("ExpressionSqrtGrammarAction");
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = SQRT_EXPRESSION;
 	newExpression->left_expression = expression;
@@ -151,8 +165,8 @@ Expression * SqrtExpressionGrammarAction(Expression * expression) {
 	return newExpression;
 }
 
-Expression * FactorialExpressionGrammarAction(Factor * factor) {
-	GenericLogger("FactorialExpressionGrammarAction");
+Expression * ExpressionFactorialGrammarAction(Factor * factor) {
+	GenericLogger("ExpressionFactorialGrammarAction");
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = FACT_EXPRESSION;
 	newExpression->left_expression = NULL;
@@ -161,8 +175,8 @@ Expression * FactorialExpressionGrammarAction(Factor * factor) {
 	return newExpression;
 }
 
-Expression * FactorExpressionGrammarAction(Factor * factor) {
-	GenericLogger("FactorExpressionGrammarAction");
+Expression * ExpressionFactorGrammarAction(Factor * factor) {
+	GenericLogger("ExpressionFactorGrammarAction");
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = FACTOR_EXPRESSION;
 	newExpression->left_expression = NULL;
@@ -260,14 +274,14 @@ CompareOpt * CompareGTGrammarAction(int comparator) {
 	return newCompareOpt;
 }
 
-Declare * DeclareVariableGrammarAction(Token * type_token, char * variable_name, Value * value) {
+Declare * DeclareVariableGrammarAction(Token * type_token, char * variable_name, Expression * expression) {
 	GenericLogger("DeclareVariableGrammarAction");
 	Declare * newDeclare = malloc(sizeof(Declare));
-	newDeclare->type = VALUE_DECLARE;
+	newDeclare->type = EXPRESSION_DECLARE;
 	newDeclare->type_token = type_token;
 	newDeclare->variable_name = variable_name;
 	newDeclare->dist_declare = NULL;
-	newDeclare->value = value;
+	newDeclare->expression = expression;
 	newDeclare->input = NULL;
 	return newDeclare;
 }
@@ -279,7 +293,7 @@ Declare * DeclareDistributionGrammarAction(DistDeclare * dist_declare) {
 	newDeclare->type_token = NULL;
 	newDeclare->variable_name = NULL;
 	newDeclare->dist_declare = dist_declare;
-	newDeclare->value = value;
+	newDeclare->expression = NULL;
 	newDeclare->input = NULL;
 	return newDeclare;
 }
@@ -291,18 +305,30 @@ Declare * DeclareInputGrammarAction(Token * type_token, char * variable_name, In
 	newDeclare->type_token = type_token;
 	newDeclare->variable_name = variable_name;
 	newDeclare->dist_declare = NULL;
-	newDeclare->value = NULL;
+	newDeclare->expression = NULL;
 	newDeclare->input = input;
 	return newDeclare;
 }
 
-Foreach * ForeachGrammarAction(StatFunctionArg * stat_function_arg, ForeachFunctionArg foreach_function_arg, int left_value, int right_value) {
-	GenericLogger("DeclareIForeachGrammarActionnputGrammarAction");
+Foreach * ForeachGrammarAction(List * list_value, ForeachFunctionArg * foreach_function_arg, int left_value, int right_value) {
+	GenericLogger("ForeachGrammarAction");
 	Foreach * newForeach = malloc(sizeof(Foreach));
-	newForeach->stat_function_arg = stat_function_arg;
+	newForeach->list_value = list_value;
 	newForeach->foreach_function_arg = foreach_function_arg;
 	newForeach->left_value = left_value;
 	newForeach->right_value = right_value;
+	newForeach->variable_name = NULL;
+	return newForeach;
+}
+
+Foreach * ForeachVariableGrammarAction(char * variable_name, ForeachFunctionArg * foreach_function_arg, int left_value, int right_value) {
+	GenericLogger("ForeachVariableGrammarAction");
+	Foreach * newForeach = malloc(sizeof(Foreach));
+	newForeach->list_value = NULL;
+	newForeach->foreach_function_arg = foreach_function_arg;
+	newForeach->left_value = left_value;
+	newForeach->right_value = right_value;
+	newForeach->variable_name = variable_name;
 	return newForeach;
 }
 
@@ -351,103 +377,31 @@ void InputGrammarAction() {
 	GenericLogger("InputGrammarAction");
 }
 
-Print * PrintGrammarAction(PrintArgs * print_args) {
+Print * PrintGrammarAction(Expression * expression) {
 	GenericLogger("PrintGrammarAction");
 	Print * newPrint = malloc(sizeof(Print));
-	newPrint->print_args = print_args;
+	newPrint->expression = expression;
 	return newPrint;
 }
 
-PrintArgs * PrintArgsTextAddGrammarAction(Text * text_value, PrintArgs * print_args) {
-	GenericLogger("PrintArgsTextAdd");
-	PrintArgs * newPrintArgs = malloc(sizeof(PrintArgs));
-	newPrintArgs->type = TEXT_ADD_TYPE;
-	newPrintArgs->text_value = text_value;
-	newPrintArgs->print_args = print_args;
-	newPrintArgs->expression = NULL;
-	newPrintArgs->variable_name = NULL;
-	return newPrintArgs;
-}
-
-PrintArgs * PrintArgsVariableAddGrammarAction(char * variable_name, PrintArgs * print_args) {
-	GenericLogger("PrintArgsVariableAdd");
-	PrintArgs * newPrintArgs = malloc(sizeof(PrintArgs));
-	newPrintArgs->type = VAR_ADD_TYPE;
-	newPrintArgs->text_value = NULL;
-	newPrintArgs->print_args = print_args;
-	newPrintArgs->expression = NULL;
-	newPrintArgs->variable_name = variable_name;
-	return newPrintArgs;
-}
-
-PrintArgs * PrintArgsExpressionAddGrammarAction(Expression * expression, PrintArgs * print_args) {
-	GenericLogger("PrintArgsExpressionAdd");
-	PrintArgs * newPrintArgs = malloc(sizeof(PrintArgs));
-	newPrintArgs->type = EXPRESSION_ADD_TYPE;
-	newPrintArgs->text_value = NULL;
-	newPrintArgs->print_args = print_args;
-	newPrintArgs->expression = expression;
-	newPrintArgs->variable_name = NULL;
-	return newPrintArgs;
-}
-
-PrintArgs * PrintArgsTextGrammarAction(Text * text_value) {
-	GenericLogger("PrintArgsText");
-	PrintArgs * newPrintArgs = malloc(sizeof(PrintArgs));
-	newPrintArgs->type = TEXT_TYPE;
-	newPrintArgs->text_value = text_value;
-	newPrintArgs->print_args = NULL;
-	newPrintArgs->expression = NULL;
-	newPrintArgs->variable_name = NULL;
-	return newPrintArgs;
-}
-
-PrintArgs * PrintArgsVariableGrammarAction(char * variable_name) {
-	GenericLogger("PrintArgsVariable");
-	PrintArgs * newPrintArgs = malloc(sizeof(PrintArgs));
-	newPrintArgs->type = VAR_TYPE;
-	newPrintArgs->text_value = NULL;
-	newPrintArgs->print_args = NULL;
-	newPrintArgs->expression = NULL;
-	newPrintArgs->variable_name = variable_name;
-	return newPrintArgs;
-}
-
-PrintArgs * PrintArgsExpressionGrammarAction(Expression * expression) {
-	GenericLogger("PrintArgsExpression");
-	PrintArgs * newPrintArgs = malloc(sizeof(PrintArgs));
-	newPrintArgs->type = EXPRESSION_TYPE;
-	newPrintArgs->text_value = NULL;
-	newPrintArgs->print_args = NULL;
-	newPrintArgs->expression = expression;
-	newPrintArgs->variable_name = NULL;
-	return newPrintArgs;
-}
-
-StatFunction * StatFunctionGrammarAction(StatFunctionType * stat_function_type, StatFunctionArg * stat_function_arg) {
+StatFunction * StatFunctionGrammarAction(StatFunctionType * stat_function_type, List * list_value) {
 	GenericLogger("StatFunctionGrammarAction");
 	StatFunction * newStatFunction = malloc(sizeof(StatFunction));
+	newStatFunction->type = LIST_STAT_FUNCTION;
 	newStatFunction->stat_function_type = stat_function_type;
-	newStatFunction->stat_function_arg = stat_function_arg;
+	newStatFunction->list_value = list_value;
+	newStatFunction->variable_name = NULL;
 	return newStatFunction;
 }
 
-StatFunctionArg * StatFunctionArgListGrammarAction(List * list_value) {
-	GenericLogger("StatFunctionArgListGrammarAction");
-	StatFunctionArg * newStatFunctionArg = malloc(sizeof(StatFunctionArg));
-	newStatFunctionArg->type = LIST_STAT_ARG;
-	newStatFunctionArg->list_value = list_value;
-	newStatFunctionArg->variable_name = NULL;
-	return newStatFunctionArg;
-}
-
-StatFunctionArg * StatFunctionArgVariableGrammarAction(char * variable_name) {
-	GenericLogger("StatFunctionArgVariableGrammarAction");
-	StatFunctionArg * newStatFunctionArg = malloc(sizeof(StatFunctionArg));
-	newStatFunctionArg->type = VARIABLE_STAT_ARG;
-	newStatFunctionArg->list_value = NULL;
-	newStatFunctionArg->variable_name = variable_name;
-	return newStatFunctionArg;
+StatFunction * StatFunctionVariableGrammarAction(StatFunctionType * stat_function_type, char * variable_name) {
+	GenericLogger("StatFunctionVariableGrammarAction");
+	StatFunction * newStatFunction = malloc(sizeof(StatFunction));
+	newStatFunction->type = VARIABLE_STAT_FUNCTION;
+	newStatFunction->stat_function_type = stat_function_type;
+	newStatFunction->list_value = NULL;
+	newStatFunction->variable_name = variable_name;
+	return newStatFunction;
 }
 
 StatFunctionType * StatFunctionTypeMeanGrammarAction(int stat_function) { 
@@ -535,6 +489,7 @@ Token * TypeIntegerGrammarAction(int token) {
 	Token * newToken = malloc(sizeof(Token));
 	newToken->type = INTEGER_TOKEN_TYPE;
 	newToken->token = token;
+	return newToken;
 }
 
 Token * TypeFloatGrammarAction(int token) {
@@ -542,6 +497,7 @@ Token * TypeFloatGrammarAction(int token) {
 	Token * newToken = malloc(sizeof(Token));
 	newToken->type = FLOAT_TOKEN_TYPE;
 	newToken->token = token;
+	return newToken;
 }
 
 Token * TypeStringGrammarAction(int token) {
@@ -549,6 +505,7 @@ Token * TypeStringGrammarAction(int token) {
 	Token * newToken = malloc(sizeof(Token));
 	newToken->type = STRING_TOKEN_TYPE;
 	newToken->token = token;
+	return newToken;
 }
 
 Token * TypeListGrammarAction(int token) {
@@ -556,6 +513,7 @@ Token * TypeListGrammarAction(int token) {
 	Token * newToken = malloc(sizeof(Token));
 	newToken->type = LIST_TOKEN_TYPE;
 	newToken->token = token;
+	return newToken;
 }
 
 DistDeclare * DistDeclareGrammarAction(DistType * dist_type, char * variable_name) {
@@ -571,7 +529,7 @@ DistType * DistTypeBinomialGrammarAction(Binomial * binomial) {
 	DistType * newDistType = malloc(sizeof(DistType));
 	newDistType->binomial = binomial;
 	newDistType->normal = NULL;
-	newDistType->possion = NULL;
+	newDistType->poisson = NULL;
 	return newDistType;
 }
 
@@ -580,7 +538,7 @@ DistType * DistTypeNormalGrammarAction(Normal * normal) {
 	DistType * newDistType = malloc(sizeof(DistType));
 	newDistType->binomial = NULL;
 	newDistType->normal = normal;
-	newDistType->possion = NULL;
+	newDistType->poisson = NULL;
 	return newDistType;
 }
 
@@ -589,7 +547,7 @@ DistType * DistTypePoissonGrammarAction(Poisson * poisson) {
 	DistType * newDistType = malloc(sizeof(DistType));
 	newDistType->binomial = NULL;
 	newDistType->normal = NULL;
-	newDistType->possion = poisson;
+	newDistType->poisson = poisson;
 	return newDistType;
 }
 
@@ -610,47 +568,47 @@ Binomial * BinomialTypeVariablesGrammarAction(char * left_variable_name, char * 
 	newBinomial->type = INTEGER_FLOAT_BINOMIAL;
 	newBinomial->left_variable_name = left_variable_name;
 	newBinomial->right_variable_name = right_variable_name;
-	newBinomial->int_value = NULL;
-	newBinomial->float_value = NULL;
+	newBinomial->int_value = 0;
+	newBinomial->float_value = 0;
 	return newBinomial;
 }
 
-Normal * NormalTypeValuesGrammarAction(double left_float, double_right float) {
+Normal * NormalTypeValuesGrammarAction(double left_float, double right_float) {
 	GenericLogger("NormalTypeValuesGrammarAction");
 	Normal * newNormal = malloc(sizeof(Normal));
 	newNormal->type = FLOAT_FLOAT_NORMAL;
-	newNormal->left_float = left_factor;
+	newNormal->left_float = left_float;
 	newNormal->right_float = right_float;
 	newNormal->left_variable_name = NULL;
 	newNormal->right_variable_name = NULL;
 	return newNormal;
 }
 
-Normal * NormalTypeVariableGrammarAction(char * left_variable_name, char * left_variable_name) {
+Normal * NormalTypeVariableGrammarAction(char * left_variable_name, char * right_variable_name) {
 	GenericLogger("NormalTypeVariableGrammarAction");
 	Normal * newNormal = malloc(sizeof(Normal));
 	newNormal->type = VARIABLE_VARIABLE_NORMAL;
-	newNormal->left_float = NULL;
-	newNormal->right_float = NULL;
+	newNormal->left_float = 0;
+	newNormal->right_float = 0;
 	newNormal->left_variable_name = left_variable_name;
 	newNormal->right_variable_name = right_variable_name;
 	return newNormal;
 }
 
-Normal * NormalTypeSumGrammarAction(char * left_variable_name, char * left_variable_name)  {
+Normal * NormalTypeSumGrammarAction(char * left_variable_name, char * right_variable_name)  {
 	GenericLogger("NormalTypeSumGrammarAction");
 	Normal * newNormal = malloc(sizeof(Normal));
 	newNormal->type = VARIABLE_SUM_VARIABLE_NORMAL;
-	newNormal->left_float = NULL;
-	newNormal->right_float = NULL;
+	newNormal->left_float = 0;
+	newNormal->right_float = 0;
 	newNormal->left_variable_name = left_variable_name;
 	newNormal->right_variable_name = right_variable_name;
 	return newNormal;
 }
 
 Poisson * PoissonTypeValueGrammarAction(int int_value) {
-	GenericLogger("PoissonTypeValueGrammarAction")
-	Poisson * newPossion = malloc(sizeof(Poisson));
+	GenericLogger("PoissonTypeValueGrammarAction");
+	Poisson * newPoisson = malloc(sizeof(Poisson));
 	newPoisson->type = INTEGER_POISSON;
 	newPoisson->int_value = int_value;
 	newPoisson->variable_name = NULL;
@@ -658,41 +616,41 @@ Poisson * PoissonTypeValueGrammarAction(int int_value) {
 }
 
 Poisson * PoissonTypeVariableGrammarAction(char * variable_name) {
-	GenericLogger("PoissonTypeVariableGrammarAction")
-	Poisson * newPossion = malloc(sizeof(Poisson));
+	GenericLogger("PoissonTypeVariableGrammarAction");
+	Poisson * newPoisson = malloc(sizeof(Poisson));
 	newPoisson->type = VARIABLE_POISSON;
-	newPoisson->int_value = NULL;
+	newPoisson->int_value = 0;
 	newPoisson->variable_name = variable_name;
 	return newPoisson;
 }
 
 Factor * FactorExpressionGrammarAction(Expression * expression) {
 	GenericLogger("FactorExpressionGrammarAction");
-	Factor * newFactor = malloc(sizeof(newFactor));
+	Factor * newFactor = malloc(sizeof(Factor));
 	newFactor->type = EXPRESSION_FACTOR;
 	newFactor->expression = expression;
 	newFactor->numeric_value = NULL;
-	newFactor->variable_name = NULL;
+	newFactor->value = NULL;
 	return newFactor;
 }
 
 Factor * FactorValueGrammarAction(Numeric * numeric_value) {
-	GenericLogger("FactorExpressionGrammarAction");
-	Factor * newFactor = malloc(sizeof(newFactor));
+	GenericLogger("FactorValueGrammarAction");
+	Factor * newFactor = malloc(sizeof(Factor));
 	newFactor->type = NUMERIC_FACTOR;
 	newFactor->expression = NULL;
 	newFactor->numeric_value = numeric_value;
-	newFactor->variable_name = NULL;
+	newFactor->value = NULL;
 	return newFactor;
 }
 
-Factor * FactorVariableGrammarAction(char * variable_name) {
-	GenericLogger("FactorExpressionGrammarAction");
-	Factor * newFactor = malloc(sizeof(newFactor));
-	newFactor->type = VARIABLE_FACTOR;
+Factor * FactorVariableGrammarAction(Value * value) {
+	GenericLogger("FactorVariableGrammarAction");
+	Factor * newFactor = malloc(sizeof(Factor));
+	newFactor->type = VALUE_FACTOR;
 	newFactor->expression = NULL;
 	newFactor->numeric_value = NULL;
-	newFactor->variable_name = variable_name;
+	newFactor->value = value;
 	return newFactor;
 }
 
@@ -703,7 +661,6 @@ Value * ValueNumericGrammarAction(Numeric * numeric_value) {
 	newValue->numeric_value = numeric_value;
 	newValue->text_value = NULL;
 	newValue->list_value = NULL;
-	newValue->expression = NULL;
 	newValue->variable_name = NULL;
 	return newValue;
 }
@@ -715,31 +672,6 @@ Value * ValueTextGrammarAction(Text * text_value) {
 	newValue->numeric_value = NULL;
 	newValue->text_value = text_value;
 	newValue->list_value = NULL;
-	newValue->expression = NULL;
-	newValue->variable_name = NULL;
-	return newValue;
-}
-
-Value * ValueListGrammarAction(List * list_value){
-	GenericLogger("ValueListGrammarAction");
-	Value * newValue = malloc(sizeof(Value));
-	newValue->type = LIST_VALUE;
-	newValue->numeric_value = NULL;
-	newValue->text_value = NULL;
-	newValue->list_value = list_value;
-	newValue->expression = NULL;
-	newValue->variable_name = NULL;
-	return newValue;
-}
-
-Value * ValueExpressionGrammarAction(Expression * expression){
-	GenericLogger("ValueExpressionGrammarAction");
-	Value * newValue = malloc(sizeof(Value));
-	newValue->type = EXPRESSION_VALUE;
-	newValue->numeric_value = NULL;
-	newValue->text_value = NULL;
-	newValue->list_value = NULL;
-	newValue->expression = expression;
 	newValue->variable_name = NULL;
 	return newValue;
 }
@@ -751,9 +683,26 @@ Value * ValueVariableGrammarAction(char * variable_name) {
 	newValue->numeric_value = NULL;
 	newValue->text_value = NULL;
 	newValue->list_value = NULL;
-	newValue->expression = NULL;
 	newValue->variable_name = variable_name;
 	return newValue;
+}
+
+Value * ValueListGrammarAction(List * list_value) {
+	GenericLogger("ValueListGrammarAction");
+	Value * newValue = malloc(sizeof(Value));
+	newValue->type = LIST_VALUE;
+	newValue->numeric_value = NULL;
+	newValue->text_value = NULL;
+	newValue->list_value = list_value;
+	newValue->variable_name = NULL;
+	return newValue;
+}
+
+List * ListGrammarAction(char * list_value) {
+	GenericLogger("ListGrammarAction");
+	List * newList = malloc(sizeof(List));
+	newList->list_value = list_value;
+	return newList;
 }
 
 Numeric * NumericIntegerGrammarAction(int int_value) {
