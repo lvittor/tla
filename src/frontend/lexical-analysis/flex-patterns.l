@@ -18,6 +18,7 @@ crlf			\r\n
 digit			[0-9]
 endline			[\n]
 whitespace		[ \f\n\r\t\v]
+letter [a-zA-Z]
 
 %%
 
@@ -88,7 +89,7 @@ whitespace		[ \f\n\r\t\v]
 
 \"[^\"]+\"                                  { return StringPatternAction(yytext); }
 
-[a-zA-Z_][a-zA-Z0-9_]*                      { return VariableNamePatternAction(yytext); }
+{letter}+                                   { return VariableNamePatternAction(yytext); }
 
 \[{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*({whitespace}*,{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*)*{whitespace}*\] { return ListPatternAction(yytext); }
 

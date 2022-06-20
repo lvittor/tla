@@ -279,9 +279,16 @@ Declare * DeclareVariableGrammarAction(Token * type_token, char * variable_name,
 	Declare * newDeclare = malloc(sizeof(Declare));
 	newDeclare->type = EXPRESSION_DECLARE;
 	newDeclare->type_token = type_token;
+	LogDebug("RECEIVED VARIABLE NAME: %s", variable_name);
 	newDeclare->variable_name = variable_name;
+	LogDebug("GOT VARIABLE NAME : %s", newDeclare->variable_name);
 	newDeclare->dist_declare = NULL;
 	newDeclare->expression = expression;
+	LogDebug("EXPRESSION TYPE: %d", expression->type);
+	LogDebug("FACTOR TYPE: %d", expression->factor_expression->type);
+	LogDebug("VALUE TYPE: %d", expression->factor_expression->value->type);
+	LogDebug("NUMERIC TYPE: %d", expression->factor_expression->value->numeric_value->type);
+	LogDebug("NUMERIC VALUE: %d", expression->factor_expression->value->numeric_value->int_value);
 	newDeclare->input = NULL;
 	return newDeclare;
 }

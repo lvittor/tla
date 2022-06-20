@@ -12,12 +12,14 @@
 TokenID TokenIDPatternAction(const char * lexeme, TokenID token) {
 	LogDebug("TokenIDPatternAction: '%s' with %d.\n", lexeme, token);
 	yylval.token = token;
+	LogDebug("Asi esta token: %d\n", yylval.token);
 	return token;
 }
 
 TokenID IntegerPatternAction(const char * lexeme) {
 	LogDebug("IntegerPatternAction: '%s'.\n", lexeme);
 	yylval.integer = atoi(lexeme);
+	LogDebug("Asi esta integer: %d\n", yylval.integer);
 	return INTEGER;
 }
 
@@ -42,6 +44,7 @@ TokenID ListPatternAction(const char * lexeme){
 TokenID VariableNamePatternAction(const char * lexeme){
 	LogDebug("VariableNamePatternAction: '%s'.\n", lexeme);
 	yylval.string = lexeme;
+	LogDebug("Asi queda string: %s\n", yylval.string);
 	return VARIABLE_NAME;
 }
 
