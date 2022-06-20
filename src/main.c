@@ -3,9 +3,11 @@
 #include "backend/support/shared.h"
 #include "frontend/syntactic-analysis/bison-parser.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 //Estado de la aplicación.
 CompilerState state;
+FILE * out;
 
 // Punto de entrada principal del compilador.
 const int main(const int argumentCount, const char ** arguments) {
@@ -26,7 +28,11 @@ const int main(const int argumentCount, const char ** arguments) {
 		case 0:
 			if (state.succeed) {
 				LogInfo("La compilacion fue exitosa.");
-				Generator(state.result);
+				out = fopen("program.c", "w+");
+				GeneratorMain(state.main, out);
+				if (out == NULL)
+					perror("Error");
+				fclose(out);
 			}
 			else {
 				LogError("Se produjo un error en la aplicacion.");

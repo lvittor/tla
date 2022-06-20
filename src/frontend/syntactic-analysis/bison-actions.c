@@ -527,6 +527,7 @@ DistDeclare * DistDeclareGrammarAction(DistType * dist_type, char * variable_nam
 DistType * DistTypeBinomialGrammarAction(Binomial * binomial) {
 	GenericLogger("DistTypeBinomialGrammarAction");
 	DistType * newDistType = malloc(sizeof(DistType));
+	newDistType->type = BINOMIAL_TYPE;
 	newDistType->binomial = binomial;
 	newDistType->normal = NULL;
 	newDistType->poisson = NULL;
@@ -536,6 +537,7 @@ DistType * DistTypeBinomialGrammarAction(Binomial * binomial) {
 DistType * DistTypeNormalGrammarAction(Normal * normal) {
 	GenericLogger("DistTypeNormalGrammarAction");
 	DistType * newDistType = malloc(sizeof(DistType));
+	newDistType->type = NORMAL_TYPE;
 	newDistType->binomial = NULL;
 	newDistType->normal = normal;
 	newDistType->poisson = NULL;
@@ -545,6 +547,7 @@ DistType * DistTypeNormalGrammarAction(Normal * normal) {
 DistType * DistTypePoissonGrammarAction(Poisson * poisson) {
 	GenericLogger("DistTypePoissonGrammarAction");
 	DistType * newDistType = malloc(sizeof(DistType));
+	newDistType->type = POISSON_TYPE;
 	newDistType->binomial = NULL;
 	newDistType->normal = NULL;
 	newDistType->poisson = poisson;
@@ -629,17 +632,6 @@ Factor * FactorExpressionGrammarAction(Expression * expression) {
 	Factor * newFactor = malloc(sizeof(Factor));
 	newFactor->type = EXPRESSION_FACTOR;
 	newFactor->expression = expression;
-	newFactor->numeric_value = NULL;
-	newFactor->value = NULL;
-	return newFactor;
-}
-
-Factor * FactorValueGrammarAction(Numeric * numeric_value) {
-	GenericLogger("FactorValueGrammarAction");
-	Factor * newFactor = malloc(sizeof(Factor));
-	newFactor->type = NUMERIC_FACTOR;
-	newFactor->expression = NULL;
-	newFactor->numeric_value = numeric_value;
 	newFactor->value = NULL;
 	return newFactor;
 }
@@ -649,7 +641,6 @@ Factor * FactorVariableGrammarAction(Value * value) {
 	Factor * newFactor = malloc(sizeof(Factor));
 	newFactor->type = VALUE_FACTOR;
 	newFactor->expression = NULL;
-	newFactor->numeric_value = NULL;
 	newFactor->value = value;
 	return newFactor;
 }

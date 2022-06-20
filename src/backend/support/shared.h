@@ -282,7 +282,14 @@ typedef struct DistDeclare {
 	char * variable_name;
 } DistDeclare;
 
+typedef enum DistTypeType {
+	BINOMIAL_TYPE,
+	NORMAL_TYPE,
+	POISSON_TYPE
+} DistTypeType;
+
 typedef struct DistType {
+	DistTypeType type;
 	Binomial * binomial;
 	Normal * normal;
 	Poisson * poisson;
@@ -328,14 +335,12 @@ typedef struct Poisson {
 
 typedef enum FactorType {
 	EXPRESSION_FACTOR,
-	NUMERIC_FACTOR,
 	VALUE_FACTOR
 } FactorType;
 
 typedef struct Factor {
 	FactorType type;
 	Expression * expression;
-	Numeric * numeric_value;
 	Value * value;
 } Factor;
 

@@ -76,7 +76,6 @@ Normal * NormalTypeSumGrammarAction(char * left_variable_name, char * right_vari
 Poisson * PoissonTypeValueGrammarAction(int int_value);
 Poisson * PoissonTypeVariableGrammarAction(char * variable_name);
 Factor * FactorExpressionGrammarAction(Expression * expression);
-Factor * FactorValueGrammarAction(Numeric * numeric_value);
 Factor * FactorVariableGrammarAction(Value * value);
 Value * ValueNumericGrammarAction(Numeric * numeric_value);
 Value * ValueTextGrammarAction(Text * text_value);
