@@ -36,7 +36,7 @@ CompareOpt * CompareLEGrammarAction(int comparator);
 CompareOpt * CompareGEGrammarAction(int comparator);
 CompareOpt * CompareLTGrammarAction(int comparator);
 CompareOpt * CompareGTGrammarAction(int comparator);
-Declare * DeclareVariableGrammarAction(Token * type_token, char * variable_name, Expression * value);
+Declare * DeclareVariableGrammarAction(Token * type_token, char * variable_name, Expression * expression);
 Declare * DeclareDistributionGrammarAction(DistDeclare * dist_declare); 
 Declare * DeclareInputGrammarAction(Token * type_token, char * variable_name, Input * input);
 Foreach * ForeachGrammarAction(List * list_value, ForeachFunctionArg * foreach_function_arg, int left_value, int right_value);
@@ -85,6 +85,7 @@ List * ListGrammarAction(char * list_value);
 Numeric * NumericIntegerGrammarAction(int int_value);
 Numeric * NumericFloatGrammarAction(double float_value);
 Numeric * NumericStatGrammarAction(StatFunction * stat_function);
+char * SymbolGrammarAction(char * variable_name);
 Text * TextGrammarAction(char * text_value);
 
 #endif

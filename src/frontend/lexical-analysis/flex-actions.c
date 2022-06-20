@@ -30,8 +30,9 @@ TokenID FloatPatternAction(const char * lexeme) {
 }
 
 TokenID StringPatternAction(const char * lexeme) {
-	LogDebug("StringPatternAction: '%s'.\n", lexeme);
+	LogDebug("StringPatternAction: [%s].\n", lexeme);
 	yylval.string = lexeme;
+	LogDebug("Asi queda string: [%s]\n", yylval.string);
 	return STRING;
 }
 
@@ -44,7 +45,7 @@ TokenID ListPatternAction(const char * lexeme){
 TokenID VariableNamePatternAction(const char * lexeme){
 	LogDebug("VariableNamePatternAction: '%s'.\n", lexeme);
 	yylval.string = lexeme;
-	LogDebug("Asi queda string: %s\n", yylval.string);
+	LogDebug("Asi queda string: [%s]", yylval.string);
 	return VARIABLE_NAME;
 }
 

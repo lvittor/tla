@@ -12,7 +12,6 @@ void GeneratorMain(Main * main, FILE * out) {
 	fprintf(out, "#include <stdio.h>\n");
 	fprintf(out, "#include <stdlib.h>\n\n");
 	fprintf(out, "int main() {\n");
-	fprintf(out, "\t");
 	GeneratorProgram(main->program, out);
 	fprintf(out, "\treturn 0;\n");
 	fprintf(out, "}");
@@ -43,6 +42,7 @@ void GeneratorInstruction(Instruction * instruction, FILE * out) {
 	LogDebug("Generating instruction..");
 	switch (instruction->type) {
 		case STATEMENT_INSTRUCTION:
+			fprintf(out, "\t");
 			GeneratorStatement(instruction->statement_instruction, out);
 			fprintf(out, ";\n");
 			break;
@@ -201,8 +201,11 @@ void GeneratorDeclare(Declare * declare, FILE * out) {
 	switch (declare->type) {
 		case EXPRESSION_DECLARE:
 			GeneratorType(declare->type_token, out);
-			LogDebug("DEBUG: %s", declare->variable_name);
-			fprintf(out, "%s = ", declare->variable_name);
+			if (declare->type_token->type == LIST_TOKEN_TYPE) {
+				fprintf(out, "%s[] = ", declare->variable_name);
+			} else {
+				fprintf(out, "%s = ", declare->variable_name);
+			}
 			GeneratorExpression(declare->expression, out);
 			break;
 		case DIST_DECLARE:
@@ -231,7 +234,7 @@ void GeneratorType(Token * type_token, FILE * out) {
 			fprintf(out, "char * ");
 			break;
 		case LIST_TOKEN_TYPE:
-			fprintf(out, "list ");
+			fprintf(out, "float ");
 			break;
 		default:
 			LogInfo("Type type not found");
@@ -241,8 +244,8 @@ void GeneratorType(Token * type_token, FILE * out) {
 
 void GeneratorDistDeclare(DistDeclare * dist_declare, FILE * out) {
 	LogDebug("Generating dist declare..");
+	fprintf(out, "%s = ", dist_declare->variable_name);
 	GeneratorDistType(dist_declare->dist_type, out);
-	fprintf(out, " %s", dist_declare->variable_name);
 }
 
 void GeneratorDistType(DistType * dist_type, FILE * out) {
@@ -472,14 +475,15 @@ void GeneratorStatFunctionType(StatFunctionType * stat_function_type, FILE * out
 
 void GeneratorList(List * list_value, FILE * out) {
 	LogDebug("Generating list..");
-	fprintf(out, "[");
-	// for (int i = 1; list_value->list_value[i] != ']'; i++) {
-	// 	fprintf(out, "%c", list_value->list_value[i]);
-	// }
-	fprintf(out, "]");
+	fprintf(out, "{");
+	for (int i = 1; list_value->list_value[i] != ']'; i++) {
+		fprintf(out, "%c", list_value->list_value[i]);
+	}
+	fprintf(out, "}");
 }
 
 void GeneratorText(Text * text_value, FILE * out) {
 	LogDebug("Generating text..");
-	// fprintf(out, "%s", text_value->text_value);
+	LogDebug("GOT: %s", text_value->text_value);
+	fprintf(out, "%s", text_value->text_value);
 }

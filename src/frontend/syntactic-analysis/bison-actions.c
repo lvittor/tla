@@ -3,6 +3,7 @@
 #include "bison-actions.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /**
  * Implementación de "bison-grammar.h".
@@ -277,21 +278,12 @@ CompareOpt * CompareGTGrammarAction(int comparator) {
 Declare * DeclareVariableGrammarAction(Token * type_token, char * variable_name, Expression * expression) {
 	GenericLogger("DeclareVariableGrammarAction");
 	Declare * newDeclare = malloc(sizeof(Declare));
+	LogDebug("TOKEN TYPE: %d", type_token->type);
 	newDeclare->type = EXPRESSION_DECLARE;
 	newDeclare->type_token = type_token;
-	LogDebug("TOKEN RECEIVED: %d", type_token->token);
-	LogDebug("TOKEN TYPE: %d", newDeclare->type_token->type);
-	LogDebug("TOKEN: %d", newDeclare->type_token->token);
-	LogDebug("RECEIVED VARIABLE NAME: %s", variable_name);
 	newDeclare->variable_name = variable_name;
-	LogDebug("GOT VARIABLE NAME : %s", newDeclare->variable_name);
 	newDeclare->dist_declare = NULL;
 	newDeclare->expression = expression;
-	LogDebug("EXPRESSION TYPE: %d", expression->type);
-	LogDebug("FACTOR TYPE: %d", expression->factor_expression->type);
-	LogDebug("VALUE TYPE: %d", expression->factor_expression->value->type);
-	LogDebug("NUMERIC TYPE: %d", expression->factor_expression->value->numeric_value->type);
-	LogDebug("NUMERIC VALUE: %d", expression->factor_expression->value->numeric_value->int_value);
 	newDeclare->input = NULL;
 	return newDeclare;
 }
@@ -736,9 +728,21 @@ Numeric * NumericStatGrammarAction(StatFunction * stat_function) {
 	return newNumeric;
 }
 
+char * SymbolGrammarAction(char * variable_name) {
+	LogDebug("SymbolGrammarAction");
+	LogDebug("SYMBOL GRAMMAR RECEIVED: [%s]", variable_name);
+	char * to_return = malloc(strlen(variable_name) + 1);
+	strcpy(to_return, variable_name);
+	LogDebug("SYMBOL_GRAMMAR HAS: [%s]", to_return);
+	return to_return;
+}
+
 Text * TextGrammarAction(char * text_value) {
 	GenericLogger("TextGrammarAction");
 	Text * newText = malloc(sizeof(Text));
-	newText->text_value = text_value;
+	LogDebug("TEXT GRAMMAR RECEIVED: [%s]", text_value);
+	newText->text_value = malloc(strlen(text_value) + 1);
+	strcpy(newText->text_value, text_value);
+	LogDebug("TEXT GRAMMAR GOT: [%s]", newText->text_value);
 	return newText;
 }

@@ -89,7 +89,7 @@ letter [a-zA-Z]
 
 \"[^\"]+\"                                  { return StringPatternAction(yytext); }
 
-{letter}+                                   { return VariableNamePatternAction(yytext); }
+[a-zA-Z_][a-zA-Z0-9_]*                      { return VariableNamePatternAction(yytext); }
 
 \[{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*({whitespace}*,{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*)*{whitespace}*\] { return ListPatternAction(yytext); }
 
