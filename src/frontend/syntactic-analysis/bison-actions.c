@@ -731,8 +731,8 @@ Numeric * NumericStatGrammarAction(StatFunction * stat_function) {
 char * SymbolGrammarAction(char * variable_name) {
 	LogDebug("SymbolGrammarAction");
 	LogDebug("SYMBOL GRAMMAR RECEIVED: [%s]", variable_name);
-	char * to_return = malloc(strlen(variable_name) + 1);
-	strcpy(to_return, variable_name);
+	char * to_return = malloc(sizeof(char) * (yyleng + 1));
+	strncpy(to_return, variable_name, yyleng);
 	LogDebug("SYMBOL_GRAMMAR HAS: [%s]", to_return);
 	return to_return;
 }
@@ -741,8 +741,8 @@ Text * TextGrammarAction(char * text_value) {
 	GenericLogger("TextGrammarAction");
 	Text * newText = malloc(sizeof(Text));
 	LogDebug("TEXT GRAMMAR RECEIVED: [%s]", text_value);
-	newText->text_value = malloc(strlen(text_value) + 1);
-	strcpy(newText->text_value, text_value);
+	newText->text_value = malloc(sizeof(char) * (yyleng + 1));
+	strncpy(newText->text_value, text_value, yyleng);
 	LogDebug("TEXT GRAMMAR GOT: [%s]", newText->text_value);
 	return newText;
 }

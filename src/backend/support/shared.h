@@ -12,6 +12,9 @@ extern FILE * yyout;
 // Variable global que contiene el número escaneado.
 // extern int yylval;
 
+// Variable global que contiene el largo obtenido en yytext
+extern int yyleng;
+
 // Variable global que contiene el número de la línea analizada.
 extern int yylineno;
 
