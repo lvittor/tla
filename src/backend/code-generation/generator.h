@@ -18,7 +18,7 @@ void GeneratorFactor(Factor * factor, FILE * out);
 void GeneratorValue(Value * value, FILE * out);
 void GeneratorNumeric(Numeric * numeric, FILE * out);
 void GeneratorDeclare(Declare * declare, FILE * out);
-void GeneratorType(Token * type_token, FILE * out);
+void GeneratorType(Token * token_type, FILE * out);
 void GeneratorDistDeclare(DistDeclare * dist_declare, FILE * out);
 void GeneratorDistType(DistType * dist_type, FILE * out);
 void GeneratorBinomial(Binomial * binomial, FILE * out);
@@ -31,5 +31,6 @@ void GeneratorForeachFunctionArgs(ForeachFunctionArg * foreach_function_arg, FIL
 void GeneratorStatFunction(StatFunction * stat_function, FILE * out);
 void GeneratorStatFunctionType(StatFunctionType * stat_function_type, FILE * out);
 void GeneratorList(List * list_value, FILE * out);
+void GeneratorListArgs(ListArgs * list_args, FILE * out);
 void GeneratorText(Text * text_value, FILE * out);
 #endif

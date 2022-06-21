@@ -14,7 +14,9 @@ print(n1);
 print("Normal n2: ");
 print(n2);
 
-print("Normal n3: " + n3);
-print("Normal n4: " + n4);
+print("Normal n3: ");
+print(n3);
+print("Normal n4: ");
+print(n4);
 
 }

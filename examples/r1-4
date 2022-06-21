@@ -3,5 +3,9 @@ main {
 
 integer entry = input();
 
-print("El factorial de " + entry + "es " + entry!);
+print("El factorial de ");
+print(entry);
+print("es ");
+print(entry!);
+
 }

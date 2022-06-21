@@ -39,6 +39,7 @@
 	Factor * factor;
 	Value * value;
 	List * list;
+	ListArgs * list_args;
 	Numeric * numeric;
 	Text * text;
 }
@@ -48,6 +49,7 @@
 %token <token> SEMICOLON
 %token <token> ADD SUB MUL DIV FACT POW SQRT
 %token <token> OPEN_PARENTHESIS CLOSE_PARENTHESIS
+%token <token> OPEN_BRACKETS CLOSE_BRACKETS
 %token <token> OPEN_BRACE CLOSE_BRACE
 %token <token> ASSIGN
 %token <token> EQ NE LE GE LT GT
@@ -92,6 +94,7 @@
 %type <factor> factor
 %type <value> value
 %type <list> list_value
+%type <list_args> list_args
 %type <numeric> numeric_value
 %type <text> text_value
 %type <string> symbol
@@ -173,7 +176,7 @@ foreach_func_arg: PRINT											{ $$ = ForeachFuncArgPrintGrammarAction($1); }
 	| MUL														{ $$ = ForeachFuncArgMulGrammarAction($1); }
 	;
 
-input: INPUT OPEN_PARENTHESIS CLOSE_PARENTHESIS					{ InputGrammarAction(); }
+input: INPUT OPEN_PARENTHESIS CLOSE_PARENTHESIS					{ $$ = InputGrammarAction($1); }
 	;
 
 print: PRINT OPEN_PARENTHESIS expression CLOSE_PARENTHESIS		{ $$ = PrintGrammarAction($3); }
@@ -232,7 +235,11 @@ value: numeric_value											{ $$ = ValueNumericGrammarAction($1); }
 	| list_value												{ $$ = ValueListGrammarAction($1); }
 	;
 
-list_value: LIST												{ $$ = ListGrammarAction($1); }
+list_value: OPEN_BRACKETS list_args CLOSE_BRACKETS				{ $$ = ListGrammarAction($2); }
+	;
+
+list_args: expression COMMA list_args							{ $$ = ListArgsRecGrammarAction($1, $3); }
+	| expression												{ $$ = ListArgsNumericGrammarAction($1); }
 	;
 
 numeric_value: INTEGER											{ $$ = NumericIntegerGrammarAction($1); }

@@ -1,6 +1,7 @@
-#include "../../backend/domain-specific/calculator.h"
 #include "../../backend/support/logger.h"
+#include "../../backend/semantic-analysis/symbol-table.h"
 #include "bison-actions.h"
+#include "bison-parser.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -8,6 +9,11 @@
 /**
  * Implementación de "bison-grammar.h".
  */
+
+static int get_expression_type(Expression * expression);
+static int get_factor_type(Factor * factor);
+static int get_value_type(Value * value);
+static int get_numeric_type(Numeric * numeric);
 
 void yyerror(const char * string) {
 	LogError("	Mensaje: '%s' debido a '%s' (linea %d).", string, yytext, yylineno);
@@ -108,6 +114,17 @@ Statement * StatementForeachGrammarAction(Foreach * foreach_statement) {
 
 Expression * ExpressionAdditionGrammarAction(Expression * left_expression, Expression * right_expression) {
 	GenericLogger("ExpressionAdditionGrammarAction");
+	int LEFT_TYPE = get_expression_type(left_expression);
+	int RIGHT_TYPE = get_expression_type(right_expression);
+	if (LEFT_TYPE == LIST_TOKEN_TYPE || LEFT_TYPE == STRING_TOKEN_TYPE) {
+		LogError("Suma entre tipos incompatibles");
+		exit(1);
+	}
+	if (RIGHT_TYPE == LIST_TOKEN_TYPE || RIGHT_TYPE == STRING_TOKEN_TYPE) {
+		LogError("Suma entre tipos incompatibles");
+		exit(1);
+	}
+
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = ADD_EXPRESSION;
 	newExpression->left_expression = left_expression;
@@ -118,6 +135,17 @@ Expression * ExpressionAdditionGrammarAction(Expression * left_expression, Expre
 
 Expression * ExpressionSubtractionGrammarAction(Expression * left_expression, Expression * right_expression) {
 	GenericLogger("ExpressionSubtractionGrammarAction");
+	int LEFT_TYPE = get_expression_type(left_expression);
+	int RIGHT_TYPE = get_expression_type(right_expression);
+	if (LEFT_TYPE == LIST_TOKEN_TYPE || LEFT_TYPE == STRING_TOKEN_TYPE) {
+		LogError("Resta entre tipos incompatibles");
+		exit(1);
+	}
+	if (RIGHT_TYPE == LIST_TOKEN_TYPE || RIGHT_TYPE == STRING_TOKEN_TYPE) {
+		LogError("Resta entre tipos incompatibles");
+		exit(1);
+	}
+
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = SUB_EXPRESSION;
 	newExpression->left_expression = left_expression;
@@ -128,6 +156,17 @@ Expression * ExpressionSubtractionGrammarAction(Expression * left_expression, Ex
 
 Expression * ExpressionMultiplicationGrammarAction(Expression * left_expression, Expression * right_expression) {
 	GenericLogger("ExpressionMultiplicationGrammarAction");
+	int LEFT_TYPE = get_expression_type(left_expression);
+	int RIGHT_TYPE = get_expression_type(right_expression);
+	if (LEFT_TYPE == LIST_TOKEN_TYPE || LEFT_TYPE == STRING_TOKEN_TYPE) {
+		LogError("Multiplicacion entre tipos incompatibles");
+		exit(1);
+	}
+	if (RIGHT_TYPE == LIST_TOKEN_TYPE || RIGHT_TYPE == STRING_TOKEN_TYPE) {
+		LogError("Multiplicacion entre tipos incompatibles");
+		exit(1);
+	}
+
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = MUL_EXPRESSION;
 	newExpression->left_expression = left_expression;
@@ -138,6 +177,17 @@ Expression * ExpressionMultiplicationGrammarAction(Expression * left_expression,
 
 Expression * ExpressionDivisionGrammarAction(Expression * left_expression, Expression * right_expression) {
 	GenericLogger("ExpressionDivisionGrammarAction");
+	int LEFT_TYPE = get_expression_type(left_expression);
+	int RIGHT_TYPE = get_expression_type(right_expression);
+	if (LEFT_TYPE == LIST_TOKEN_TYPE || LEFT_TYPE == STRING_TOKEN_TYPE) {
+		LogError("Division entre tipos incompatibles");
+		exit(1);
+	}
+	if (RIGHT_TYPE == LIST_TOKEN_TYPE || RIGHT_TYPE == STRING_TOKEN_TYPE) {
+		LogError("Division entre tipos incompatibles");
+		exit(1);
+	}
+
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = DIV_EXPRESSION;
 	newExpression->left_expression = left_expression;
@@ -148,6 +198,17 @@ Expression * ExpressionDivisionGrammarAction(Expression * left_expression, Expre
 
 Expression * ExpressionPowerGrammarAction(Expression * left_expression, Expression * right_expression) {
 	GenericLogger("ExpressionPowerGrammarAction");
+	int LEFT_TYPE = get_expression_type(left_expression);
+	int RIGHT_TYPE = get_expression_type(right_expression);
+	if (LEFT_TYPE == LIST_TOKEN_TYPE || LEFT_TYPE == STRING_TOKEN_TYPE) {
+		LogError("Potenciacion entre tipos incompatibles");
+		exit(1);
+	}
+	if (RIGHT_TYPE == LIST_TOKEN_TYPE || RIGHT_TYPE == STRING_TOKEN_TYPE) {
+		LogError("Potenciacion entre tipos incompatibles");
+		exit(1);
+	}
+
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = POW_EXPRESSION;
 	newExpression->left_expression = left_expression;
@@ -158,6 +219,12 @@ Expression * ExpressionPowerGrammarAction(Expression * left_expression, Expressi
 
 Expression * ExpressionSqrtGrammarAction(Expression * expression) {
 	GenericLogger("ExpressionSqrtGrammarAction");
+	int TYPE = get_expression_type(expression);
+	if (TYPE == LIST_TOKEN_TYPE || TYPE == STRING_TOKEN_TYPE) {
+		LogError("Radicacion entre tipos incompatibles");
+		exit(1);
+	}
+
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = SQRT_EXPRESSION;
 	newExpression->left_expression = expression;
@@ -168,6 +235,11 @@ Expression * ExpressionSqrtGrammarAction(Expression * expression) {
 
 Expression * ExpressionFactorialGrammarAction(Factor * factor) {
 	GenericLogger("ExpressionFactorialGrammarAction");
+	if (get_factor_type(factor) != INTEGER_TOKEN_TYPE) {
+		LogError("Factorizacion entre tipos incompatibles");
+		exit(1);
+	}
+
 	Expression * newExpression = malloc(sizeof(Expression));
 	newExpression->type = FACT_EXPRESSION;
 	newExpression->left_expression = NULL;
@@ -213,6 +285,16 @@ EndIf * EndIfElseGrammarAction(Block * block) {
 
 Condition * ConditionGrammarAction(Factor * left_factor, CompareOpt * compare_opt, Factor * right_factor) {
 	GenericLogger("ConditionGrammarAction");
+	int LEFT_TYPE = get_factor_type(left_factor);
+	int RIGHT_TYPE = get_factor_type(right_factor);
+	if (LEFT_TYPE == LIST_TOKEN_TYPE || LEFT_TYPE == STRING_TOKEN_TYPE) {
+		LogError("Comparacion entre tipos incompatibles");
+		exit(1);
+	}
+	if (RIGHT_TYPE == LIST_TOKEN_TYPE || RIGHT_TYPE == STRING_TOKEN_TYPE) {
+		LogError("Comparacion entre tipos incompatibles");
+		exit(1);
+	}
 	Condition * newCondition = malloc(sizeof(Condition));
 	newCondition->left_factor = left_factor;
 	newCondition->compare_opt = compare_opt;
@@ -275,12 +357,25 @@ CompareOpt * CompareGTGrammarAction(int comparator) {
 	return newCompareOpt;
 }
 
-Declare * DeclareVariableGrammarAction(Token * type_token, char * variable_name, Expression * expression) {
+Declare * DeclareVariableGrammarAction(Token * token_type, char * variable_name, Expression * expression) {
 	GenericLogger("DeclareVariableGrammarAction");
+	Var * var = symbol_table_get(variable_name);
+	if (var == NULL) {
+		var = symbol_table_put(variable_name, token_type);
+	} else {
+		LogDebug("%s already existed, deleting it.", variable_name);
+		symbol_table_remove(variable_name);
+		var = symbol_table_put(variable_name, token_type);
+	}
+
+	if (token_type->type != get_expression_type(expression)) {
+		LogError("Asignacion de tipos incorrectos");
+		exit(1);
+	}
+
 	Declare * newDeclare = malloc(sizeof(Declare));
-	LogDebug("TOKEN TYPE: %d", type_token->type);
 	newDeclare->type = EXPRESSION_DECLARE;
-	newDeclare->type_token = type_token;
+	newDeclare->token_type = token_type;
 	newDeclare->variable_name = variable_name;
 	newDeclare->dist_declare = NULL;
 	newDeclare->expression = expression;
@@ -290,9 +385,24 @@ Declare * DeclareVariableGrammarAction(Token * type_token, char * variable_name,
 
 Declare * DeclareDistributionGrammarAction(DistDeclare * dist_declare) {
 	GenericLogger("DeclareDistributionGrammarAction");
+	Token * newToken = malloc(sizeof(Token));
+	newToken->type = FLOAT_TOKEN_TYPE;
+	newToken->token = FLOAT;
+
+	Var * var = symbol_table_get(dist_declare->variable_name);
+	if (var == NULL) {
+		var = symbol_table_put(dist_declare->variable_name, newToken);
+	} else {
+		LogDebug("%s already existed, deleting it.", dist_declare->variable_name);
+		symbol_table_remove(dist_declare->variable_name);
+		var = symbol_table_put(dist_declare->variable_name, newToken);
+	}
+	
+	var->is_dist = true;
+	var->dist_type = dist_declare->dist_type->type;
 	Declare * newDeclare = malloc(sizeof(Declare));
 	newDeclare->type = DIST_DECLARE;
-	newDeclare->type_token = NULL;
+	newDeclare->token_type = NULL;
 	newDeclare->variable_name = NULL;
 	newDeclare->dist_declare = dist_declare;
 	newDeclare->expression = NULL;
@@ -300,11 +410,19 @@ Declare * DeclareDistributionGrammarAction(DistDeclare * dist_declare) {
 	return newDeclare;
 }
 
-Declare * DeclareInputGrammarAction(Token * type_token, char * variable_name, Input * input) {
+Declare * DeclareInputGrammarAction(Token * token_type, char * variable_name, Input * input) {
 	GenericLogger("DeclareInputGrammarAction");
+	Var * var = symbol_table_get(variable_name);
+	if (var == NULL) {
+		var = symbol_table_put(variable_name, token_type);
+	} else {
+		LogDebug("%s already existed, deleting it.", variable_name);
+		symbol_table_remove(variable_name);
+		var = symbol_table_put(variable_name, token_type);
+	}
 	Declare * newDeclare = malloc(sizeof(Declare));
 	newDeclare->type = INPUT_DECLARE;
-	newDeclare->type_token = type_token;
+	newDeclare->token_type = token_type;
 	newDeclare->variable_name = variable_name;
 	newDeclare->dist_declare = NULL;
 	newDeclare->expression = NULL;
@@ -314,7 +432,9 @@ Declare * DeclareInputGrammarAction(Token * type_token, char * variable_name, In
 
 Foreach * ForeachGrammarAction(List * list_value, ForeachFunctionArg * foreach_function_arg, int left_value, int right_value) {
 	GenericLogger("ForeachGrammarAction");
+	LogDebug("From foreach");
 	Foreach * newForeach = malloc(sizeof(Foreach));
+	newForeach->type = LIST_FOREACH;
 	newForeach->list_value = list_value;
 	newForeach->foreach_function_arg = foreach_function_arg;
 	newForeach->left_value = left_value;
@@ -325,7 +445,17 @@ Foreach * ForeachGrammarAction(List * list_value, ForeachFunctionArg * foreach_f
 
 Foreach * ForeachVariableGrammarAction(char * variable_name, ForeachFunctionArg * foreach_function_arg, int left_value, int right_value) {
 	GenericLogger("ForeachVariableGrammarAction");
+	Var * var = symbol_table_get(variable_name);
+	if (var == NULL) {
+		LogError("%s no esta definida", variable_name);
+		exit(1);
+	}
+	if (var->token_type->type != LIST_TOKEN_TYPE) {
+		LogError("%s no es una lista", variable_name);
+		exit(1);
+	}
 	Foreach * newForeach = malloc(sizeof(Foreach));
+	newForeach->type = VARIABLE_FOREACH;
 	newForeach->list_value = NULL;
 	newForeach->foreach_function_arg = foreach_function_arg;
 	newForeach->left_value = left_value;
@@ -374,9 +504,11 @@ ForeachFunctionArg * ForeachFuncArgMulGrammarAction(int function) {
 	return newForeachFunctionArg;
 }
 
-// TODO: what should this do?
-void InputGrammarAction() {
+Input * InputGrammarAction(int token) {
 	GenericLogger("InputGrammarAction");
+	Input * newInput = malloc(sizeof(Input));
+	newInput->token = token;
+	return newInput;
 }
 
 Print * PrintGrammarAction(Expression * expression) {
@@ -398,6 +530,16 @@ StatFunction * StatFunctionGrammarAction(StatFunctionType * stat_function_type, 
 
 StatFunction * StatFunctionVariableGrammarAction(StatFunctionType * stat_function_type, char * variable_name) {
 	GenericLogger("StatFunctionVariableGrammarAction");
+	Var * var = symbol_table_get(variable_name);
+	LogDebug("1");
+	if (var == NULL) {
+		LogError("%s no esta definida", variable_name);
+		exit(1);
+	}
+	if (var->token_type->type != LIST_TOKEN_TYPE) {
+		LogError("%s no es una lista", variable_name);
+		exit(1);
+	}
 	StatFunction * newStatFunction = malloc(sizeof(StatFunction));
 	newStatFunction->type = VARIABLE_STAT_FUNCTION;
 	newStatFunction->stat_function_type = stat_function_type;
@@ -569,6 +711,25 @@ Binomial * BinomialTypeValuesGrammarAction(int int_value, double float_value) {
 
 Binomial * BinomialTypeVariablesGrammarAction(char * left_variable_name, char * right_variable_name) {
 	GenericLogger("BinomialTypeVariablesGrammarAction");
+	Var * var1 = symbol_table_get(left_variable_name);
+	if (var1 == NULL) {
+		LogError("%s no esta definida", left_variable_name);
+		exit(1);
+	}
+	if (var1->token_type->type != INTEGER_TOKEN_TYPE) {
+		LogError("%s no es de tipo integer", left_variable_name);
+		exit(1);
+	}
+	Var * var2 = symbol_table_get(right_variable_name);
+	if (var2 == NULL) {
+		LogError("%s no esta definida", right_variable_name);
+		exit(1);
+	}
+	if (var2->token_type->type != FLOAT_TOKEN_TYPE) {
+		LogError("%s no es de tipo float", right_variable_name);
+		exit(1);
+	}
+		
 	Binomial * newBinomial = malloc(sizeof(Binomial));
 	newBinomial->type = INTEGER_FLOAT_BINOMIAL;
 	newBinomial->left_variable_name = left_variable_name;
@@ -591,6 +752,24 @@ Normal * NormalTypeValuesGrammarAction(double left_float, double right_float) {
 
 Normal * NormalTypeVariableGrammarAction(char * left_variable_name, char * right_variable_name) {
 	GenericLogger("NormalTypeVariableGrammarAction");
+	Var * var1 = symbol_table_get(left_variable_name);
+	if (var1 == NULL) {
+		LogError("%s no esta definida", left_variable_name);
+		exit(1);
+	}
+	if (var1->token_type->type != FLOAT_TOKEN_TYPE) {
+		LogError("%s no es de tipo float", left_variable_name);
+		exit(1);
+	}
+	Var * var2 = symbol_table_get(right_variable_name);
+	if (var2 == NULL) {
+		LogError("%s no esta definida", right_variable_name);
+		exit(1);
+	}
+	if (var2->token_type->type != FLOAT_TOKEN_TYPE) {
+		LogError("%s no es de tipo float", right_variable_name);
+		exit(1);
+	}
 	Normal * newNormal = malloc(sizeof(Normal));
 	newNormal->type = VARIABLE_VARIABLE_NORMAL;
 	newNormal->left_float = 0;
@@ -602,6 +781,24 @@ Normal * NormalTypeVariableGrammarAction(char * left_variable_name, char * right
 
 Normal * NormalTypeSumGrammarAction(char * left_variable_name, char * right_variable_name)  {
 	GenericLogger("NormalTypeSumGrammarAction");
+	Var * var1 = symbol_table_get(left_variable_name);
+	if (var1 == NULL) {
+		LogError("%s no esta definida", left_variable_name);
+		exit(1);
+	}
+	if (var1->is_dist == false || var1->dist_type != NORMAL_TYPE) {
+		LogError("%s no es una distribucion normal", left_variable_name);
+		exit(1);
+	}
+	Var * var2 = symbol_table_get(right_variable_name);
+	if (var2 == NULL) {
+		LogError("%s no esta definida", right_variable_name);
+		exit(1);
+	}
+	if (var2->is_dist == false || var2->dist_type != NORMAL_TYPE) {
+		LogError("%s no es una distribucion normal", right_variable_name);
+		exit(1);
+	}
 	Normal * newNormal = malloc(sizeof(Normal));
 	newNormal->type = VARIABLE_SUM_VARIABLE_NORMAL;
 	newNormal->left_float = 0;
@@ -622,6 +819,15 @@ Poisson * PoissonTypeValueGrammarAction(int int_value) {
 
 Poisson * PoissonTypeVariableGrammarAction(char * variable_name) {
 	GenericLogger("PoissonTypeVariableGrammarAction");
+	Var * var = symbol_table_get(variable_name);
+	if (var == NULL) {
+		LogError("%s no esta definida", variable_name);
+		exit(1);
+	}
+	if (var->token_type->type != INTEGER_TOKEN_TYPE) {
+		LogError("%s no es de tipo integer", variable_name);
+		exit(1);
+	}
 	Poisson * newPoisson = malloc(sizeof(Poisson));
 	newPoisson->type = VARIABLE_POISSON;
 	newPoisson->int_value = 0;
@@ -671,6 +877,11 @@ Value * ValueTextGrammarAction(Text * text_value) {
 
 Value * ValueVariableGrammarAction(char * variable_name) {
 	GenericLogger("ValueVariableGrammarAction");
+	Var * var = symbol_table_get(variable_name);
+	if (var == NULL) {
+		LogError("%s no esta definida");
+		exit(1);
+	}
 	Value * newValue = malloc(sizeof(Value));
 	newValue->type = VARIABLE_VALUE;
 	newValue->numeric_value = NULL;
@@ -691,11 +902,29 @@ Value * ValueListGrammarAction(List * list_value) {
 	return newValue;
 }
 
-List * ListGrammarAction(char * list_value) {
+List * ListGrammarAction(ListArgs * list_args) {
 	GenericLogger("ListGrammarAction");
 	List * newList = malloc(sizeof(List));
-	newList->list_value = list_value;
+	newList->list_args = list_args;
 	return newList;
+}
+
+ListArgs * ListArgsRecGrammarAction(Expression * expression, ListArgs * list_args) {
+	GenericLogger("ListArgsRecGrammarAction");
+	ListArgs * newListArgs = malloc(sizeof(ListArgs));
+	newListArgs->type = EXPRESSION_LIST_LISTARGS;
+	newListArgs->expression = expression;
+	newListArgs->list_args = list_args;
+	return newListArgs;
+}
+
+ListArgs * ListArgsNumericGrammarAction(Expression * expression) {
+	GenericLogger("ListArgsNumericGrammarAction");
+	ListArgs * newListArgs = malloc(sizeof(ListArgs));
+	newListArgs->type = EXPRESSION_LISTARGS;
+	newListArgs->expression = expression;
+	newListArgs->list_args = NULL;
+	return newListArgs;
 }
 
 Numeric * NumericIntegerGrammarAction(int int_value) {
@@ -730,19 +959,74 @@ Numeric * NumericStatGrammarAction(StatFunction * stat_function) {
 
 char * SymbolGrammarAction(char * variable_name) {
 	LogDebug("SymbolGrammarAction");
-	LogDebug("SYMBOL GRAMMAR RECEIVED: [%s]", variable_name);
 	char * to_return = malloc(sizeof(char) * (yyleng + 1));
 	strncpy(to_return, variable_name, yyleng);
-	LogDebug("SYMBOL_GRAMMAR HAS: [%s]", to_return);
 	return to_return;
 }
 
 Text * TextGrammarAction(char * text_value) {
 	GenericLogger("TextGrammarAction");
 	Text * newText = malloc(sizeof(Text));
-	LogDebug("TEXT GRAMMAR RECEIVED: [%s]", text_value);
 	newText->text_value = malloc(sizeof(char) * (yyleng + 1));
 	strncpy(newText->text_value, text_value, yyleng);
-	LogDebug("TEXT GRAMMAR GOT: [%s]", newText->text_value);
 	return newText;
+}
+
+static int get_expression_type(Expression * expression) {
+	switch (expression->type) {
+		case ADD_EXPRESSION:
+		case SUB_EXPRESSION:
+		case MUL_EXPRESSION:
+			if (get_expression_type(expression->right_expression) == FLOAT_TOKEN_TYPE || get_expression_type(expression->right_expression) == FLOAT_TOKEN_TYPE)
+				return FLOAT_TOKEN_TYPE;
+			else 
+				return INTEGER_TOKEN_TYPE;
+		case DIV_EXPRESSION:
+		case POW_EXPRESSION:
+		case SQRT_EXPRESSION:
+			return FLOAT_TOKEN_TYPE;
+		case FACT_EXPRESSION:
+			return INTEGER_TOKEN_TYPE;
+		case FACTOR_EXPRESSION:
+			return get_factor_type(expression->factor_expression);
+	}
+}
+
+static int get_factor_type(Factor * factor) {
+	switch (factor->type) {
+		case EXPRESSION_FACTOR:
+			return get_expression_type(factor->expression);
+		case VALUE_FACTOR:
+			return get_value_type(factor->value);
+	}
+}
+
+static int get_value_type(Value * value) {
+	switch (value->type) {
+		case NUMERIC_VALUE:
+			return get_numeric_type(value->numeric_value);
+		case TEXT_VALUE:
+			return STRING_TOKEN_TYPE;
+		case LIST_VALUE:
+			return LIST_TOKEN_TYPE;
+		case VARIABLE_VALUE:
+			Var * var = symbol_table_get(value->variable_name);
+			if (var == NULL)
+				return -1;
+			return var->token_type->type;
+		default:
+			return -1;
+	}
+}
+
+static int get_numeric_type(Numeric * numeric) {
+	switch (numeric->type) {
+		case INTEGER_NUMERIC:
+			return INTEGER_TOKEN_TYPE;
+		case FLOAT_NUMERIC:
+		case STAT_NUMERIC:
+			return FLOAT_TOKEN_TYPE;
+		default:
+			return -1;
+	}
 }

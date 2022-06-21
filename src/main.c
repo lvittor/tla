@@ -2,6 +2,7 @@
 #include "backend/support/logger.h"
 #include "backend/support/shared.h"
 #include "frontend/syntactic-analysis/bison-parser.h"
+#include "backend/semantic-analysis/symbol-table.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -23,6 +24,7 @@ const int main(const int argumentCount, const char ** arguments) {
 
 	// Compilar el programa de entrada.
 	LogInfo("Compilando...\n");
+	symbol_table_init();
 	const int result = yyparse();
 	switch (result) {
 		case 0:
@@ -36,6 +38,7 @@ const int main(const int argumentCount, const char ** arguments) {
 			}
 			else {
 				LogError("Se produjo un error en la aplicacion.");
+				symbol_table_free();
 				return -1;
 			}
 			break;
@@ -48,6 +51,8 @@ const int main(const int argumentCount, const char ** arguments) {
 		default:
 			LogError("Error desconocido mientras se ejecutaba el analizador Bison (codigo %d).", result);
 	}
+	symbol_table_free();
+	// free tree
 	LogInfo("Fin.");
 	return result;
 }

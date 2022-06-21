@@ -57,6 +57,7 @@ typedef struct Poisson Poisson;
 typedef struct Factor Factor;
 typedef struct Value Value;
 typedef struct List List;
+typedef struct ListArgs ListArgs;
 typedef struct Numeric Numeric;
 typedef struct Text Text;
 
@@ -196,7 +197,7 @@ typedef enum DeclareType {
 
 typedef struct Declare { 
 	DeclareType type;
-	Token * type_token;
+	Token * token_type;
 	char * variable_name;
 	DistDeclare * dist_declare;
 	Expression * expression;
@@ -230,8 +231,8 @@ typedef struct ForeachFunctionArg {
 	int function;
 } ForeachFunctionArg;
 
-typedef struct Input {
-	char * value;
+typedef struct Input { 
+	int token;
 } Input;
 
 typedef struct Print {
@@ -363,8 +364,19 @@ typedef struct Value {
 } Value;
 
 typedef struct List {
-	char * list_value;
+	ListArgs * list_args;
 } List;
+
+typedef enum ListArgsType {
+	EXPRESSION_LIST_LISTARGS,
+	EXPRESSION_LISTARGS
+} ListArgsType;
+
+typedef struct ListArgs {
+	ListArgsType type;
+	Expression * expression;
+	ListArgs * list_args;
+} ListArgs;
 
 typedef enum NumericType {
 	INTEGER_NUMERIC,

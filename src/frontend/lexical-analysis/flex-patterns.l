@@ -40,6 +40,9 @@ letter [a-zA-Z]
 "{"											{ return TokenIDPatternAction(yytext, OPEN_BRACE); }
 "}"											{ return TokenIDPatternAction(yytext, CLOSE_BRACE); }
 
+"["                                         { return TokenIDPatternAction(yytext, OPEN_BRACKETS); }
+"]"                                         { return TokenIDPatternAction(yytext, CLOSE_BRACKETS); }
+
 "="                                         { return TokenIDPatternAction(yytext, ASSIGN); }
 
 "=="                                        { return TokenIDPatternAction(yytext, EQ); }
@@ -90,8 +93,6 @@ letter [a-zA-Z]
 \"[^\"]+\"                                  { return StringPatternAction(yytext); }
 
 [a-zA-Z_][a-zA-Z0-9_]*                      { return VariableNamePatternAction(yytext); }
-
-\[{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*({whitespace}*,{whitespace}*-?(0|[1-9]{digit}*)\.{digit}*)*{whitespace}*\] { return ListPatternAction(yytext); }
 
 {whitespace}								{ IgnoredPatternAction(yytext); }
 
