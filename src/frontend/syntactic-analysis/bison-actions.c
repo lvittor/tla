@@ -698,7 +698,7 @@ DistType * DistTypePoissonGrammarAction(Poisson * poisson) {
 	return newDistType;
 }
 
-Binomial * BinomialTypeValuesGrammarAction(int int_value, double float_value) {
+Binomial * BinomialTypeValuesGrammarAction(int int_value, double float_value, int target) {
 	GenericLogger("BinomialTypeValuesGrammarAction");
 	Binomial * newBinomial = malloc(sizeof(Binomial));
 	newBinomial->type = INTEGER_FLOAT_BINOMIAL;
@@ -706,10 +706,12 @@ Binomial * BinomialTypeValuesGrammarAction(int int_value, double float_value) {
 	newBinomial->right_variable_name = NULL;
 	newBinomial->int_value = int_value;
 	newBinomial->float_value = float_value;
+	newBinomial->target = target;
+	newBinomial->target_variable = NULL;
 	return newBinomial;
 }
 
-Binomial * BinomialTypeVariablesGrammarAction(char * left_variable_name, char * right_variable_name) {
+Binomial * BinomialTypeVariablesGrammarAction(char * left_variable_name, char * right_variable_name, char * target_variable) {
 	GenericLogger("BinomialTypeVariablesGrammarAction");
 	Var * var1 = symbol_table_get(left_variable_name);
 	if (var1 == NULL) {
@@ -729,6 +731,15 @@ Binomial * BinomialTypeVariablesGrammarAction(char * left_variable_name, char * 
 		LogError("%s no es de tipo float", right_variable_name);
 		exit(1);
 	}
+	Var * var3 = symbol_table_get(target_variable);
+	if (var3 == NULL) {
+		LogError("%s no esta definida", target_variable);
+		exit(1);
+	}
+	if (var3->token_type->type != INTEGER_TOKEN_TYPE) {
+		LogError("%s no es de tipo integer", target_variable);
+		exit(1);
+	}
 		
 	Binomial * newBinomial = malloc(sizeof(Binomial));
 	newBinomial->type = INTEGER_FLOAT_BINOMIAL;
@@ -736,10 +747,12 @@ Binomial * BinomialTypeVariablesGrammarAction(char * left_variable_name, char * 
 	newBinomial->right_variable_name = right_variable_name;
 	newBinomial->int_value = 0;
 	newBinomial->float_value = 0;
+	newBinomial->target = 0;
+	newBinomial->target_variable = target_variable;
 	return newBinomial;
 }
 
-Normal * NormalTypeValuesGrammarAction(double left_float, double right_float) {
+Normal * NormalTypeValuesGrammarAction(double left_float, double right_float, double target) {
 	GenericLogger("NormalTypeValuesGrammarAction");
 	Normal * newNormal = malloc(sizeof(Normal));
 	newNormal->type = FLOAT_FLOAT_NORMAL;
@@ -747,10 +760,12 @@ Normal * NormalTypeValuesGrammarAction(double left_float, double right_float) {
 	newNormal->right_float = right_float;
 	newNormal->left_variable_name = NULL;
 	newNormal->right_variable_name = NULL;
+	newNormal->target = target;
+	newNormal->target_variable = NULL;
 	return newNormal;
 }
 
-Normal * NormalTypeVariableGrammarAction(char * left_variable_name, char * right_variable_name) {
+Normal * NormalTypeVariableGrammarAction(char * left_variable_name, char * right_variable_name, char * target_variable) {
 	GenericLogger("NormalTypeVariableGrammarAction");
 	Var * var1 = symbol_table_get(left_variable_name);
 	if (var1 == NULL) {
@@ -770,16 +785,28 @@ Normal * NormalTypeVariableGrammarAction(char * left_variable_name, char * right
 		LogError("%s no es de tipo float", right_variable_name);
 		exit(1);
 	}
+	Var * var3 = symbol_table_get(target_variable);
+	if (var3 == NULL) {
+		LogError("%s no esta definida", target_variable);
+		exit(1);
+	}
+	if (var3->token_type->type != FLOAT_TOKEN_TYPE) {
+		LogError("%s no es de tipo float", target_variable);
+		exit(1);
+	}
+
 	Normal * newNormal = malloc(sizeof(Normal));
 	newNormal->type = VARIABLE_VARIABLE_NORMAL;
 	newNormal->left_float = 0;
 	newNormal->right_float = 0;
 	newNormal->left_variable_name = left_variable_name;
 	newNormal->right_variable_name = right_variable_name;
+	newNormal->target = 0;
+	newNormal->target_variable = target_variable;
 	return newNormal;
 }
 
-Normal * NormalTypeSumGrammarAction(char * left_variable_name, char * right_variable_name)  {
+Normal * NormalTypeSumGrammarAction(char * left_variable_name, char * right_variable_name, char * target_variable)  {
 	GenericLogger("NormalTypeSumGrammarAction");
 	Var * var1 = symbol_table_get(left_variable_name);
 	if (var1 == NULL) {
@@ -799,39 +826,64 @@ Normal * NormalTypeSumGrammarAction(char * left_variable_name, char * right_vari
 		LogError("%s no es una distribucion normal", right_variable_name);
 		exit(1);
 	}
+	Var * var3 = symbol_table_get(target_variable);
+	if (var3 == NULL) {
+		LogError("%s no esta definida", target_variable);
+		exit(1);
+	}
+	if (var3->token_type->type != FLOAT_TOKEN_TYPE) {
+		LogError("%s no es de tipo float", target_variable);
+		exit(1);
+	}
+
 	Normal * newNormal = malloc(sizeof(Normal));
 	newNormal->type = VARIABLE_SUM_VARIABLE_NORMAL;
 	newNormal->left_float = 0;
 	newNormal->right_float = 0;
 	newNormal->left_variable_name = left_variable_name;
 	newNormal->right_variable_name = right_variable_name;
+	newNormal->target = 0;
+	newNormal->target_variable = target_variable;
 	return newNormal;
 }
 
-Poisson * PoissonTypeValueGrammarAction(int int_value) {
+Poisson * PoissonTypeValueGrammarAction(int int_value, int target) {
 	GenericLogger("PoissonTypeValueGrammarAction");
 	Poisson * newPoisson = malloc(sizeof(Poisson));
 	newPoisson->type = INTEGER_POISSON;
 	newPoisson->int_value = int_value;
 	newPoisson->variable_name = NULL;
+	newPoisson->target = target;
+	newPoisson->target_variable = NULL;
 	return newPoisson;
 }
 
-Poisson * PoissonTypeVariableGrammarAction(char * variable_name) {
+Poisson * PoissonTypeVariableGrammarAction(char * variable_name, char * target_variable) {
 	GenericLogger("PoissonTypeVariableGrammarAction");
-	Var * var = symbol_table_get(variable_name);
-	if (var == NULL) {
+	Var * var1 = symbol_table_get(variable_name);
+	if (var1 == NULL) {
 		LogError("%s no esta definida", variable_name);
 		exit(1);
 	}
-	if (var->token_type->type != INTEGER_TOKEN_TYPE) {
+	if (var1->token_type->type != INTEGER_TOKEN_TYPE) {
 		LogError("%s no es de tipo integer", variable_name);
+		exit(1);
+	}
+	Var * var2 = symbol_table_get(target_variable);
+	if (var2 == NULL) {
+		LogError("%s no esta definida", target_variable);
+		exit(1);
+	}
+	if (var2->token_type->type != INTEGER_TOKEN_TYPE) {
+		LogError("%s no es de tipo integer", target_variable);
 		exit(1);
 	}
 	Poisson * newPoisson = malloc(sizeof(Poisson));
 	newPoisson->type = VARIABLE_POISSON;
 	newPoisson->int_value = 0;
 	newPoisson->variable_name = variable_name;
+	newPoisson->target = 0;
+	newPoisson->target_variable = target_variable;
 	return newPoisson;
 }
 

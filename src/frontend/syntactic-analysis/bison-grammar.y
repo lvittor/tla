@@ -212,17 +212,17 @@ dist_type: binomial_type										{ $$ = DistTypeBinomialGrammarAction($1); }
 	| poisson_type												{ $$ = DistTypePoissonGrammarAction($1); }
 	;
 
-binomial_type:  BINOMIAL_DIST_TYPE OPEN_PARENTHESIS INTEGER COMMA FLOAT CLOSE_PARENTHESIS	 	{ $$ = BinomialTypeValuesGrammarAction($3, $5); }			
-	| BINOMIAL_DIST_TYPE OPEN_PARENTHESIS symbol COMMA symbol CLOSE_PARENTHESIS					{ $$ = BinomialTypeVariablesGrammarAction($3, $5); }		
+binomial_type:  BINOMIAL_DIST_TYPE OPEN_PARENTHESIS INTEGER COMMA FLOAT COMMA INTEGER CLOSE_PARENTHESIS	 	{ $$ = BinomialTypeValuesGrammarAction($3, $5, $7); }			
+	| BINOMIAL_DIST_TYPE OPEN_PARENTHESIS symbol COMMA symbol COMMA symbol CLOSE_PARENTHESIS				{ $$ = BinomialTypeVariablesGrammarAction($3, $5, $7); }		
 	;
 
-normal_type: NORMAL_DIST_TYPE OPEN_PARENTHESIS FLOAT COMMA FLOAT CLOSE_PARENTHESIS		      	{ $$ = NormalTypeValuesGrammarAction($3, $5); } 			  	 
-	| NORMAL_DIST_TYPE OPEN_PARENTHESIS symbol COMMA symbol CLOSE_PARENTHESIS   				{ $$ = NormalTypeVariableGrammarAction($3, $5); }   	 
-	| NORMAL_DIST_TYPE OPEN_PARENTHESIS symbol SUM_WITH symbol CLOSE_PARENTHESIS				{ $$ = NormalTypeSumGrammarAction($3, $5); } 
+normal_type: NORMAL_DIST_TYPE OPEN_PARENTHESIS FLOAT COMMA FLOAT COMMA INTEGER CLOSE_PARENTHESIS		    { $$ = NormalTypeValuesGrammarAction($3, $5, $7); } 			  	 
+	| NORMAL_DIST_TYPE OPEN_PARENTHESIS symbol COMMA symbol COMMA symbol CLOSE_PARENTHESIS   				{ $$ = NormalTypeVariableGrammarAction($3, $5, $7); }   	 
+	| NORMAL_DIST_TYPE OPEN_PARENTHESIS symbol SUM_WITH symbol COMMA symbol CLOSE_PARENTHESIS				{ $$ = NormalTypeSumGrammarAction($3, $5, $7); } 
 	;
 
-poisson_type: POISSON_DIST_TYPE OPEN_PARENTHESIS INTEGER CLOSE_PARENTHESIS                      { $$ = PoissonTypeValueGrammarAction($3); }
-	| POISSON_DIST_TYPE OPEN_PARENTHESIS symbol CLOSE_PARENTHESIS                         		{ $$ = PoissonTypeVariableGrammarAction($3); }
+poisson_type: POISSON_DIST_TYPE OPEN_PARENTHESIS INTEGER COMMA INTEGER CLOSE_PARENTHESIS                    { $$ = PoissonTypeValueGrammarAction($3, $5); }
+	| POISSON_DIST_TYPE OPEN_PARENTHESIS symbol COMMA symbol CLOSE_PARENTHESIS                         		{ $$ = PoissonTypeVariableGrammarAction($3, $5); }
 	;
 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = FactorExpressionGrammarAction($2); }

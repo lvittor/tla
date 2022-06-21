@@ -310,6 +310,8 @@ typedef struct Binomial {
 	char * right_variable_name;
 	int int_value;
 	double float_value;
+	int target;
+	char * target_variable;
 } Binomial;
 
 typedef enum NormalType {
@@ -324,6 +326,8 @@ typedef struct Normal {
 	double right_float;
 	char * left_variable_name;
 	char * right_variable_name;
+	double target;
+	char * target_variable;
 } Normal;
 
 typedef enum PoissonType {
@@ -335,6 +339,8 @@ typedef struct Poisson {
 	PoissonType type;
 	int int_value;
 	char * variable_name;
+	int target;
+	char * target_variable;
 } Poisson;
 
 typedef enum FactorType {

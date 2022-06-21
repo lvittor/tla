@@ -239,13 +239,13 @@ void GeneratorType(Token * token_type, FILE * out) {
 			fprintf(out, "int ");
 			break;
 		case FLOAT_TOKEN_TYPE:
-			fprintf(out, "float ");
+			fprintf(out, "double ");
 			break;
 		case STRING_TOKEN_TYPE:
 			fprintf(out, "char * ");
 			break;
 		case LIST_TOKEN_TYPE:
-			fprintf(out, "float ");
+			fprintf(out, "double ");
 			break;
 		default:
 			LogInfo("Type type not found");
@@ -255,7 +255,7 @@ void GeneratorType(Token * token_type, FILE * out) {
 
 void GeneratorDistDeclare(DistDeclare * dist_declare, FILE * out) {
 	LogDebug("Generating dist declare..");
-	fprintf(out, "float %s = ", dist_declare->variable_name);
+	fprintf(out, "double %s = ", dist_declare->variable_name);
 	GeneratorDistType(dist_declare->dist_type, out);
 }
 
@@ -282,10 +282,10 @@ void GeneratorBinomial(Binomial * binomial, FILE * out) {
 	fprintf(out, "binomial(");
 	switch (binomial->type) {
 		case INTEGER_FLOAT_BINOMIAL:
-			fprintf(out, "%d, %f", binomial->int_value, binomial->float_value);
+			fprintf(out, "%d, %f, %d", binomial->int_value, binomial->float_value, binomial->target);
 			break;
 		case VARIABLE_VARIABLE_BINOMIAL:
-			fprintf(out, "%s, %s", binomial->left_variable_name, binomial->right_variable_name);
+			fprintf(out, "%s, %s, %s", binomial->left_variable_name, binomial->right_variable_name, binomial->target_variable);
 			break;
 		default:
 			LogInfo("Binomial type not found");
@@ -299,13 +299,13 @@ void GeneratorNormal(Normal * normal, FILE * out) {
 	fprintf(out, "normal(");
 	switch (normal->type) {
 		case FLOAT_FLOAT_NORMAL:
-			fprintf(out, "%f, %f", normal->left_float, normal->right_float);
+			fprintf(out, "%f, %f, %f", normal->left_float, normal->right_float, normal->target);
 			break;
 		case VARIABLE_VARIABLE_NORMAL:
-			fprintf(out, "%s, %s", normal->left_variable_name, normal->right_variable_name);
+			fprintf(out, "%s, %s, %s", normal->left_variable_name, normal->right_variable_name, normal->target_variable);
 			break;
 		case VARIABLE_SUM_VARIABLE_NORMAL:
-			fprintf(out, "%s sumwith %s", normal->left_variable_name, normal->right_variable_name);
+			fprintf(out, "%s sumwith %s, %s", normal->left_variable_name, normal->right_variable_name, normal->target_variable);
 			break;
 		default:
 			LogInfo("Normal type not found");
@@ -319,10 +319,10 @@ void GeneratorPoisson(Poisson * poisson, FILE * out) {
 	fprintf(out, "poisson(");
 	switch (poisson->type) {
 		case INTEGER_POISSON:
-			fprintf(out, "%d", poisson->int_value);
+			fprintf(out, "%d, %d", poisson->int_value, poisson->target);
 			break;
 		case VARIABLE_POISSON:
-			fprintf(out, "%s", poisson->variable_name);
+			fprintf(out, "%s, %s", poisson->variable_name, poisson->target_variable);
 			break;
 		default:
 			LogInfo("Poisson type not found");
