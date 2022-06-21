@@ -1,6 +1,7 @@
 #include "backend/code-generation/generator.h"
 #include "backend/support/logger.h"
 #include "backend/support/shared.h"
+#include "backend/support/free-tree.h"
 #include "frontend/syntactic-analysis/bison-parser.h"
 #include "backend/semantic-analysis/symbol-table.h"
 #include <stdio.h>
@@ -52,7 +53,7 @@ const int main(const int argumentCount, const char ** arguments) {
 			LogError("Error desconocido mientras se ejecutaba el analizador Bison (codigo %d).", result);
 	}
 	symbol_table_free();
-	// free tree
+	free_main(state.main);
 	LogInfo("Fin.");
 	return result;
 }

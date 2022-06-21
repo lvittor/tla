@@ -3,8 +3,4 @@ main {
 string a = "hola";
 integer b = 10;
 
-integer a = 40;
-
-print(a + b);
-
 }
