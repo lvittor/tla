@@ -53,7 +53,6 @@
 %token <token> OPEN_BRACE CLOSE_BRACE
 %token <token> ASSIGN
 %token <token> EQ NE LE GE LT GT
-%token <token> SUM_WITH
 %token <token> IF ELSE
 %token <token> FOREACH
 %token <token> COMMA
@@ -165,8 +164,8 @@ declare: type symbol ASSIGN expression	   						{ $$ = DeclareVariableGrammarAct
 	| type symbol ASSIGN input									{ $$ = DeclareInputGrammarAction($1, $2, $4); }
 	;
 
-foreach: FOREACH OPEN_PARENTHESIS list_value COMMA foreach_func_arg COMMA INTEGER COMMA INTEGER CLOSE_PARENTHESIS	{ $$ = ForeachGrammarAction($3, $5, $7, $9); }
-	| FOREACH OPEN_PARENTHESIS symbol COMMA foreach_func_arg COMMA INTEGER COMMA INTEGER CLOSE_PARENTHESIS	{ $$ = ForeachVariableGrammarAction($3, $5, $7, $9); }
+foreach: FOREACH OPEN_PARENTHESIS list_value COMMA foreach_func_arg COMMA INTEGER COMMA INTEGER COMMA INTEGER CLOSE_PARENTHESIS	{ $$ = ForeachGrammarAction($3, $5, $7, $9, $11); }
+	| FOREACH OPEN_PARENTHESIS symbol COMMA foreach_func_arg COMMA INTEGER COMMA INTEGER COMMA INTEGER CLOSE_PARENTHESIS	{ $$ = ForeachVariableGrammarAction($3, $5, $7, $9, $11); }
 	;
 
 foreach_func_arg: PRINT											{ $$ = ForeachFuncArgPrintGrammarAction($1); }
@@ -182,8 +181,8 @@ input: INPUT OPEN_PARENTHESIS CLOSE_PARENTHESIS					{ $$ = InputGrammarAction($1
 print: PRINT OPEN_PARENTHESIS expression CLOSE_PARENTHESIS		{ $$ = PrintGrammarAction($3); }
 	;
 
-stat_function: stat_function_type OPEN_PARENTHESIS list_value CLOSE_PARENTHESIS 	{ $$ = StatFunctionGrammarAction($1, $3); }
-	| stat_function_type OPEN_PARENTHESIS symbol CLOSE_PARENTHESIS 					{ $$ = StatFunctionVariableGrammarAction($1, $3); }
+stat_function: stat_function_type OPEN_PARENTHESIS list_value COMMA INTEGER CLOSE_PARENTHESIS 	{ $$ = StatFunctionGrammarAction($1, $3, $5); }
+	| stat_function_type OPEN_PARENTHESIS symbol COMMA INTEGER CLOSE_PARENTHESIS 				{ $$ = StatFunctionVariableGrammarAction($1, $3, $5); }
 	;	
 
 stat_function_type: MEAN										{ $$ = StatFunctionTypeMeanGrammarAction($1); } 
@@ -216,9 +215,8 @@ binomial_type:  BINOMIAL_DIST_TYPE OPEN_PARENTHESIS INTEGER COMMA FLOAT COMMA IN
 	| BINOMIAL_DIST_TYPE OPEN_PARENTHESIS symbol COMMA symbol COMMA symbol CLOSE_PARENTHESIS				{ $$ = BinomialTypeVariablesGrammarAction($3, $5, $7); }		
 	;
 
-normal_type: NORMAL_DIST_TYPE OPEN_PARENTHESIS FLOAT COMMA FLOAT COMMA INTEGER CLOSE_PARENTHESIS		    { $$ = NormalTypeValuesGrammarAction($3, $5, $7); } 			  	 
-	| NORMAL_DIST_TYPE OPEN_PARENTHESIS symbol COMMA symbol COMMA symbol CLOSE_PARENTHESIS   				{ $$ = NormalTypeVariableGrammarAction($3, $5, $7); }   	 
-	| NORMAL_DIST_TYPE OPEN_PARENTHESIS symbol SUM_WITH symbol COMMA symbol CLOSE_PARENTHESIS				{ $$ = NormalTypeSumGrammarAction($3, $5, $7); } 
+normal_type: NORMAL_DIST_TYPE OPEN_PARENTHESIS FLOAT COMMA FLOAT COMMA FLOAT CLOSE_PARENTHESIS		   		{ $$ = NormalTypeValuesGrammarAction($3, $5, $7); } 			  	 
+	| NORMAL_DIST_TYPE OPEN_PARENTHESIS symbol COMMA symbol COMMA symbol CLOSE_PARENTHESIS   				{ $$ = NormalTypeVariableGrammarAction($3, $5, $7); }
 	;
 
 poisson_type: POISSON_DIST_TYPE OPEN_PARENTHESIS INTEGER COMMA INTEGER CLOSE_PARENTHESIS                    { $$ = PoissonTypeValueGrammarAction($3, $5); }

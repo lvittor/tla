@@ -31,3 +31,12 @@ dot -Tpng -oex.png out/ex.dot
 mv ex.png out/
 "
 ```
+
+## Compile generated code with libraries
+```bash
+alias gen="
+cd target
+rm *.o
+gcc -c program.c ../src/backend/domain-specific/stat-functions.c ../src/backend/domain-specific/z-index-table.c
+gcc stat-functions.o z-index-table.o program.o -o program -lm
+"

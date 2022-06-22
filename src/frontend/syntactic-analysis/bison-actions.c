@@ -1,4 +1,5 @@
 #include "../../backend/support/logger.h"
+#include "../../backend/support/get-types.h"
 #include "../../backend/semantic-analysis/symbol-table.h"
 #include "bison-actions.h"
 #include "bison-parser.h"
@@ -9,11 +10,6 @@
 /**
  * Implementación de "bison-grammar.h".
  */
-
-static int get_expression_type(Expression * expression);
-static int get_factor_type(Factor * factor);
-static int get_value_type(Value * value);
-static int get_numeric_type(Numeric * numeric);
 
 void yyerror(const char * string) {
 	LogError("	Mensaje: '%s' debido a '%s' (linea %d).", string, yytext, yylineno);
@@ -430,9 +426,24 @@ Declare * DeclareInputGrammarAction(Token * token_type, char * variable_name, In
 	return newDeclare;
 }
 
-Foreach * ForeachGrammarAction(List * list_value, ForeachFunctionArg * foreach_function_arg, int left_value, int right_value) {
+Foreach * ForeachGrammarAction(List * list_value, ForeachFunctionArg * foreach_function_arg, int left_value, int right_value, int size) {
 	GenericLogger("ForeachGrammarAction");
-	LogDebug("From foreach");
+	if (size < 0) {
+		LogError("El tamaño de la lista no puede ser negativo");
+		exit(1);
+	}
+	if (left_value < 0) {
+		LogError("Cota inferior no puede ser negativa");
+		exit(1);
+	}
+	if (right_value < 0) {
+		LogError("Cota superior no puede ser negativa");
+		exit(1);
+	}
+	if (left_value < right_value) {
+		LogError("[%d, %d] no es un rango valido", left_value, right_value);
+		exit(1);
+	}
 	Foreach * newForeach = malloc(sizeof(Foreach));
 	newForeach->type = LIST_FOREACH;
 	newForeach->list_value = list_value;
@@ -440,11 +451,16 @@ Foreach * ForeachGrammarAction(List * list_value, ForeachFunctionArg * foreach_f
 	newForeach->left_value = left_value;
 	newForeach->right_value = right_value;
 	newForeach->variable_name = NULL;
+	newForeach->size = size;
 	return newForeach;
 }
 
-Foreach * ForeachVariableGrammarAction(char * variable_name, ForeachFunctionArg * foreach_function_arg, int left_value, int right_value) {
+Foreach * ForeachVariableGrammarAction(char * variable_name, ForeachFunctionArg * foreach_function_arg, int left_value, int right_value, int size) {
 	GenericLogger("ForeachVariableGrammarAction");
+	if (size < 0) {
+		LogError("El tamaño de la lista no puede ser negativo");
+		exit(1);
+	}
 	Var * var = symbol_table_get(variable_name);
 	if (var == NULL) {
 		LogError("%s no esta definida", variable_name);
@@ -461,6 +477,7 @@ Foreach * ForeachVariableGrammarAction(char * variable_name, ForeachFunctionArg 
 	newForeach->left_value = left_value;
 	newForeach->right_value = right_value;
 	newForeach->variable_name = variable_name;
+	newForeach->size = size;
 	return newForeach;
 }
 
@@ -518,18 +535,27 @@ Print * PrintGrammarAction(Expression * expression) {
 	return newPrint;
 }
 
-StatFunction * StatFunctionGrammarAction(StatFunctionType * stat_function_type, List * list_value) {
+StatFunction * StatFunctionGrammarAction(StatFunctionType * stat_function_type, List * list_value, int size) {
 	GenericLogger("StatFunctionGrammarAction");
+	if (size < 0) {
+		LogError("El tamaño de una lista no puede ser negativo");
+		exit(1);
+	}
 	StatFunction * newStatFunction = malloc(sizeof(StatFunction));
 	newStatFunction->type = LIST_STAT_FUNCTION;
 	newStatFunction->stat_function_type = stat_function_type;
 	newStatFunction->list_value = list_value;
 	newStatFunction->variable_name = NULL;
+	newStatFunction->size = size;
 	return newStatFunction;
 }
 
-StatFunction * StatFunctionVariableGrammarAction(StatFunctionType * stat_function_type, char * variable_name) {
+StatFunction * StatFunctionVariableGrammarAction(StatFunctionType * stat_function_type, char * variable_name, int size) {
 	GenericLogger("StatFunctionVariableGrammarAction");
+	if (size < 0) {
+		LogError("El tamaño de una lista no puede ser negativo");
+		exit(1);
+	}
 	Var * var = symbol_table_get(variable_name);
 	LogDebug("1");
 	if (var == NULL) {
@@ -545,6 +571,7 @@ StatFunction * StatFunctionVariableGrammarAction(StatFunctionType * stat_functio
 	newStatFunction->stat_function_type = stat_function_type;
 	newStatFunction->list_value = NULL;
 	newStatFunction->variable_name = variable_name;
+	newStatFunction->size = size;
 	return newStatFunction;
 }
 
@@ -742,7 +769,7 @@ Binomial * BinomialTypeVariablesGrammarAction(char * left_variable_name, char * 
 	}
 		
 	Binomial * newBinomial = malloc(sizeof(Binomial));
-	newBinomial->type = INTEGER_FLOAT_BINOMIAL;
+	newBinomial->type = VARIABLE_VARIABLE_BINOMIAL;
 	newBinomial->left_variable_name = left_variable_name;
 	newBinomial->right_variable_name = right_variable_name;
 	newBinomial->int_value = 0;
@@ -797,47 +824,6 @@ Normal * NormalTypeVariableGrammarAction(char * left_variable_name, char * right
 
 	Normal * newNormal = malloc(sizeof(Normal));
 	newNormal->type = VARIABLE_VARIABLE_NORMAL;
-	newNormal->left_float = 0;
-	newNormal->right_float = 0;
-	newNormal->left_variable_name = left_variable_name;
-	newNormal->right_variable_name = right_variable_name;
-	newNormal->target = 0;
-	newNormal->target_variable = target_variable;
-	return newNormal;
-}
-
-Normal * NormalTypeSumGrammarAction(char * left_variable_name, char * right_variable_name, char * target_variable)  {
-	GenericLogger("NormalTypeSumGrammarAction");
-	Var * var1 = symbol_table_get(left_variable_name);
-	if (var1 == NULL) {
-		LogError("%s no esta definida", left_variable_name);
-		exit(1);
-	}
-	if (var1->is_dist == false || var1->dist_type != NORMAL_TYPE) {
-		LogError("%s no es una distribucion normal", left_variable_name);
-		exit(1);
-	}
-	Var * var2 = symbol_table_get(right_variable_name);
-	if (var2 == NULL) {
-		LogError("%s no esta definida", right_variable_name);
-		exit(1);
-	}
-	if (var2->is_dist == false || var2->dist_type != NORMAL_TYPE) {
-		LogError("%s no es una distribucion normal", right_variable_name);
-		exit(1);
-	}
-	Var * var3 = symbol_table_get(target_variable);
-	if (var3 == NULL) {
-		LogError("%s no esta definida", target_variable);
-		exit(1);
-	}
-	if (var3->token_type->type != FLOAT_TOKEN_TYPE) {
-		LogError("%s no es de tipo float", target_variable);
-		exit(1);
-	}
-
-	Normal * newNormal = malloc(sizeof(Normal));
-	newNormal->type = VARIABLE_SUM_VARIABLE_NORMAL;
 	newNormal->left_float = 0;
 	newNormal->right_float = 0;
 	newNormal->left_variable_name = left_variable_name;
@@ -1022,63 +1008,4 @@ Text * TextGrammarAction(char * text_value) {
 	newText->text_value = malloc(sizeof(char) * (yyleng + 1));
 	strncpy(newText->text_value, text_value, yyleng);
 	return newText;
-}
-
-static int get_expression_type(Expression * expression) {
-	switch (expression->type) {
-		case ADD_EXPRESSION:
-		case SUB_EXPRESSION:
-		case MUL_EXPRESSION:
-			if (get_expression_type(expression->right_expression) == FLOAT_TOKEN_TYPE || get_expression_type(expression->right_expression) == FLOAT_TOKEN_TYPE)
-				return FLOAT_TOKEN_TYPE;
-			else 
-				return INTEGER_TOKEN_TYPE;
-		case DIV_EXPRESSION:
-		case POW_EXPRESSION:
-		case SQRT_EXPRESSION:
-			return FLOAT_TOKEN_TYPE;
-		case FACT_EXPRESSION:
-			return INTEGER_TOKEN_TYPE;
-		case FACTOR_EXPRESSION:
-			return get_factor_type(expression->factor_expression);
-	}
-}
-
-static int get_factor_type(Factor * factor) {
-	switch (factor->type) {
-		case EXPRESSION_FACTOR:
-			return get_expression_type(factor->expression);
-		case VALUE_FACTOR:
-			return get_value_type(factor->value);
-	}
-}
-
-static int get_value_type(Value * value) {
-	switch (value->type) {
-		case NUMERIC_VALUE:
-			return get_numeric_type(value->numeric_value);
-		case TEXT_VALUE:
-			return STRING_TOKEN_TYPE;
-		case LIST_VALUE:
-			return LIST_TOKEN_TYPE;
-		case VARIABLE_VALUE:
-			Var * var = symbol_table_get(value->variable_name);
-			if (var == NULL)
-				return -1;
-			return var->token_type->type;
-		default:
-			return -1;
-	}
-}
-
-static int get_numeric_type(Numeric * numeric) {
-	switch (numeric->type) {
-		case INTEGER_NUMERIC:
-			return INTEGER_TOKEN_TYPE;
-		case FLOAT_NUMERIC:
-		case STAT_NUMERIC:
-			return FLOAT_TOKEN_TYPE;
-		default:
-			return -1;
-	}
 }

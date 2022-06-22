@@ -1,5 +1,11 @@
 # Intentar asignar una variable de un tipo basico a una distribucion de probabilidad.
+main {
 
-integer basic_type = 1
+binomial(10, 0.35, 3) dist1;
 
-normal(0.1, 0.5) basic_type
+# Esto se rompe ya que basic_type no devuelve lo mismo que dist1
+# que seria un float -> si basic_type fuera float, si funcionaria
+integer basic_type = dist1;
+
+}
+

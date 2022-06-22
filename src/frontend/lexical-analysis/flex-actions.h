@@ -46,8 +46,6 @@ typedef yytoken_kind_t TokenID;
 // 	LT,
 // 	GT,
 
-// 	SUM_WITH,
-
 // 	IF, 
 // 	ELSE,
 

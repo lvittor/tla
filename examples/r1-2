@@ -2,10 +2,17 @@ main {
 
 # Crear una distribucion de probabilidad de cada tipo soportado.
 
-binomial(17, 0.5) dist1;
+binomial(4, 0.5, 3) dist1;
 
-normal(0.0, 1.0) dist2;
+normal(5.8, 3.1, 1.1) dist2;
 
-poisson(3) dist3;
+poisson(3, 2) dist3;
+
+print("Binomial:");
+print(dist1);
+print("Normal:");
+print(dist2);
+print("Poisson:");
+print(dist3);
 
 }

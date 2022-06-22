@@ -52,8 +52,6 @@ letter [a-zA-Z]
 "<"                                         { return TokenIDPatternAction(yytext, LT); }
 ">"                                         { return TokenIDPatternAction(yytext, GT); }
 
-"sumwith"                                   { return TokenIDPatternAction(yytext, SUM_WITH); } 
-
 "if"                                        { return TokenIDPatternAction(yytext, IF); }
 "else"                                      { return TokenIDPatternAction(yytext, ELSE); }
 

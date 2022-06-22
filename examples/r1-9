@@ -1,22 +1,29 @@
 # Realizar una operacion que involucre el uso de variables y distribuciones en un mismo calculo.
 main {
-float mu1 = 0.0;
-float sigma1 = 1.0;
 
-float mu2 = 2.0;
-float sigma2 = 3.0;
+integer n = 10;
+float p = 0.5;
+integer x = 6;
+binomial(n, p, x) dist1;
 
-normal(mu1, sigma1) n1;
-normal(mu2, sigma2) n2;
+print("La probabilidad de tirar una moneda 10 veces y sacar cara (o seca) 6 veces exactas es:");
+print(dist1);
 
-float mu1_2 = mu1 + mu2; 
-float sigma3 = sqrt(sigma1**2 + sigma2**2);
+float mu = 0.0;
+float sigma = 1.0;
+float target = 0.5;
 
-normal(mu1_2, sigma3) n3;
+normal(mu, sigma, target) dist2;
 
-normal(n1 sumwith n2) n4;
+print("La probabilidad de generar un numero aleatorio, siguiendo una distribucion normal estandar, y que sea menor que 0.5 es:");
+print(dist2);
 
-if (n4 == n3){
-   print("The sum of normal distributions is defined");
-}
+integer lambda = 3;
+integer occurences = 2;
+
+poisson(lambda, occurences) dist3;
+
+print("La probabilidad de que, en un determinado tiempo dada una frecuencia de 3 veces en el intervalo, hayan exactamente 2 ocurrencias es:");
+print(dist3);
+
 }

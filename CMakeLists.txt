@@ -50,6 +50,9 @@ add_executable(Compiler
 	src/backend/code-generation/generator.c
 	src/backend/support/logger.c
 	src/backend/support/free-tree.c
+	src/backend/support/get-types.c
+	src/backend/domain-specific/z-index-table.c
+	src/backend/domain-specific/stat-functions.c
 	src/frontend/lexical-analysis/flex-actions.c
 	src/frontend/lexical-analysis/flex-scanner.c
 	src/frontend/syntactic-analysis/bison-actions.c
@@ -57,4 +60,4 @@ add_executable(Compiler
 	src/backend/semantic-analysis/symbol-table.c)
 
 # Linkear el proyecto y sus librerías:
-target_link_libraries(Compiler)
+target_link_libraries(Compiler m)

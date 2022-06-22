@@ -1,3 +1,7 @@
 # Intentar computar alguna de las funciones soportadas sobre algo que no es un vector.
+main {
 
-print("Mean: " + mean("value"))
+print("Mean: ");
+print(mean("value"));
+
+}

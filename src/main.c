@@ -31,7 +31,7 @@ const int main(const int argumentCount, const char ** arguments) {
 		case 0:
 			if (state.succeed) {
 				LogInfo("La compilacion fue exitosa.");
-				out = fopen("program.c", "w+");
+				out = fopen("./target/program.c", "w+");
 				GeneratorMain(state.main, out);
 				if (out == NULL)
 					perror("Error");

@@ -1,5 +1,12 @@
 # Realizar un calculo entre variables de tipos incompatibles.
 
-integer n = 10
+main {
 
-print("Sum: " + ("hola"+n))
+integer n = 10;
+string a = "hola!";
+
+print("Sum:");
+print(a + n);
+
+}
+

@@ -1,9 +1,7 @@
 #include "stat-functions.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdbool.h>
+#include "z-index-table.h"
 #include <math.h>
+#include <string.h>
 
 void sort(double * arr, int size) {
     for (int i = 0; i < size - 1; i++) {
@@ -18,6 +16,16 @@ void sort(double * arr, int size) {
         }
         if (!swapped) break;
     }
+}
+
+double max(double * list, int size) {
+    sort(list, size);
+    return list[size - 1];
+}
+
+double min(double * list, int size) {
+    sort(list, size);
+    return list[0];
 }
 
 double mean(double * list, int size) {
@@ -51,15 +59,11 @@ double perc_n(double * list, int size, int n) {
     return v;
 }
 
-double median(double * list, int size) {
-    return perc_n(list, size, 50);
-}
-
-double qtr1(double * list, int size) {
+double q1(double * list, int size) {
     return perc_n(list, size, 25);
 }
 
-double qtr3(double * list, int size) {
+double q3(double * list, int size) {
     return perc_n(list, size, 75);
 }
 
@@ -72,31 +76,39 @@ double variance(double * list, int size) {
     return sum / (size - 1);
 }
 
-double stdev(double * list, int size) {
+double sd(double * list, int size) {
     return sqrt(variance(list, size));
 }
 
 double skewness(double * list, int size) {
     if (size < 2) return 0.0;
+    double ans = 0;
     double sum = 0;
     double _mean = mean(list, size);
     for (int i = 0; i < size; i++)
         sum += pow(list[i] - _mean, 3);
-    return sum / (pow(stdev(list, size), 3) * size);
+    ans = sum / size;
+    ans = ans / pow(sd(list, size), 3);
+    return ans;
 }
 
 double kurtosis(double * list, int size) {
     if (size < 2) return 0.0;
+    double ans = 0;
     double sum = 0;
     double _mean = mean(list, size);
     for (int i = 0; i < size; i++)
         sum += pow(list[i] - _mean, 4);
-    return sum / (pow(stdev(list, size), 4) * size);
+    ans = sum / size;
+    ans = ans / pow(sd(list, size), 4);
+    return ans;
 }
 
 int factorial(int input) {
     if (input < 0)
         return 0;
+    if (input == 0)
+        return 1;
         
     for (int i = input-1; i >0; i--)
         input*=i;
@@ -123,7 +135,49 @@ double poisson(int lambda, int x) {
 }
 
 double normal(double mu, double sigma, double x) {
-    if (sigma < 0)
+    return get_normal_probability(mu, sigma, x);    
+}
+
+int foreach(double * list, char * token, int low, int high, int size) {
+    if (high > size - 1) {
         return -1;
-    return (1/(sigma*(sqrt(2*M_PI))))*(pow(M_E, -1 * ((pow(x - mu, 2))/(2 * pow(sigma, 2)))));
+    }
+    if (strcmp(token, "print") == 0){
+        printf("[");
+        for (int i = low; i < high + 1; i++) {
+            printf("%f", list[i]);
+            if (i != high)
+                printf(", ");
+        }
+        printf("]\n");
+    } else if (strcmp(token, "sqrt") == 0) {
+        printf("[");
+        for (int i = low; i < high + 1; i++) {
+            printf("%f", sqrt(list[i]));
+            if (i != high)
+                printf(", ");
+        }
+        printf("]\n");
+    } else if (strcmp(token, "!") == 0) {
+        printf("[");
+        for (int i = low; i < high + 1; i++) {
+            printf("%d", factorial(roundf(list[i])));
+            if (i != high)
+                printf(", ");
+        }
+        printf("]\n");
+    } else if (strcmp(token, "+") == 0) {
+        double ans = 0;
+        for (int i = low; i < high + 1; i++) 
+            ans += list[i];
+        printf("%f\n", ans);
+    } else if (strcmp(token, "*") == 0) {
+        double ans = 1;
+        for (int i = low; i < high + 1; i++) 
+            ans *= list[i];
+        printf("%f\n", ans);
+    } else {
+        return -1;
+    }
+    return 1;
 }

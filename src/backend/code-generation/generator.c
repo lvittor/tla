@@ -1,5 +1,6 @@
 #include "../support/logger.h"
 #include "generator.h"
+#include "../support/get-types.h"
 
 /**
  * Implementación de "generator.h".
@@ -12,7 +13,8 @@ static int current_indent = 0;
 void GeneratorMain(Main * main, FILE * out) {
 	LogDebug("Generating main..");
 	fprintf(out, "#include <stdio.h>\n");
-	fprintf(out, "#include <stdlib.h>\n\n");
+	fprintf(out, "#include <stdlib.h>\n");
+	fprintf(out, "#include \"../src/backend/domain-specific/stat-functions.h\"\n\n");
 	fprintf(out, "int main() {\n");
 	current_indent++;
 	GeneratorProgram(main->program, out);
@@ -304,9 +306,6 @@ void GeneratorNormal(Normal * normal, FILE * out) {
 		case VARIABLE_VARIABLE_NORMAL:
 			fprintf(out, "%s, %s, %s", normal->left_variable_name, normal->right_variable_name, normal->target_variable);
 			break;
-		case VARIABLE_SUM_VARIABLE_NORMAL:
-			fprintf(out, "%s sumwith %s, %s", normal->left_variable_name, normal->right_variable_name, normal->target_variable);
-			break;
 		default:
 			LogInfo("Normal type not found");
 			break;
@@ -367,8 +366,9 @@ void GeneratorExpression(Expression * expression, FILE * out) {
 			fprintf(out, ")");
 			break;
 		case FACT_EXPRESSION:
+			fprintf(out, "factorial(");
 			GeneratorFactor(expression->factor_expression, out);
-			fprintf(out, "!");
+			fprintf(out, ")");
 			break;
 		case FACTOR_EXPRESSION:
 			GeneratorFactor(expression->factor_expression, out);
@@ -382,6 +382,21 @@ void GeneratorExpression(Expression * expression, FILE * out) {
 void GeneratorPrint(Print * print_value, FILE * out) {
 	LogDebug("Generating print..");
 	fprintf(out, "printf(");
+	int TYPE = get_expression_type(print_value->expression);
+	switch (TYPE) {
+		case STRING_TOKEN_TYPE:
+			fprintf(out, "\"%%s\\n\", ");
+			break;
+		case FLOAT_TOKEN_TYPE:
+			fprintf(out, "\"%%f\\n\", ");
+			break;
+		case INTEGER_TOKEN_TYPE:
+			fprintf(out, "\"%%d\\n\", ");
+			break;
+		default:
+			LogError("Not a printable type");
+			exit(1);
+	}
 	GeneratorExpression(print_value->expression, out);
 	fprintf(out, ")");
 }
@@ -403,26 +418,26 @@ void GeneratorForeach(Foreach * foreach, FILE * out) {
 	}
 	fprintf(out, ", ");
 	GeneratorForeachFunctionArgs(foreach->foreach_function_arg, out);
-	fprintf(out, ", %d, %d)", foreach->left_value, foreach->right_value);
+	fprintf(out, ", %d, %d, %d)", foreach->left_value, foreach->right_value, foreach->size);
 }
 
 void GeneratorForeachFunctionArgs(ForeachFunctionArg * foreach_function_arg, FILE * out) {
 	LogDebug("Generating foreach args..");
 	switch (foreach_function_arg->type) {
 		case PRINT_FOREACH:
-			fprintf(out, "print");
+			fprintf(out, "\"print\"");
 			break;
 		case SQRT_FOREACH:
-			fprintf(out, "sqrt");
+			fprintf(out, "\"sqrt\"");
 			break;
 		case FACT_FOREACH:
-			fprintf(out, "!");
+			fprintf(out, "\"!\"");
 			break;
 		case ADD_FOREACH:
-			fprintf(out, "+");
+			fprintf(out, "\"+\"");
 			break;
 		case MUL_FOREACH:
-			fprintf(out, "*");
+			fprintf(out, "\"*\"");
 			break;
 		default:
 			LogInfo("ForeachFunctionArgs type not found");
@@ -445,7 +460,7 @@ void GeneratorStatFunction(StatFunction * stat_function, FILE * out) {
 			LogInfo("StatFunction type not found");
 			break;
 	}
-	fprintf(out, ")");
+	fprintf(out, ", %d)", stat_function->size);
 }
 
 void GeneratorStatFunctionType(StatFunctionType * stat_function_type, FILE * out) {

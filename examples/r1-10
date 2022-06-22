@@ -1,15 +1,26 @@
 # Computar cada funcion soportada sobre un vector definido
 main {
-list data = [21.3, 38.4, 12.7, 41.6];
+list data = [21.3, 38.4, 12.7, 41.6, 51.8, 12.5];
 
-print("The mean of " + data + "is " + mean(data));
-print("The mode of " + data + "is " + mode(data));
-print("The variance of " + data + "is " + variance(data));
-print("The kurtosis of " + data + "is " + kurtosis(data));
-print("The q1 of " + data + "is " + q1(data));
-print("The q3 of " + data + "is " + q3(data));
-print("The max of " + data + "is " + max(data));
-print("The min of " + data + "is " + min(data));
-print("The standard deviation of " + data + "is " + sd(data));
-print("The skewness of " + data + "is " + skewness(data));
+print("The max is");
+print(max(data, 6));
+print("The min is:");
+print(min(data, 6));
+print("The mean is:");
+print(mean(data, 6));
+print("The mode is:");
+print(mode(data, 6));
+print("The q1 is:");
+print(q1(data, 6));
+print("The q3 is");
+print(q3(data, 6));
+print("The standard deviation is:");
+print(sd(data, 6));
+print("The variance is:");
+print(variance(data, 6));
+print("The kurtosis is:");
+print(kurtosis(data, 6));
+print("The skewness is:");
+print(skewness(data, 6));
+
 }

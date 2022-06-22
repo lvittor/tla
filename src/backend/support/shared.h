@@ -216,6 +216,7 @@ typedef struct Foreach {
 	int left_value;
 	int right_value;
 	char * variable_name;
+	int size;
 } Foreach;
 
 typedef enum ForeachFuncArgType {
@@ -249,6 +250,7 @@ typedef struct StatFunction {
 	StatFunctionType * stat_function_type;
 	List * list_value;
 	char * variable_name;
+	int size;
 } StatFunction;
 
 typedef enum StatFunctionTypeType {
@@ -317,7 +319,6 @@ typedef struct Binomial {
 typedef enum NormalType {
 	FLOAT_FLOAT_NORMAL,
 	VARIABLE_VARIABLE_NORMAL,
-	VARIABLE_SUM_VARIABLE_NORMAL
 } NormalType;
 
 typedef struct Normal {
