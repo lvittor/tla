@@ -14,6 +14,7 @@ void GeneratorMain(Main * main, FILE * out) {
 	LogDebug("Generating main..");
 	fprintf(out, "#include <stdio.h>\n");
 	fprintf(out, "#include <stdlib.h>\n");
+	fprintf(out, "#include \"../src/backend/domain-specific/input-reader.h\"\n");
 	fprintf(out, "#include \"../src/backend/domain-specific/stat-functions.h\"\n\n");
 	fprintf(out, "int main() {\n");
 	current_indent++;
@@ -226,7 +227,20 @@ void GeneratorDeclare(Declare * declare, FILE * out) {
 			break;
 		case INPUT_DECLARE:
 			GeneratorType(declare->token_type, out);
-			fprintf(out, "%s = input()", declare->variable_name);
+			switch (declare->token_type->type) {
+				case INTEGER_TOKEN_TYPE:
+					fprintf(out, "%s = input_int()", declare->variable_name);
+					break;
+				case FLOAT_TOKEN_TYPE:
+					fprintf(out, "%s = input_float()", declare->variable_name);
+					break;
+				case STRING_TOKEN_TYPE:
+					fprintf(out, "%s = input_string()", declare->variable_name);
+					break;
+				default:
+					LogInfo("Token type not found");
+					break;
+			}
 			break;
 		default:
 			LogInfo("Declare type not found");

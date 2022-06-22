@@ -37,6 +37,6 @@ mv ex.png out/
 alias gen="
 cd target
 rm *.o
-gcc -c program.c ../src/backend/domain-specific/stat-functions.c ../src/backend/domain-specific/z-index-table.c
-gcc stat-functions.o z-index-table.o program.o -o program -lm
+gcc -c program.c ../src/backend/domain-specific/stat-functions.c ../src/backend/domain-specific/z-index-table.c ../src/backend/domain-specific/input-reader.c
+gcc stat-functions.o z-index-table.o input-reader.o program.o -o program -lm
 "

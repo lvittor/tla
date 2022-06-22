@@ -1,11 +1,26 @@
 # Realizar un computo que involucre la entrada de algun valor por parte del usuario.
 main {
 
-integer entry = input();
+integer entry1 = input();
 
-print("El factorial de ");
-print(entry);
-print("es ");
-print(entry!);
+if (entry1 > 0) {
+    print("El factorial de ");
+    print(entry1);
+    print("es ");
+    print(entry1!);
+} else {
+    print("Se ingreso algo que no es un numero!");
+}
+
+float entry2 = input();
+if (entry2 > 0) {
+    print("Entrada anterior multiplicada a la nueva ");
+    print(entry1 * entry2);
+} else {
+    print("Se ingreso algo que no es un numero!");
+}
+
+string entry3 = input();
+print(entry3);
 
 }

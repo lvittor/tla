@@ -53,6 +53,7 @@ add_executable(Compiler
 	src/backend/support/get-types.c
 	src/backend/domain-specific/z-index-table.c
 	src/backend/domain-specific/stat-functions.c
+	src/backend/domain-specific/input-reader.c
 	src/frontend/lexical-analysis/flex-actions.c
 	src/frontend/lexical-analysis/flex-scanner.c
 	src/frontend/syntactic-analysis/bison-actions.c

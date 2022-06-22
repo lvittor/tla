@@ -408,6 +408,10 @@ Declare * DeclareDistributionGrammarAction(DistDeclare * dist_declare) {
 
 Declare * DeclareInputGrammarAction(Token * token_type, char * variable_name, Input * input) {
 	GenericLogger("DeclareInputGrammarAction");
+	if (token_type->type == LIST_TOKEN_TYPE) {
+		LogError("Cant use input for list type");
+		exit(1);
+	}
 	Var * var = symbol_table_get(variable_name);
 	if (var == NULL) {
 		var = symbol_table_put(variable_name, token_type);
