@@ -2,8 +2,8 @@
 
 main {
 
-integer n1 = 10;
-integer n2 = 1;
+integer n1 = 6;
+integer n2 = 2;
 
 print("Operation 1: ");
 print(n1+n2-n1!);
@@ -16,15 +16,15 @@ print(n1/n2);
 print("Operation 5: ");
 print(n1!);
 
-float n1 = 10.0;
-float n2 = 1.0;
+float n3 = 10.0;
+float n4 = 1.0;
 
 print("Operation 6: ");
-print(n1+n2);
+print(n3+n4);
 print("Operation 7: ");
-print(n1-n2);
+print(n3-n4);
 print("Operation 8: ");
-print(n1*n2);
+print(n3*n4);
 print("Operation 9: ");
-print(n1/n2);
+print(n3/n4);
 }

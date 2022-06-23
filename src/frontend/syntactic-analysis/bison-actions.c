@@ -355,13 +355,10 @@ CompareOpt * CompareGTGrammarAction(int comparator) {
 
 Declare * DeclareVariableGrammarAction(Token * token_type, char * variable_name, Expression * expression) {
 	GenericLogger("DeclareVariableGrammarAction");
-	Var * var = symbol_table_get(variable_name);
+	Var * var = symbol_table_put(variable_name, token_type);
 	if (var == NULL) {
-		var = symbol_table_put(variable_name, token_type);
-	} else {
-		LogDebug("%s already existed, deleting it.", variable_name);
-		symbol_table_remove(variable_name);
-		var = symbol_table_put(variable_name, token_type);
+		LogError("%s ya esta definida", variable_name);
+		exit(1);
 	}
 
 	if (token_type->type != get_expression_type(expression)) {
@@ -385,13 +382,10 @@ Declare * DeclareDistributionGrammarAction(DistDeclare * dist_declare) {
 	newToken->type = FLOAT_TOKEN_TYPE;
 	newToken->token = FLOAT;
 
-	Var * var = symbol_table_get(dist_declare->variable_name);
+	Var * var = symbol_table_put(dist_declare->variable_name, newToken);
 	if (var == NULL) {
-		var = symbol_table_put(dist_declare->variable_name, newToken);
-	} else {
-		LogDebug("%s already existed, deleting it.", dist_declare->variable_name);
-		symbol_table_remove(dist_declare->variable_name);
-		var = symbol_table_put(dist_declare->variable_name, newToken);
+		LogError("%s ya esta definida", dist_declare->variable_name);
+		exit(1);
 	}
 	
 	var->is_dist = true;
@@ -412,13 +406,10 @@ Declare * DeclareInputGrammarAction(Token * token_type, char * variable_name, In
 		LogError("Cant use input for list type");
 		exit(1);
 	}
-	Var * var = symbol_table_get(variable_name);
+	Var * var = symbol_table_put(variable_name, token_type);
 	if (var == NULL) {
-		var = symbol_table_put(variable_name, token_type);
-	} else {
-		LogDebug("%s already existed, deleting it.", variable_name);
-		symbol_table_remove(variable_name);
-		var = symbol_table_put(variable_name, token_type);
+		LogError("%s ya esta definida", variable_name);
+		exit(1);
 	}
 	Declare * newDeclare = malloc(sizeof(Declare));
 	newDeclare->type = INPUT_DECLARE;

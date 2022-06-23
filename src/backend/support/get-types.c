@@ -5,12 +5,12 @@ int get_expression_type(Expression * expression) {
 		case ADD_EXPRESSION:
 		case SUB_EXPRESSION:
 		case MUL_EXPRESSION:
+		case DIV_EXPRESSION:
+		case POW_EXPRESSION:
 			if (get_expression_type(expression->right_expression) == FLOAT_TOKEN_TYPE || get_expression_type(expression->right_expression) == FLOAT_TOKEN_TYPE)
 				return FLOAT_TOKEN_TYPE;
 			else 
 				return INTEGER_TOKEN_TYPE;
-		case DIV_EXPRESSION:
-		case POW_EXPRESSION:
 		case SQRT_EXPRESSION:
 			return FLOAT_TOKEN_TYPE;
 		case FACT_EXPRESSION:
